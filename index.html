@@ -50,8 +50,27 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            align-items: center; /* 링크 중앙 정렬을 위해 추가 */
         }
+        
+        /* 로그 다운로드 하이퍼링크 스타일 */
+        .download-link {
+            font-size: 13px;
+            color: #65676b;
+            text-decoration: underline;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .download-link:hover {
+            color: #111111;
+        }
+
         .btn {
+            width: 100%; /* 버튼 너비를 컨테이너에 맞춤 */
             padding: 12px;
             border-radius: 8px;
             font-weight: bold;
@@ -60,6 +79,8 @@
             cursor: pointer;
             transition: 0.2s;
             border: none;
+            box-sizing: border-box;
+            display: block;
         }
         .btn-primary {
             background-color: #111111;
@@ -94,6 +115,8 @@
         <div class="error-code">Error Code: 500 - Internal Server Error ( 내부 서버 오류 )</div>
 
         <div class="button-group">
+            <button class="download-link" onclick="downloadLog()">로그 다운로드</button>
+            
             <button class="btn btn-primary" onclick="location.reload()">재시도</button>
             <a href="https://jwonpark1109.github.io" class="btn btn-secondary">홈으로 돌아가기</a>
         </div>
@@ -101,18 +124,28 @@
 
     <script>
         function generateHash() {
-            const part = () => Math.random().toString(36).substring(2, 6);
-            let hash = "{";
-            for(let i=0; i<13; i++) {
-                hash += part() + "-";
-            }
-            return hash + "KOR1-paju}";
+            const parts = Array.from({length: 8}, () => Math.random().toString(36).substring(2, 6));
+            return `{${parts.join('-')}-KOR1-paju}`;
         }
 
         function generateServerInfo() {
             const num1 = Math.floor(Math.random() * 10);
             const num2 = Math.floor(Math.random() * 100);
             return `AWS-${num1}-${num2}-KR`;
+        }
+
+        // 로그를 .txt 파일로 다운로드하는 함수
+        function downloadLog() {
+            const debugText = document.getElementById('debug').innerText;
+            const blob = new Blob([debugText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `roblox_error_log_${new Date().getTime()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
         }
 
         window.onload = function() {
