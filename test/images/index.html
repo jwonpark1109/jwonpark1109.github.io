@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이미지 저장소 - Test</title>
-    
+    <title>실시간 이미지 저장소</title>
     <link rel="icon" href="https://jwonpark1109.github.io/test/images/icon.svg" type="image/x-icon">
     
     <style>
@@ -15,6 +14,7 @@
             --text-sub: #65676b;
             --card-border: #eeeeee;
             --card-hover-bg: #f9f9f9;
+            --accent: #007bff;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -30,124 +30,95 @@
 
         body { 
             background-color: var(--bg-color); 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        h1 { color: var(--text-main); margin-bottom: 10px; }
-        p { color: var(--text-sub); margin-bottom: 40px; }
+        .status-bar {
+            font-size: 12px; color: var(--text-sub); margin-bottom: 20px;
+            padding: 5px 15px; border-radius: 20px; background: rgba(0,0,0,0.05);
+        }
 
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 900px;
+            gap: 20px; width: 100%; max-width: 900px;
         }
 
         .image-card {
             background: var(--container-bg);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            text-decoration: none;
+            border-radius: 12px; padding: 20px;
+            text-align: center; text-decoration: none;
             transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            opacity: 0;
-            animation: fadeIn 0.5s ease forwards;
         }
 
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        .image-card:hover {
-            transform: translateY(-5px);
-            background-color: var(--card-hover-bg);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
+        .image-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
         .preview-box {
-            width: 100%;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-            background: rgba(128, 128, 128, 0.05);
-            border-radius: 8px;
+            width: 100%; height: 120px; display: flex;
+            align-items: center; justify-content: center;
+            margin-bottom: 15px; background: rgba(128, 128, 128, 0.05);
+            border-radius: 8px; overflow: hidden;
         }
 
-        .preview-box img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
-        }
+        .preview-box img { max-width: 80%; max-height: 80%; object-fit: contain; }
 
         .image-name { color: var(--text-main); font-weight: bold; font-size: 14px; }
         .image-url { color: var(--text-sub); font-size: 11px; margin-top: 5px; }
 
-        .back-link {
-            margin-top: 50px;
-            color: var(--text-sub);
-            text-decoration: none;
-            font-size: 14px;
-            border-bottom: 1px solid var(--text-sub);
-        }
+        .back-link { margin-top: 50px; color: var(--text-sub); text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <h1>이미지 저장소</h1>
-    <p>폴더: /test/images</p>
+    <div class="status-bar" id="status">목록 업데이트 중...</div>
 
-    <div class="gallery" id="gallery">
-        <div id="loading">목록을 불러오는 중...</div>
-    </div>
+    <div class="gallery" id="gallery"></div>
 
     <a href="../" class="back-link">이전 페이지로</a>
 
     <script>
+        const owner = "jwonpark1109";
+        const repo = "jwonpark1109.github.io";
+        const folderPath = "test/images";
+        
+        const apiURL = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
+        const baseImgURL = `https://jwonpark1109.github.io/${folderPath}/`;
+
         async function fetchImages() {
             const gallery = document.getElementById('gallery');
-            
-            // 1. 경로 설정 (중요!)
-            const owner = "jwonpark1109";
-            const repo = "jwonpark1109.github.io"; // 저장소 이름
-            const folderPath = "test/images";      // 실제 폴더 경로
-            
-            // GitHub API 주소
-            const apiURL = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
-            // 이미지 실제 주소 (GitHub Pages 경로)
-            const baseImgURL = `https://jwonpark1109.github.io/${folderPath}/`;
+            const status = document.getElementById('status');
 
             try {
-                const response = await fetch(apiURL);
-                if (!response.ok) throw new Error('API 호출 실패');
-                
+                // 캐시를 무시하고 신규 데이터를 가져오기 위한 설정
+                const response = await fetch(apiURL, {
+                    headers: { 'Cache-Control': 'no-cache' }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 403) throw new Error('API 한도 초과 (1시간 뒤 해제)');
+                    throw new Error('데이터를 불러오지 못했습니다.');
+                }
+
                 const files = await response.json();
-                gallery.innerHTML = ''; // 로딩 메시지 제거
+                gallery.innerHTML = ''; 
 
                 const imageExtensions = ['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp'];
 
-                files.forEach((file, index) => {
+                files.forEach(file => {
                     const ext = file.name.split('.').pop().toLowerCase();
                     if (imageExtensions.includes(ext)) {
                         const card = document.createElement('a');
                         card.href = baseImgURL + file.name;
                         card.className = 'image-card';
-                        card.style.animationDelay = `${index * 0.05}s`;
-
+                        card.target = '_blank';
                         card.innerHTML = `
-                            <div class="preview-box">
-                                <img src="${baseImgURL}${file.name}" alt="${file.name}">
-                            </div>
+                            <div class="preview-box"><img src="${baseImgURL}${file.name}" alt="${file.name}"></div>
                             <div class="image-name">${file.name}</div>
                             <div class="image-url">/${folderPath}/${file.name}</div>
                         `;
@@ -155,19 +126,21 @@
                     }
                 });
 
-                if(gallery.innerHTML === '') {
-                    gallery.innerHTML = '<p>이미지 파일을 찾을 수 없습니다.</p>';
-                }
+                const now = new Date();
+                status.innerText = `마지막 업데이트: ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')} (1분마다 자동 갱신)`;
 
             } catch (error) {
                 console.error(error);
-                gallery.innerHTML = '<p>불러오기 실패. (API 호출 한도 초과 또는 경로 오류)</p>';
+                status.innerText = error.message;
             }
         }
 
+        // 초기 실행
         fetchImages();
+
+        // 1분(60,000ms)마다 실행
+        setInterval(fetchImages, 60000);
     </script>
 </body>
 </html>
-</body>
 </html>
