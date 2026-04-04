@@ -2,44 +2,101 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>이미지 저장소</title>
     <link rel="icon" href="https://jwonpark1109.github.io/test/images/icon.svg">
+    
     <style>
-        /* (기존 스타일과 동일) */
-        :root { --bg-color: #f2f4f5; --container-bg: #ffffff; --text-main: #393b3d; --text-sub: #65676b; --card-border: #eeeeee; }
-        @media (prefers-color-scheme: dark) { :root { --bg-color: #191b1d; --container-bg: #232527; --text-main: #ffffff; --text-sub: #b8b8b8; --card-border: #333537; } }
-        body { background-color: var(--bg-color); font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px; }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; max-width: 900px; }
-        .image-card { background: var(--container-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; text-align: center; text-decoration: none; color: inherit; }
-        .preview-box { width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.03); border-radius: 8px; margin-bottom: 15px; }
+        :root {
+            --bg-color: #f2f4f5;
+            --container-bg: #ffffff;
+            --text-main: #393b3d;
+            --text-sub: #65676b;
+            --card-border: #eeeeee;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191b1d;
+                --container-bg: #232527;
+                --text-main: #ffffff;
+                --text-sub: #b8b8b8;
+                --card-border: #333537;
+            }
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; width: 100%; max-width: 900px;
+        }
+
+        .image-card {
+            background: var(--container-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px; padding: 15px;
+            text-align: center; text-decoration: none;
+            transition: transform 0.2s;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .image-card:hover { transform: translateY(-5px); }
+
+        .preview-box {
+            width: 100%; height: 100px; display: flex;
+            align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.03); border-radius: 8px; margin-bottom: 10px;
+        }
+
         .preview-box img { max-width: 90%; max-height: 90%; object-fit: contain; }
-        .image-name { font-weight: bold; font-size: 14px; color: var(--text-main); }
+
+        .image-name { color: var(--text-main); font-weight: bold; font-size: 13px; word-break: break-all; }
+        
+        .back-link { margin-top: 50px; color: var(--text-sub); text-decoration: none; font-size: 14px; border-bottom: 1px solid; }
     </style>
 </head>
 <body>
+
     <h1>이미지 저장소</h1>
-    <div class="gallery" id="gallery">로딩 중...</div>
+    <p style="color: var(--text-sub); font-size: 14px;">파일을 추가하면 아래 리스트에 이름을 적어주세요.</p>
+
+    <div class="gallery" id="gallery"></div>
+
+    <a href="../" class="back-link">이전 페이지로</a>
 
     <script>
-        async function loadImages() {
-            try {
-                // API가 아니라 내 저장소에 있는 json 파일을 읽음 (지연 없음!)
-                const response = await fetch('./images.json?t=' + Date.now());
-                const images = await response.json();
-                
-                const gallery = document.getElementById('gallery');
-                gallery.innerHTML = images.map(img => `
-                    <a href="./images/${img}" class="image-card" target="_blank">
-                        <div class="preview-box"><img src="./images/${img}" alt="${img}"></div>
-                        <div class="image-name">${img}</div>
-                    </a>
-                `).join('');
-            } catch (e) {
-                document.getElementById('gallery').innerText = "이미지 목록을 찾을 수 없습니다.";
-            }
+        // ★ 여기에 폴더에 있는 파일 이름을 직접 적으세요! 
+        // 이 리스트만 수정하면 즉시 반영됩니다. (API 에러 걱정 끝)
+        const myImages = [
+            "icon.svg",
+            "label_black.svg",
+            "label_white.svg"
+        ];
+
+        // 이미지가 들어있는 실제 웹 주소
+        const imgPath = "https://jwonpark1109.github.io/test/images/";
+
+        const gallery = document.getElementById('gallery');
+
+        function draw() {
+            gallery.innerHTML = myImages.map(name => `
+                <a href="${imgPath}${name}" class="image-card" target="_blank">
+                    <div class="preview-box">
+                        <img src="${imgPath}${name}" alt="${name}" onerror="this.src='https://via.placeholder.com/100?text=Error'">
+                    </div>
+                    <div class="image-name">${name}</div>
+                </a>
+            `).join('');
         }
-        loadImages();
-        setInterval(loadImages, 30000); // 30초마다 갱신
+
+        draw();
     </script>
 </body>
 </html>
