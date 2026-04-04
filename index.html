@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox - Internal Server Error</title>
+    
+    <link rel="icon" href="https://jwonpark1109.github.io/images/icon.svg" type="image/x-icon">
+    
+    <style>
+        body { 
+            background-color: #f2f4f5; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container { 
+            background: white; 
+            width: 90%; 
+            max-width: 400px; 
+            padding: 40px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            text-align: center;
+        }
+        h1 { color: #393b3d; font-size: 24px; margin-top: 20px; }
+        p { color: #65676b; line-height: 1.5; margin-bottom: 25px; }
+        
+        debug-box {
+            display: block;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 11px;
+            color: #a1a3a7;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #eeeeee;
+            text-align: left;
+            word-break: break-all;
+            margin-bottom: 20px;
+            max-height: 100px; /* 너무 길어지지 않게 화면에선 숨김 처리 */
+            overflow-y: auto;
+        }
+
+        .error-code { font-weight: bold; color: #f44336; margin-bottom: 25px; font-size: 14px; }
+        img { max-width: 150px; height: auto; }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .download-link {
+            font-size: 13px;
+            color: #65676b;
+            text-decoration: underline;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .download-link:hover {
+            color: #111111;
+        }
+
+        .btn {
+            width: 100%; 
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            box-sizing: border-box;
+            display: block;
+        }
+        .btn-primary {
+            background-color: #111111;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #333333;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #111111;
+            border: 1px solid #adb0b1;
+        }
+        .btn-secondary:hover {
+            background-color: #f2f4f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://jwonpark1109.github.io/images/icon.svg" width="150" alt="Roblox">
+        <h1>우리는 더 나은 Roblox를 만들고 있어요!</h1>
+        <p>Roblox가 알 수 없는 이유로 인해 일시적으로 접속이 불가능합니다.<br>나중에 다시 시도해 주세요.</p>
+        
+        <debug-box id="debug">
+            Error code: 500 - Internal Server Error<br>
+            Request ID: <span id="request-id">{loading...}</span><br>
+            Server: <span id="server-info">AWS-?-?-KR</span><br>
+            Timestamp: <span id="timestamp"></span><br>
+            ----------------------------------------<br>
+            [DUMP START]<br>
+            <span id="full-log">Generating detailed system dump...</span>
+        </debug-box>
+
+        <div class="error-code">Error Code: 500 - Internal Server Error ( 내부 서버 오류 )</div>
+
+        <div class="button-group">
+            <button class="download-link" onclick="downloadLog()">로그 다운로드</button>
+            <button class="btn btn-primary" onclick="location.reload()">재시도</button>
+            <a href="https://jwonpark1109.github.io" class="btn btn-secondary">홈으로 돌아가기</a>
+        </div>
+    </div>
+
+    <script>
+        function generateHash() {
+            const parts = Array.from({length: 8}, () => Math.random().toString(36).substring(2, 6));
+            return `{${parts.join('-')}-KOR1-paju}`;
+        }
+
+        function generateServerInfo() {
+            const num1 = Math.floor(Math.random() * 10);
+            const num2 = Math.floor(Math.random() * 100);
+            return `AWS-${num1}-${num2}-KR`;
+        }
+
+        // 5000자 이상의 가짜 로그 데이터를 생성하는 함수
+        function generateBigLog() {
+            let logData = "";
+            const modules = ["CoreEngine", "NetworkManager", "PhysicsProvider", "DataStore", "AvatarService", "AssetStreaming"];
+            const errors = ["NullReferenceException", "StackOverflowError", "MemoryLeakDetected", "TimedOut", "ConnectionRefused"];
+            
+            for(let i=0; i < 150; i++) { // 약 150회 반복하여 5000자 이상 확보
+                const mod = modules[Math.floor(Math.random() * modules.length)];
+                const err = errors[Math.floor(Math.random() * errors.length)];
+                const hex = Math.random().toString(16).substring(2, 10).toUpperCase();
+                logData += `[${new Date().toISOString()}] CRITICAL ERROR in ${mod}: ${err} at 0x${hex}\n`;
+                logData += `   Stack: at Roblox.Services.${mod}.ProcessRequest(RequestID id) in C:\\build\\${mod}.cs:line ${Math.floor(Math.random()*5000)}\n`;
+                logData += `   Context: { "UserAgent": "RobloxApp/2.615.606", "Platform": "Windows", "MemoryUsage": "${Math.floor(Math.random()*2048)}MB" }\n`;
+                logData += `-`.repeat(40) + "\n";
+            }
+            return logData;
+        }
+
+        function downloadLog() {
+            // 화면의 기본 정보와 생성된 대용량 로그 합치기
+            const header = document.getElementById('debug').innerText.split('[DUMP START]')[0];
+            const body = document.getElementById('full-log').innerText;
+            const finalLog = header + "\n[DETAILED SYSTEM DUMP]\n" + body;
+
+            const blob = new Blob([finalLog], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `roblox_full_system_log_${new Date().getTime()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        window.onload = function() {
+            document.getElementById('request-id').innerText = generateHash();
+            document.getElementById('server-info').innerText = generateServerInfo();
+            document.getElementById('timestamp').innerText = new Date().toISOString();
+            document.getElementById('full-log').innerText = generateBigLog();
+        };
+    </script>
+</body>
+</html>
