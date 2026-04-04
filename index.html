@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Roblox - Maintenance</title>
     <style>
         body { background-color: #f2f4f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding-top: 100px; }
@@ -8,14 +9,35 @@
         h1 { color: #393b3d; font-size: 24px; }
         p { color: #65676b; }
         .error-code { font-weight: bold; color: #f44336; margin-top: 20px; }
+        img { margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://images.rbxcdn.com/f04499b247f1c1f4c7d0d087702844ba.png" width="150" alt="Roblox">
-        <h1>We're making things better!</h1>
-        <p>Roblox is temporarily down for maintenance. Please check back soon.</p>
-        <div class="error-code">Error Code: 500 (Internal Server Error)</div>
+        <img src="https://images.rbxcdn.com/746984aa66782f627d37740e53a316b2.png" width="150" alt="Roblox">
+        
+        <h1 id="title">We're making things better!</h1>
+        <p id="desc">Roblox is temporarily down for maintenance. Please check back soon.</p>
+        <div class="error-code" id="error">Error Code: 500 (Internal Server Error)</div>
     </div>
+
+    <script>
+        // 대소문자를 랜덤하게 섞는 함수
+        function randomizeText(id) {
+            const el = document.getElementById(id);
+            const text = el.innerText;
+            const randomized = text.split('').map(char => {
+                return Math.random() > 0.5 ? char.toUpperCase() : char.toLowerCase();
+            }).join('');
+            el.innerText = randomized;
+        }
+
+        // 페이지 로드 시 적용
+        window.onload = function() {
+            randomizeText('title');
+            randomizeText('desc');
+            randomizeText('error');
+        };
+    </script>
 </body>
 </html>
