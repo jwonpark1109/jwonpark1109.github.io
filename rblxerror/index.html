@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox - Internal Server Error</title>
     
-    <link rel="icon" href="https://jwonpark1109.github.io/rblxerrror/images/icon.svg" type="image/x-icon">
+    <link rel="icon" href="https://jwonpark1109.github.io/rblxerror/images/icon.svg" type="image/x-icon">
     
     <style>
-        /* 테마 변수 설정 */
+        /* 1. 기본 테마 설정 (라이트 모드) */
         :root {
             --bg-color: #f2f4f5;
             --container-bg: #ffffff;
@@ -23,25 +23,28 @@
             --btn-secondary-border: #adb0b1;
             --btn-secondary-hover: #e8eaeb;
             --link-hover: #111111;
-            --toggle-active-bg: rgba(0, 0, 0, 0.05);
         }
 
-        /* 사용자가 '다크 모드' 클릭 시 적용 (시스템 자동 감지 삭제됨) */
-        body.dark-mode {
-            --bg-color: #191b1d;
-            --container-bg: #232527;
-            --text-main: #ffffff;
-            --text-sub: #b8b8b8;
-            --debug-bg: #1a1c1e;
-            --debug-border: #333537;
-            --debug-text: #8b8d91;
-            --btn-primary-bg: #ffffff;
-            --btn-primary-text: #111111;
-            --btn-primary-hover: #e0e0e0;
-            --btn-secondary-border: #5c5e60;
-            --btn-secondary-hover: #2f3133;
-            --link-hover: #ffffff;
-            --toggle-active-bg: rgba(255, 255, 255, 0.1);
+        /* 2. 시스템 다크 모드 자동 감지 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191b1d;
+                --container-bg: #232527;
+                --text-main: #ffffff;
+                --text-sub: #b8b8b8;
+                --debug-bg: #1a1c1e;
+                --debug-border: #333537;
+                --debug-text: #8b8d91;
+                --btn-primary-bg: #ffffff;
+                --btn-primary-text: #111111;
+                --btn-primary-hover: #e0e0e0;
+                --btn-secondary-border: #5c5e60;
+                --btn-secondary-hover: #2f3133;
+                --link-hover: #ffffff;
+            }
+            /* 다크 모드 시 라벨 교체 */
+            #label_white { display: none !important; }
+            #label_black { display: inline-block !important; }
         }
 
         body { 
@@ -54,35 +57,21 @@
         .container { 
             background: var(--container-bg); 
             width: 90%; max-width: 420px; padding: 40px; 
-            border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
             text-align: center; transition: background-color 0.3s ease;
         }
 
-        /* --- 아이콘(라벨) 로직 --- */
-        .icon-container { margin-bottom: 20px; min-height: 40px; }
-        .icon-container img { max-width: 160px; height: auto; display: none; }
+        /* 라벨 이미지 구역 */
+        .icon-container { margin-bottom: 25px; min-height: 45px; }
+        .icon-container img { max-width: 160px; height: auto; }
         
-        /* 화이트 모드일 때 label_white 표시 */
-        body:not(.dark-mode) #label_white { display: inline-block; }
-        /* 다크 모드일 때 label_black 표시 */
-        body.dark-mode #label_black { display: inline-block; }
-
-        /* 테마 토글 스위치 */
-        .theme-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
-        .theme-label {
-            font-size: 11px; font-weight: bold; color: var(--text-sub);
-            padding: 5px 10px; border-radius: 15px; cursor: pointer;
-            border: 1px solid var(--btn-secondary-border); transition: 0.2s;
-        }
-        .theme-label.active {
-            color: var(--text-main); background-color: var(--toggle-active-bg);
-            border-width: 2px;
-        }
+        #label_white { display: inline-block; }
+        #label_black { display: none; }
 
         h1 { color: var(--text-main); font-size: 22px; margin-top: 10px; }
         p { color: var(--text-sub); line-height: 1.5; margin-bottom: 25px; font-size: 14px; }
         
-        /* 복구된 디버그 박스 */
+        /* 디버그 박스 */
         .debug-box {
             display: block; font-family: 'Courier New', monospace; font-size: 11px;
             color: var(--debug-text); background: var(--debug-bg);
@@ -97,7 +86,7 @@
         
         .download-link {
             font-size: 12px; color: var(--text-sub); text-decoration: underline;
-            margin-bottom: 5px; cursor: pointer; background: none; border: none;
+            margin-bottom: 5px; cursor: pointer; background: none; border: none; padding: 5px;
         }
 
         .btn {
@@ -107,6 +96,8 @@
         }
         .btn:disabled { opacity: 0.7; cursor: not-allowed; }
         .btn-primary { background-color: var(--btn-primary-bg); color: var(--btn-primary-text); }
+        .btn-primary:hover:not(:disabled) { background-color: var(--btn-primary-hover); }
+
         .btn-secondary {
             background-color: transparent; color: var(--text-main);
             border: 1px solid var(--btn-secondary-border); text-decoration: none;
@@ -119,13 +110,8 @@
 <body>
     <div class="container">
         <div class="icon-container">
-            <img src="https://jwonpark1109.github.io/rblxerrror/images/label_white.svg" id="label_white" alt="Roblox Light">
-            <img src="https://jwonpark1109.github.io/rblxerrror/images/label_black.svg" id="label_black" alt="Roblox Dark">
-        </div>
-
-        <div class="theme-toggle">
-            <span class="theme-label active" id="btn_white" onclick="setTheme('light')">화이트 모드</span>
-            <span class="theme-label" id="btn_black" onclick="setTheme('dark')">다크 모드</span>
+            <img src="https://jwonpark1109.github.io/rblxerror/images/label_white.svg" id="label_white" alt="Roblox Light">
+            <img src="https://jwonpark1109.github.io/rblxerror/images/label_black.svg" id="label_black" alt="Roblox Dark">
         </div>
         
         <h1>우리는 더 나은 Roblox를 만들고 있어요!</h1>
@@ -146,30 +132,12 @@ Timestamp: <span id="timestamp"></span>
         <div class="button-group">
             <button class="download-link" onclick="downloadLog()">로그 다운로드</button>
             <button class="btn btn-primary" onclick="retryConnection(this)">재시도</button>
-            <a href="https://jwonpark1109.github.io/rblxerrror/status/" class="btn btn-secondary">로블록스 서버 상태 보기</a>
-            <a href="https://jwonpark1109.github.io/rblxerrror/" class="btn btn-secondary">홈으로 돌아가기</a>
+            <a href="https://jwonpark1109.github.io/rblxerror/status/" class="btn btn-secondary">로블록스 서버 상태 보기</a>
+            <a href="https://jwonpark1109.github.io/rblxerror/" class="btn btn-secondary">홈으로 돌아가기</a>
         </div>
     </div>
 
     <script>
-        // --- 테마 전환 (아이콘 및 라벨 상태 관리) ---
-        function setTheme(mode) {
-            const body = document.body;
-            const btnWhite = document.getElementById('btn_white');
-            const btnBlack = document.getElementById('btn_black');
-
-            if (mode === 'dark') {
-                body.classList.add('dark-mode');
-                btnBlack.classList.add('active');
-                btnWhite.classList.remove('active');
-            } else {
-                body.classList.remove('dark-mode');
-                btnWhite.classList.add('active');
-                btnBlack.classList.remove('active');
-            }
-        }
-
-        // --- 복구된 동적 데이터 생성 기능 ---
         function generateHash() {
             const parts = Array.from({length: 8}, () => Math.random().toString(36).substring(2, 6));
             return `{${parts.join('-')}-KOR1-paju}`;
@@ -181,17 +149,16 @@ Timestamp: <span id="timestamp"></span>
 
         function generateBigLog() {
             let logData = "";
-            const modules = ["CoreEngine", "NetworkManager", "DataStore", "AvatarService"];
+            const modules = ["CoreEngine", "NetworkManager", "DataStore", "AvatarService", "AssetStreaming"];
             for(let i=0; i < 150; i++) { 
                 const mod = modules[Math.floor(Math.random() * modules.length)];
-                logData += `[${new Date().toISOString()}] ERROR in ${mod}: at 0x${Math.random().toString(16).substring(2, 10).toUpperCase()}\n`;
+                logData += `[${new Date().toISOString()}] ERROR in ${mod}: 0x${Math.random().toString(16).substring(2, 10).toUpperCase()}\n`;
                 logData += `   Stack: Roblox.Services.${mod}.ProcessRequest line ${Math.floor(Math.random()*5000)}\n`;
                 logData += `-`.repeat(40) + "\n";
             }
             return logData;
         }
 
-        // --- 복구된 로그 다운로드 기능 ---
         function downloadLog() {
             const header = document.getElementById('debug').innerText.split('[DUMP START]')[0];
             const body = document.getElementById('full-log').innerText;
@@ -202,7 +169,6 @@ Timestamp: <span id="timestamp"></span>
             a.click();
         }
 
-        // --- 복구된 재시도 애니메이션 ---
         function retryConnection(btn) {
             btn.disabled = true;
             let dots = 0;
