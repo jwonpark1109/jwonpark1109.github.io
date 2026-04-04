@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox - Internal Server Error</title>
     
+    <link rel="icon" href="https://jwonpark1109.github.io/rblxerrror/images/icon.svg" type="image/x-icon">
+    
     <style>
+        /* 테마 변수 설정 */
         :root {
             --bg-color: #f2f4f5;
             --container-bg: #ffffff;
@@ -13,10 +16,17 @@
             --text-sub: #65676b;
             --debug-bg: #f9f9f9;
             --debug-border: #eeeeee;
+            --debug-text: #a1a3a7;
             --btn-primary-bg: #111111;
             --btn-primary-text: #ffffff;
+            --btn-primary-hover: #333333;
+            --btn-secondary-border: #adb0b1;
+            --btn-secondary-hover: #e8eaeb;
+            --link-hover: #111111;
+            --toggle-active-bg: rgba(0, 0, 0, 0.05);
         }
 
+        /* 사용자가 '다크 모드' 클릭 시 적용 (시스템 자동 감지 삭제됨) */
         body.dark-mode {
             --bg-color: #191b1d;
             --container-bg: #232527;
@@ -24,92 +34,191 @@
             --text-sub: #b8b8b8;
             --debug-bg: #1a1c1e;
             --debug-border: #333537;
+            --debug-text: #8b8d91;
             --btn-primary-bg: #ffffff;
             --btn-primary-text: #111111;
+            --btn-primary-hover: #e0e0e0;
+            --btn-secondary-border: #5c5e60;
+            --btn-secondary-hover: #2f3133;
+            --link-hover: #ffffff;
+            --toggle-active-bg: rgba(255, 255, 255, 0.1);
         }
 
         body { 
             background-color: var(--bg-color); 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             display: flex; justify-content: center; align-items: center;
-            height: 100vh; margin: 0; transition: 0.3s;
+            height: 100vh; margin: 0; transition: background-color 0.3s ease;
         }
 
         .container { 
             background: var(--container-bg); 
-            width: 90%; max-width: 400px; padding: 40px; 
-            border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
-            text-align: center;
+            width: 90%; max-width: 420px; padding: 40px; 
+            border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            text-align: center; transition: background-color 0.3s ease;
         }
 
-        /* --- 아이콘(라벨) 노출 제어 --- */
-        .icon-container img {
-            max-width: 150px;
-            height: auto;
-            margin-bottom: 20px;
-            display: none; /* 기본적으로 모두 숨김 */
-        }
-
-        /* 화이트 모드일 때 label_white만 표시 */
+        /* --- 아이콘(라벨) 로직 --- */
+        .icon-container { margin-bottom: 20px; min-height: 40px; }
+        .icon-container img { max-width: 160px; height: auto; display: none; }
+        
+        /* 화이트 모드일 때 label_white 표시 */
         body:not(.dark-mode) #label_white { display: inline-block; }
-
-        /* 다크 모드일 때 label_black만 표시 */
+        /* 다크 모드일 때 label_black 표시 */
         body.dark-mode #label_black { display: inline-block; }
 
-        /* 테마 전환 버튼 스타일 */
-        .theme-switch-group { margin-bottom: 20px; display: flex; justify-content: center; gap: 10px; }
-        .mode-btn {
-            font-size: 12px; cursor: pointer; padding: 5px 10px;
-            border: 1px solid #adb0b1; border-radius: 15px; color: var(--text-sub);
+        /* 테마 토글 스위치 */
+        .theme-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .theme-label {
+            font-size: 11px; font-weight: bold; color: var(--text-sub);
+            padding: 5px 10px; border-radius: 15px; cursor: pointer;
+            border: 1px solid var(--btn-secondary-border); transition: 0.2s;
+        }
+        .theme-label.active {
+            color: var(--text-main); background-color: var(--toggle-active-bg);
+            border-width: 2px;
         }
 
-        h1 { color: var(--text-main); font-size: 24px; }
-        p { color: var(--text-sub); line-height: 1.5; margin-bottom: 25px; }
+        h1 { color: var(--text-main); font-size: 22px; margin-top: 10px; }
+        p { color: var(--text-sub); line-height: 1.5; margin-bottom: 25px; font-size: 14px; }
         
+        /* 복구된 디버그 박스 */
         .debug-box {
-            font-family: monospace; font-size: 11px; color: #a1a3a7;
-            background: var(--debug-bg); padding: 12px; border: 1px solid var(--debug-border);
-            text-align: left; white-space: pre-wrap; margin-bottom: 20px;
-            max-height: 100px; overflow-y: auto;
+            display: block; font-family: 'Courier New', monospace; font-size: 11px;
+            color: var(--debug-text); background: var(--debug-bg);
+            padding: 12px; border-radius: 4px; border: 1px solid var(--debug-border);
+            text-align: left; word-break: break-all; white-space: pre-wrap;
+            margin-bottom: 20px; max-height: 100px; overflow-y: auto;
+        }
+
+        .error-code { font-weight: bold; color: #f44336; margin-bottom: 25px; font-size: 13px; }
+
+        .button-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        
+        .download-link {
+            font-size: 12px; color: var(--text-sub); text-decoration: underline;
+            margin-bottom: 5px; cursor: pointer; background: none; border: none;
         }
 
         .btn {
             width: 100%; padding: 12px; border-radius: 8px; font-weight: bold;
-            cursor: pointer; border: none; display: block; margin-top: 10px;
+            font-size: 15px; cursor: pointer; transition: all 0.2s;
+            border: none; box-sizing: border-box; display: block;
         }
-        .btn-primary { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        .btn-primary { background-color: var(--btn-primary-bg); color: var(--btn-primary-text); }
+        .btn-secondary {
+            background-color: transparent; color: var(--text-main);
+            border: 1px solid var(--btn-secondary-border); text-decoration: none;
+        }
+        .btn-secondary:hover { background-color: var(--btn-secondary-hover); }
+
+        @media (max-width: 480px) { .container { padding: 30px 20px; } }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="icon-container">
-            <img src="https://jwonpark1109.github.io/rblxerror/images/label_black.svg" id="label_white" alt="Roblox White">
-            <img src="https://jwonpark1109.github.io/rblxerror/images/label_white.svg" id="label_black" alt="Roblox Black">
+            <img src="https://jwonpark1109.github.io/rblxerrror/images/label_white.svg" id="label_white" alt="Roblox Light">
+            <img src="https://jwonpark1109.github.io/rblxerrror/images/label_black.svg" id="label_black" alt="Roblox Dark">
         </div>
 
-        <div class="theme-switch-group">
-            <span class="mode-btn" onclick="document.body.classList.remove('dark-mode')">Light</span>
-            <span class="mode-btn" onclick="document.body.classList.add('dark-mode')">Dark</span>
+        <div class="theme-toggle">
+            <span class="theme-label active" id="btn_white" onclick="setTheme('light')">화이트 모드</span>
+            <span class="theme-label" id="btn_black" onclick="setTheme('dark')">다크 모드</span>
         </div>
         
         <h1>우리는 더 나은 Roblox를 만들고 있어요!</h1>
-        <p>일시적으로 접속이 불가능합니다.<br>나중에 다시 시도해 주세요.</p>
+        <p>Roblox가 알 수 없는 이유로 인해 일시적으로 접속이 불가능합니다.<br>나중에 다시 시도해 주세요.</p>
         
-        <div class="debug-box" id="debug">Error code: 500 - Internal Server Error...</div>
+        <div class="debug-box" id="debug">
+Error code: 500 - Internal Server Error
+Request ID: <span id="request-id">{loading...}</span>
+Server: <span id="server-info">AWS-?-?-KR</span>
+Timestamp: <span id="timestamp"></span>
+----------------------------------------
+[DUMP START]
+<span id="full-log">Generating detailed system dump...</span>
+        </div>
 
-        <button class="btn btn-primary" onclick="retry(this)">재시도</button>
+        <div class="error-code">Error Code: 500 - Internal Server Error ( 내부 서버 오류 )</div>
+
+        <div class="button-group">
+            <button class="download-link" onclick="downloadLog()">로그 다운로드</button>
+            <button class="btn btn-primary" onclick="retryConnection(this)">재시도</button>
+            <a href="https://jwonpark1109.github.io/rblxerrror/status/" class="btn btn-secondary">로블록스 서버 상태 보기</a>
+            <a href="https://jwonpark1109.github.io/rblxerrror/" class="btn btn-secondary">홈으로 돌아가기</a>
+        </div>
     </div>
 
     <script>
-        function retry(btn) {
+        // --- 테마 전환 (아이콘 및 라벨 상태 관리) ---
+        function setTheme(mode) {
+            const body = document.body;
+            const btnWhite = document.getElementById('btn_white');
+            const btnBlack = document.getElementById('btn_black');
+
+            if (mode === 'dark') {
+                body.classList.add('dark-mode');
+                btnBlack.classList.add('active');
+                btnWhite.classList.remove('active');
+            } else {
+                body.classList.remove('dark-mode');
+                btnWhite.classList.add('active');
+                btnBlack.classList.remove('active');
+            }
+        }
+
+        // --- 복구된 동적 데이터 생성 기능 ---
+        function generateHash() {
+            const parts = Array.from({length: 8}, () => Math.random().toString(36).substring(2, 6));
+            return `{${parts.join('-')}-KOR1-paju}`;
+        }
+
+        function generateServerInfo() {
+            return `AWS-${Math.floor(Math.random() * 10)}-${Math.floor(Math.random() * 100)}-KR`;
+        }
+
+        function generateBigLog() {
+            let logData = "";
+            const modules = ["CoreEngine", "NetworkManager", "DataStore", "AvatarService"];
+            for(let i=0; i < 150; i++) { 
+                const mod = modules[Math.floor(Math.random() * modules.length)];
+                logData += `[${new Date().toISOString()}] ERROR in ${mod}: at 0x${Math.random().toString(16).substring(2, 10).toUpperCase()}\n`;
+                logData += `   Stack: Roblox.Services.${mod}.ProcessRequest line ${Math.floor(Math.random()*5000)}\n`;
+                logData += `-`.repeat(40) + "\n";
+            }
+            return logData;
+        }
+
+        // --- 복구된 로그 다운로드 기능 ---
+        function downloadLog() {
+            const header = document.getElementById('debug').innerText.split('[DUMP START]')[0];
+            const body = document.getElementById('full-log').innerText;
+            const blob = new Blob([header + "\n[SYSTEM DUMP]\n" + body], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = window.URL.createObjectURL(blob);
+            a.download = `roblox_error_log_${new Date().getTime()}.txt`;
+            a.click();
+        }
+
+        // --- 복구된 재시도 애니메이션 ---
+        function retryConnection(btn) {
             btn.disabled = true;
             let dots = 0;
             const ani = setInterval(() => {
                 dots = (dots + 1) % 4;
                 btn.innerText = "연결 시도 중" + ".".repeat(dots);
             }, 400);
-            setTimeout(() => { clearInterval(ani); location.reload(); }, 2000);
+            setTimeout(() => { clearInterval(ani); location.reload(); }, 2500);
         }
+
+        window.onload = function() {
+            document.getElementById('request-id').innerText = generateHash();
+            document.getElementById('server-info').innerText = generateServerInfo();
+            document.getElementById('timestamp').innerText = new Date().toISOString();
+            document.getElementById('full-log').innerText = generateBigLog();
+        };
     </script>
 </body>
 </html>
