@@ -8,7 +8,6 @@
     <link rel="icon" href="https://jwonpark1109.github.io/rblxerror/images/icon.svg" type="image/x-icon">
     
     <style>
-        /* 기본 테마 (라이트 모드) */
         :root {
             --bg-color: #f2f4f5;
             --container-bg: #ffffff;
@@ -18,7 +17,6 @@
             --card-hover-bg: #f9f9f9;
         }
 
-        /* 시스템 다크 모드 자동 감지 */
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-color: #191b1d;
@@ -52,14 +50,13 @@
             max-width: 900px;
         }
 
-        /* 이미지 카드 스타일 */
         .image-card {
             background: var(--container-bg);
             border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 20px;
             text-align: center;
-            text-decoration: none; /* 링크 밑줄 제거 */
+            text-decoration: none;
             transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
@@ -81,7 +78,7 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 15px;
-            background: rgba(128, 128, 128, 0.05); /* 이미지 배경 약간 깔아줌 */
+            background: rgba(128, 128, 128, 0.05);
             border-radius: 8px;
         }
 
@@ -116,7 +113,7 @@
 </head>
 <body>
 
-    <h1>Assets Gallery</h1>
+    <h1>이미지 저장소</h1>
     <p>이미지를 클릭하면 원본 파일 주소로 이동합니다.</p>
 
     <div class="gallery">
