@@ -1,12 +1,204 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Roblox - Status</title>
+/* <!DOCTYPE html> */
+/* <html> */
+/* <head> */
+/*     <title>Roblox - Status</title> */
     
+/*     <link rel="icon" href="https://jwonpark1109.github.io/rblxerror/images/icon.svg" type="image/x-icon"> */
+/* </head> */
+/* <body> */
+/*     <h1>Error: 상태를 로드 하는데 실패하였습니다.</h1> */
+/*     <p>500 - Internal server error ( 내부 서버 오류 )</p> */
+/* </body> */
+/* </html> */
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Status - All Systems Operational?</title>
+
+    <meta property="og:title" content="Roblox System Status">
+    <meta property="og:description" content="현재 로블록스 서버의 실시간 상태를 확인하세요.">
+    <meta property="og:image" content="https://jwonpark1109.github.io/rblxerror/images/label_black.svg">
+    <meta property="og:url" content="https://jwonpark1109.github.io/rblxerror/status/">
+    <meta property="og:type" content="website">
+
     <link rel="icon" href="https://jwonpark1109.github.io/rblxerror/images/icon.svg" type="image/x-icon">
+
+    <style>
+        :root {
+            --bg-color: #f2f4f5;
+            --header-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-main: #393b3d;
+            --text-sub: #65676b;
+            --border-color: #dee1e2;
+            --status-ok: #00b06f; /* 초록색 (정상) */
+            --status-warn: #f68b1e; /* 주황색 (지연) */
+            --status-error: #f44336; /* 빨간색 (장애) */
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191b1d;
+                --header-bg: #232527;
+                --card-bg: #232527;
+                --text-main: #ffffff;
+                --text-sub: #b8b8b8;
+                --border-color: #333537;
+            }
+            #label_white { display: none !important; }
+            #label_black { display: inline-block !important; }
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 헤더 */
+        header {
+            background: var(--header-bg);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .logo img { height: 30px; display: none; }
+        #label_white { display: inline-block; }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* 메인 상태 바 */
+        .main-status {
+            background: var(--status-error); /* 가짜니까 장애 상태로 설정 */
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 서비스 리스트 */
+        .service-list {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .service-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .service-item:last-child { border-bottom: none; }
+        .service-name { font-weight: 600; font-size: 16px; }
+        
+        .status-text { font-size: 14px; font-weight: bold; }
+        .status-ok { color: var(--status-ok); }
+        .status-warn { color: var(--status-warn); }
+        .status-error { color: var(--status-error); }
+
+        .update-time {
+            margin-top: 15px;
+            font-size: 12px;
+            color: var(--text-sub);
+            text-align: right;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-bottom: 30px;
+        }
+        .back-btn {
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+        .back-btn:hover { background: var(--header-bg); color: var(--text-main); }
+    </style>
 </head>
 <body>
-    <h1>Error: 상태를 로드 하는데 실패하였습니다.</h1>
-    <p>500 - Internal server error ( 내부 서버 오류 )</p>
+
+<header>
+    <div class="logo">
+        <img src="https://jwonpark1109.github.io/rblxerror/images/label_white.svg" id="label_white" alt="Roblox">
+        <img src="https://jwonpark1109.github.io/rblxerror/images/label_black.svg" id="label_black" alt="Roblox">
+    </div>
+    <div style="font-weight: bold; font-size: 14px;">System Status</div>
+</header>
+
+<div class="container">
+    <div class="main-status" id="main-banner">
+        <span>Partial Outage (부분적 장애 발생)</span>
+        <span style="font-size: 14px; opacity: 0.9;">⚠️</span>
+    </div>
+
+    <div class="service-list">
+        <div class="service-item">
+            <span class="service-name">User (사용자 접속)</span>
+            <span class="status-text status-error">Service Disruption</span>
+        </div>
+        <div class="service-item">
+            <span class="service-name">Player (게임 플레이)</span>
+            <span class="status-text status-error">Major Outage</span>
+        </div>
+        <div class="service-item">
+            <span class="service-name">Creator (스튜디오/만들기)</span>
+            <span class="status-text status-warn">Degraded Performance</span>
+        </div>
+        <div class="service-item">
+            <span class="service-name">Website (홈페이지)</span>
+            <span class="status-text status-ok">Operational</span>
+        </div>
+        <div class="service-item">
+            <span class="service-name">Avatar (아바타 편집)</span>
+            <span class="status-text status-ok">Operational</span>
+        </div>
+    </div>
+
+    <div class="update-time">
+        Last updated: <span id="current-time"></span>
+    </div>
+</div>
+
+<footer>
+    <a href="https://jwonpark1109.github.io/rblxerror/" class="back-btn">에러 페이지로 돌아가기</a>
+</footer>
+
+<script>
+    // 현재 시간을 실시간으로 표시 (로블록스 상태 페이지 특징)
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('current-time').innerText = now.toLocaleString('ko-KR', { 
+            timeZone: 'Asia/Seoul',
+            year: 'numeric', month: 'long', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+        }) + " (KST)";
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+
 </body>
 </html>
