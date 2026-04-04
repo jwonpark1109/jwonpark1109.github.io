@@ -41,10 +41,43 @@
             border: 1px solid #eeeeee;
             text-align: left;
             word-break: break-all;
+            margin-bottom: 20px;
         }
 
-        .error-code { font-weight: bold; color: #f44336; margin-top: 20px; font-size: 14px; }
+        .error-code { font-weight: bold; color: #f44336; margin-bottom: 25px; font-size: 14px; }
         img { max-width: 150px; height: auto; }
+
+        /* 버튼 컨테이너 및 스타일 */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .btn {
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+        }
+        .btn-primary {
+            background-color: #111111;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #333333;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #111111;
+            border: 1px solid #adb0b1;
+        }
+        .btn-secondary:hover {
+            background-color: #f2f4f5;
+        }
     </style>
 </head>
 <body>
@@ -61,13 +94,16 @@
         </debug-box>
 
         <div class="error-code">Error Code: 500 (Internal Server Error)</div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+            <a href="https://www.roblox.com" class="btn btn-secondary">Back to Home</a>
+        </div>
     </div>
 
     <script>
-        // 랜덤한 디버그 해시 생성 함수
         function generateHash() {
             const part = () => Math.random().toString(36).substring(2, 6);
-            // 요청하신 긴 형식 유지
             let hash = "{";
             for(let i=0; i<13; i++) {
                 hash += part() + "-";
@@ -75,14 +111,12 @@
             return hash + "KOR1-paju}";
         }
 
-        // AWS-랜덤숫자-랜덤숫자-KR 생성 함수
         function generateServerInfo() {
-            const num1 = Math.floor(Math.random() * 10); // 0~9
-            const num2 = Math.floor(Math.random() * 100); // 0~99
+            const num1 = Math.floor(Math.random() * 10);
+            const num2 = Math.floor(Math.random() * 100);
             return `AWS-${num1}-${num2}-KR`;
         }
 
-        // 페이지 로드 시 정보 삽입
         window.onload = function() {
             document.getElementById('request-id').innerText = generateHash();
             document.getElementById('server-info').innerText = generateServerInfo();
