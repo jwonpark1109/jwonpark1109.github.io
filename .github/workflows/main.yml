@@ -1,0 +1,22 @@
+name: Generate Image List
+on:
+  push:
+    paths:
+      - 'test/images/**' # 이미지가 추가되면 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create JSON
+        run: |
+          cd test/images
+          ls -p | grep -v / | grep -E '\.(jpg|jpeg|png|gif|svg|webp)$' | jq -R . | jq -s . > ../images.json
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "action@github.com"
+          git add test/images.json
+          git commit -m "Update image list" || exit 0
+          git push
