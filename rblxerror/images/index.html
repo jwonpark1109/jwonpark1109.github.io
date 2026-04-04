@@ -1,10 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>images load</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Error Assets - Images</title>
+    
+    <link rel="icon" href="https://jwonpark1109.github.io/rblxerror/images/icon.svg" type="image/x-icon">
+    
+    <style>
+        /* 기본 테마 (라이트 모드) */
+        :root {
+            --bg-color: #f2f4f5;
+            --container-bg: #ffffff;
+            --text-main: #393b3d;
+            --text-sub: #65676b;
+            --card-border: #eeeeee;
+            --card-hover-bg: #f9f9f9;
+        }
+
+        /* 시스템 다크 모드 자동 감지 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191b1d;
+                --container-bg: #232527;
+                --text-main: #ffffff;
+                --text-sub: #b8b8b8;
+                --card-border: #333537;
+                --card-hover-bg: #2f3133;
+            }
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        h1 { color: var(--text-main); margin-bottom: 10px; }
+        p { color: var(--text-sub); margin-bottom: 40px; }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* 이미지 카드 스타일 */
+        .image-card {
+            background: var(--container-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none; /* 링크 밑줄 제거 */
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--card-hover-bg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .preview-box {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            background: rgba(128, 128, 128, 0.05); /* 이미지 배경 약간 깔아줌 */
+            border-radius: 8px;
+        }
+
+        .preview-box img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .image-name {
+            color: var(--text-main);
+            font-weight: bold;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .image-url {
+            color: var(--text-sub);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .back-link {
+            margin-top: 50px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid var(--text-sub);
+        }
+        .back-link:hover { color: var(--text-main); border-color: var(--text-main); }
+    </style>
 </head>
 <body>
-    <h1>index.html</h1>
-    <p>Message displayed in index.html: Returns null.</p>
+
+    <h1>Assets Gallery</h1>
+    <p>이미지를 클릭하면 원본 파일 주소로 이동합니다.</p>
+
+    <div class="gallery">
+        <a href="https://jwonpark1109.github.io/rblxerror/images/icon.svg" class="image-card">
+            <div class="preview-box">
+                <img src="https://jwonpark1109.github.io/rblxerror/images/icon.svg" alt="icon.svg">
+            </div>
+            <div class="image-name">icon.svg</div>
+            <div class="image-url">/images/icon.svg</div>
+        </a>
+
+        <a href="https://jwonpark1109.github.io/rblxerror/images/label_white.svg" class="image-card">
+            <div class="preview-box">
+                <img src="https://jwonpark1109.github.io/rblxerror/images/label_white.svg" alt="label_white.svg">
+            </div>
+            <div class="image-name">label_white.svg</div>
+            <div class="image-url">/images/label_white.svg</div>
+        </a>
+
+        <a href="https://jwonpark1109.github.io/rblxerror/images/label_black.svg" class="image-card">
+            <div class="preview-box">
+                <img src="https://jwonpark1109.github.io/rblxerror/images/label_black.svg" alt="label_black.svg">
+            </div>
+            <div class="image-name">label_black.svg</div>
+            <div class="image-url">/images/label_black.svg</div>
+        </a>
+    </div>
+
+    <a href="https://jwonpark1109.github.io/rblxerror/" class="back-link">메인 페이지로 돌아가기</a>
+
 </body>
 </html>
