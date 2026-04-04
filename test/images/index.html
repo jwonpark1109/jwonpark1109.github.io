@@ -63,6 +63,13 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .image-card:hover {
@@ -80,6 +87,7 @@
             margin-bottom: 15px;
             background: rgba(128, 128, 128, 0.05);
             border-radius: 8px;
+            overflow: hidden;
         }
 
         .preview-box img {
@@ -109,6 +117,9 @@
             border-bottom: 1px solid var(--text-sub);
         }
         .back-link:hover { color: var(--text-main); border-color: var(--text-main); }
+
+        /* 로딩 메시지 스타일 */
+        #loading-msg { color: var(--text-sub); font-size: 14px; }
     </style>
 </head>
 <body>
@@ -116,33 +127,72 @@
     <h1>이미지 저장소</h1>
     <p>이미지를 클릭하면 원본 파일 주소로 이동합니다.</p>
 
-    <div class="gallery">
-        <a href="https://jwonpark1109.github.io/rblxerror/images/icon.svg" class="image-card">
-            <div class="preview-box">
-                <img src="https://jwonpark1109.github.io/rblxerror/images/icon.svg" alt="icon.svg">
-            </div>
-            <div class="image-name">icon.svg</div>
-            <div class="image-url">/images/icon.svg</div>
-        </a>
-
-        <a href="https://jwonpark1109.github.io/rblxerror/images/label_white.svg" class="image-card">
-            <div class="preview-box">
-                <img src="https://jwonpark1109.github.io/rblxerror/images/label_white.svg" alt="label_white.svg">
-            </div>
-            <div class="image-name">label_white.svg</div>
-            <div class="image-url">/images/label_white.svg</div>
-        </a>
-
-        <a href="https://jwonpark1109.github.io/rblxerror/images/label_black.svg" class="image-card">
-            <div class="preview-box">
-                <img src="https://jwonpark1109.github.io/rblxerror/images/label_black.svg" alt="label_black.svg">
-            </div>
-            <div class="image-name">label_black.svg</div>
-            <div class="image-url">/images/label_black.svg</div>
-        </a>
+    <div class="gallery" id="gallery">
+        <div id="loading-msg">이미지 목록을 불러오는 중...</div>
     </div>
 
     <a href="https://jwonpark1109.github.io/rblxerror/" class="back-link">메인 페이지로 돌아가기</a>
+
+    <script>
+        async function fetchImages() {
+            const gallery = document.getElementById('gallery');
+            
+            // 본인의 GitHub 정보에 맞게 설정됨
+            const owner = "jwonpark1109";
+            const repo = "rblxerror";
+            const path = "images";
+            
+            const apiURL = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+            const baseRawURL = `https://jwonpark1109.github.io/${repo}/${path}/`;
+
+            try {
+                const response = await fetch(apiURL);
+                if (!response.ok) throw new Error('네트워크 응답에 문제가 있습니다.');
+                
+                const files = await response.json();
+                
+                // 로딩 메시지 삭제
+                gallery.innerHTML = '';
+
+                // 이미지 파일만 필터링 (확장자 기준)
+                const imageExtensions = ['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'ico'];
+                const imageFiles = files.filter(file => {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    return imageExtensions.includes(ext);
+                });
+
+                if (imageFiles.length === 0) {
+                    gallery.innerHTML = '<p>폴더 내에 이미지가 없습니다.</p>';
+                    return;
+                }
+
+                // 이미지 카드 생성
+                imageFiles.forEach((file, index) => {
+                    const card = document.createElement('a');
+                    card.href = baseRawURL + file.name;
+                    card.className = 'image-card';
+                    card.style.animationDelay = `${index * 0.05}s`; // 순차적 나타남 효과
+
+                    card.innerHTML = `
+                        <div class="preview-box">
+                            <img src="${baseRawURL}${file.name}" alt="${file.name}" loading="lazy">
+                        </div>
+                        <div class="image-name">${file.name}</div>
+                        <div class="image-url">/${path}/${file.name}</div>
+                    `;
+                    
+                    gallery.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                gallery.innerHTML = '<p>이미지를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</p>';
+            }
+        }
+
+        // 실행
+        fetchImages();
+    </script>
 
 </body>
 </html>
