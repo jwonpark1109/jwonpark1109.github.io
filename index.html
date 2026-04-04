@@ -1,42 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox - Maintenance</title>
     <style>
-        body { background-color: #f2f4f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding-top: 100px; }
-        .container { background: white; width: 400px; margin: 0 auto; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { color: #393b3d; font-size: 24px; }
-        p { color: #65676b; }
-        .error-code { font-weight: bold; color: #f44336; margin-top: 20px; }
-        img { margin-bottom: 20px; }
+        body { 
+            background-color: #f2f4f5; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container { 
+            background: white; 
+            width: 90%; 
+            max-width: 400px; 
+            padding: 40px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            text-align: center;
+        }
+        h1 { color: #393b3d; font-size: 24px; margin-top: 20px; }
+        p { color: #65676b; line-height: 1.5; margin-bottom: 25px; }
+        
+        /* 디버그 정보 스타일 */
+        debug-box {
+            display: block;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 11px;
+            color: #a1a3a7;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #eeeeee;
+            text-align: left;
+            word-break: break-all;
+        }
+
+        .error-code { font-weight: bold; color: #f44336; margin-top: 20px; font-size: 14px; }
+        img { max-width: 150px; height: auto; }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://images.rbxcdn.com/746984aa66782f627d37740e53a316b2.png" width="150" alt="Roblox">
+        <img src="https://images.rbxcdn.com/746984aa66782f627d37740e53a316b2.png" alt="Roblox">
+        <h1>We're making things better!</h1>
+        <p>Roblox is temporarily down for maintenance.<br>Please check back soon.</p>
         
-        <h1 id="title">We're making things better!</h1>
-        <p id="desc">Roblox is temporarily down for maintenance. Please check back soon.</p>
-        <div class="error-code" id="error">Error Code: 500 (Internal Server Error)</div>
+        <debug-box id="debug">
+            Request ID: <span id="request-id">{loading...}</span><br>
+            Server: AWS-OR-2-NODE-7<br>
+            Timestamp: <span id="timestamp"></span>
+        </debug-box>
+
+        <div class="error-code">Error Code: 500 (Internal Server Error)</div>
     </div>
 
     <script>
-        // 대소문자를 랜덤하게 섞는 함수
-        function randomizeText(id) {
-            const el = document.getElementById(id);
-            const text = el.innerText;
-            const randomized = text.split('').map(char => {
-                return Math.random() > 0.5 ? char.toUpperCase() : char.toLowerCase();
-            }).join('');
-            el.innerText = randomized;
+        // 랜덤한 디버그 해시 생성 함수 (djaw-9aj1-21wa 형식)
+        function generateHash() {
+            const part = () => Math.random().toString(36).substring(2, 6);
+            return `{${part()}-${part()}-${part()}}`;
         }
 
-        // 페이지 로드 시 적용
+        // 페이지 로드 시 정보 삽입
         window.onload = function() {
-            randomizeText('title');
-            randomizeText('desc');
-            randomizeText('error');
+            document.getElementById('request-id').innerText = generateHash();
+            document.getElementById('timestamp').innerText = new Date().toISOString();
         };
     </script>
 </body>
