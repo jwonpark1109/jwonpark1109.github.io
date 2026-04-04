@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox - Internal Server Error</title>
     
-    <link rel="icon" href="https://jwonpark1109.github.io/rblxerrror/images/icon.svg" type="image/x-icon">
-    
     <style>
-        /* 시스템 테마에 따른 색상 변수 설정 */
+        /* 기본 테마 (라이트 모드) 색상 변수 */
         :root {
             --bg-color: #f2f4f5;
             --container-bg: #ffffff;
@@ -23,25 +21,25 @@
             --btn-secondary-border: #adb0b1;
             --btn-secondary-hover: #e8eaeb;
             --link-hover: #111111;
+            --toggle-active-bg: rgba(0, 0, 0, 0.05);
         }
 
-        /* 다크 모드 자동 감지 */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #191b1d;
-                --container-bg: #232527;
-                --text-main: #ffffff;
-                --text-sub: #b8b8b8;
-                --debug-bg: #1a1c1e;
-                --debug-border: #333537;
-                --debug-text: #8b8d91;
-                --btn-primary-bg: #ffffff;
-                --btn-primary-text: #111111;
-                --btn-primary-hover: #e0e0e0;
-                --btn-secondary-border: #5c5e60;
-                --btn-secondary-hover: #2f3133;
-                --link-hover: #ffffff;
-            }
+        /* 다크 모드 색상 변수 */
+        body.dark-mode {
+            --bg-color: #191b1d;
+            --container-bg: #232527;
+            --text-main: #ffffff;
+            --text-sub: #b8b8b8;
+            --debug-bg: #1a1c1e;
+            --debug-border: #333537;
+            --debug-text: #8b8d91;
+            --btn-primary-bg: #ffffff;
+            --btn-primary-text: #111111;
+            --btn-primary-hover: #e0e0e0;
+            --btn-secondary-border: #5c5e60;
+            --btn-secondary-hover: #2f3133;
+            --link-hover: #ffffff;
+            --toggle-active-bg: rgba(255, 255, 255, 0.1);
         }
 
         body { 
@@ -52,7 +50,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
         .container { 
@@ -63,13 +61,42 @@
             border-radius: 8px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
             text-align: center;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        h1 { color: var(--text-main); font-size: 24px; margin-top: 20px; }
-        p { color: var(--text-sub); line-height: 1.5; margin-bottom: 25px; font-size: 15px; }
+        /* 테마 변경 토글 버튼 스타일 */
+        .theme-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .theme-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--text-sub);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+
+        .theme-label:hover {
+            color: var(--text-main);
+        }
+
+        .theme-label.active {
+            color: var(--text-main);
+            background-color: var(--toggle-active-bg);
+            border-color: var(--btn-secondary-border);
+        }
+
+        h1 { color: var(--text-main); font-size: 24px; margin-top: 10px; transition: color 0.3s ease; }
+        p { color: var(--text-sub); line-height: 1.5; margin-bottom: 25px; font-size: 15px; transition: color 0.3s ease; }
         
-        /* 커스텀 태그를 div로 변경하여 호환성 향상 */
         .debug-box {
             display: block;
             font-family: 'Courier New', Courier, monospace;
@@ -81,14 +108,14 @@
             border: 1px solid var(--debug-border);
             text-align: left;
             word-break: break-all;
-            white-space: pre-wrap; /* 줄바꿈 유지 */
+            white-space: pre-wrap;
             margin-bottom: 20px;
             max-height: 100px; 
             overflow-y: auto;
+            transition: all 0.3s ease;
         }
 
         .error-code { font-weight: bold; color: #f44336; margin-bottom: 25px; font-size: 14px; }
-        img { max-width: 150px; height: auto; }
 
         .button-group {
             display: flex;
@@ -149,7 +176,6 @@
             background-color: var(--btn-secondary-hover);
         }
 
-        /* 모바일 최적화 */
         @media (max-width: 480px) {
             .container { padding: 30px 20px; }
         }
@@ -157,7 +183,12 @@
 </head>
 <body>
     <div class="container">
-        <img src="https://jwonpark1109.github.io/rblxerrror/images/icon.svg" width="150" alt="Roblox" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg'"> <h1>우리는 더 나은 Roblox를 만들고 있어요!</h1>
+        <div class="theme-toggle">
+            <span class="theme-label active" id="label_white" onclick="setTheme('light')">화이트 모드</span>
+            <span class="theme-label" id="label_black" onclick="setTheme('dark')">다크 모드</span>
+        </div>
+        
+        <h1>우리는 더 나은 Roblox를 만들고 있어요!</h1>
         <p>Roblox가 알 수 없는 이유로 인해 일시적으로 접속이 불가능합니다.<br>나중에 다시 시도해 주세요.</p>
         
         <div class="debug-box" id="debug">
@@ -175,12 +206,30 @@ Timestamp: <span id="timestamp"></span>
         <div class="button-group">
             <button class="download-link" onclick="downloadLog()">로그 다운로드</button>
             <button class="btn btn-primary" onclick="retryConnection(this)">재시도</button>
-            <a href="https://jwonpark1109.github.io/rblxerror/status/" class="btn btn-secondary">로블록스 서버 상태 보기</a>
-            <a href="https://jwonpark1109.github.io/rblxerror/" class="btn btn-secondary">홈으로 돌아가기</a>
+            <a href="https://jwonpark1109.github.io/rblxerrror/status/" class="btn btn-secondary">로블록스 서버 상태 보기</a>
+            <a href="https://jwonpark1109.github.io/rblxerrror/" class="btn btn-secondary">홈으로 돌아가기</a>
         </div>
     </div>
 
     <script>
+        // --- 테마 전환 기능 ---
+        function setTheme(mode) {
+            const body = document.body;
+            const labelWhite = document.getElementById('label_white');
+            const labelBlack = document.getElementById('label_black');
+
+            if (mode === 'dark') {
+                body.classList.add('dark-mode');
+                labelBlack.classList.add('active');
+                labelWhite.classList.remove('active');
+            } else {
+                body.classList.remove('dark-mode');
+                labelWhite.classList.add('active');
+                labelBlack.classList.remove('active');
+            }
+        }
+
+        // --- 기존 기능 유지 ---
         function generateHash() {
             const parts = Array.from({length: 8}, () => Math.random().toString(36).substring(2, 6));
             return `{${parts.join('-')}-KOR1-paju}`;
@@ -225,18 +274,15 @@ Timestamp: <span id="timestamp"></span>
             window.URL.revokeObjectURL(url);
         }
 
-        // 가짜 복구 애니메이션 함수
         function retryConnection(btn) {
-            btn.disabled = true; // 버튼 비활성화 (중복 클릭 방지)
+            btn.disabled = true;
             let dots = 0;
             
-            // 0.4초마다 점이 늘어나는 애니메이션
             const loadingInterval = setInterval(() => {
                 dots = (dots + 1) % 4;
                 btn.innerText = "연결 시도 중" + ".".repeat(dots);
             }, 400);
 
-            // 2.5초 뒤에 실제로 페이지 새로고침
             setTimeout(() => {
                 clearInterval(loadingInterval);
                 location.reload();
