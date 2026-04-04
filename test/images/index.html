@@ -1,49 +1,190 @@
-<style>
-    :root {
-        /* 라이트 모드 (기본) */
-        --bg-color: #f2f4f5;
-        --container-bg: #ffffff;
-        --text-main: #393b3d;   /* 진한 회색/검정 */
-        --text-sub: #65676b;    /* 연한 회색 */
-        --card-border: #eeeeee;
-        --card-hover-bg: #f9f9f9;
-    }
-
-    /* 시스템 설정이 다크 모드일 때 */
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg-color: #191b1d;
-            --container-bg: #232527;
-            --text-main: #ffffff !important; /* 무조건 흰색 */
-            --text-sub: #b8b8b8 !important;  /* 밝은 회색 */
-            --card-border: #333537;
-            --card-hover-bg: #2f3133;
-        }
-        
-        /* 혹시나 변수가 안 먹힐 경우를 대비한 직접 지정 */
-        body, h1, .image-name {
-            color: #ffffff !important;
-        }
-        p, .image-url, .status-bar, .back-link {
-            color: #b8b8b8 !important;
-        }
-    }
-
-    body { 
-        background-color: var(--bg-color); 
-        color: var(--text-main); /* 기본 글자색 지정 */
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        margin: 0;
-        padding: 40px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 저장소</title>
     
-    /* 제목과 본문 색상 강제 연결 */
-    h1 { color: var(--text-main); }
-    p { color: var(--text-sub); }
-    .image-name { color: var(--text-main); }
-    .image-url { color: var(--text-sub); }
-</style>
+    <link rel="icon" href="https://jwonpark1109.github.io/test/images/icon.svg" type="image/x-icon">
+    
+    <style>
+        :root {
+            /* 라이트 모드 변수 */
+            --bg-color: #f2f4f5;
+            --container-bg: #ffffff;
+            --text-main: #393b3d;
+            --text-sub: #65676b;
+            --card-border: #eeeeee;
+            --card-hover-bg: #f9f9f9;
+        }
+
+        /* 시스템 설정에 따른 다크 모드 (버튼 조작 불가, 시스템 강제) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191b1d;
+                --container-bg: #232527;
+                --text-main: #ffffff; /* 다크 모드 시 흰색 */
+                --text-sub: #b8b8b8;  /* 다크 모드 시 밝은 회색 */
+                --card-border: #333537;
+                --card-hover-bg: #2f3133;
+            }
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); /* 전체 글자색 적용 */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1 { color: var(--text-main); margin-bottom: 10px; }
+        p { color: var(--text-sub); margin-bottom: 30px; }
+
+        .status-bar {
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+            padding: 4px 12px;
+            border-radius: 15px;
+            background: rgba(128, 128, 128, 0.1);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .image-card {
+            background: var(--container-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--card-hover-bg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .preview-box {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            background: rgba(128, 128, 128, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-box img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .image-name {
+            color: var(--text-main); /* 다크 모드 시 흰색으로 변함 */
+            font-weight: bold;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .image-url {
+            color: var(--text-sub);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .back-link {
+            margin-top: 50px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid var(--text-sub);
+        }
+        .back-link:hover { color: var(--text-main); border-color: var(--text-main); }
+    </style>
+</head>
+<body>
+
+    <h1>이미지 저장소</h1>
+    <p>이미지를 클릭하면 원본 파일 주소로 이동합니다.</p>
+    <div class="status-bar" id="status">목록 불러오는 중...</div>
+
+    <div class="gallery" id="gallery">
+        </div>
+
+    <a href="../" class="back-link">이전 페이지로 돌아가기</a>
+
+    <script>
+        const owner = "jwonpark1109";
+        const repo = "jwonpark1109.github.io";
+        const folderPath = "test/images";
+        const baseImgURL = `https://jwonpark1109.github.io/${folderPath}/`;
+
+        async function fetchImages() {
+            const gallery = document.getElementById('gallery');
+            const status = document.getElementById('status');
+
+            // API 캐시 방지를 위해 타임스탬프 추가
+            const apiURL = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}?t=${new Date().getTime()}`;
+
+            try {
+                const response = await fetch(apiURL);
+                if (!response.ok) throw new Error('불러오기 실패 (한도 초과 또는 경로 오류)');
+
+                const files = await response.json();
+                const imageExtensions = ['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'ico'];
+                
+                let htmlContent = '';
+                files.forEach(file => {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    if (imageExtensions.includes(ext)) {
+                        htmlContent += `
+                            <a href="${baseImgURL}${file.name}" class="image-card" target="_blank">
+                                <div class="preview-box">
+                                    <img src="${baseImgURL}${file.name}?t=${new Date().getTime()}" alt="${file.name}">
+                                </div>
+                                <div class="image-name">${file.name}</div>
+                                <div class="image-url">/test/images/${file.name}</div>
+                            </a>
+                        `;
+                    }
+                });
+
+                gallery.innerHTML = htmlContent || '<p>폴더에 이미지가 없습니다.</p>';
+                
+                const now = new Date();
+                status.innerText = `최근 업데이트: ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} (1분마다 갱신)`;
+
+            } catch (error) {
+                console.error(error);
+                status.innerText = error.message;
+            }
+        }
+
+        // 초기 실행 및 1분 간격 반복
+        fetchImages();
+        setInterval(fetchImages, 60000);
+    </script>
+
+</body>
+</html>
