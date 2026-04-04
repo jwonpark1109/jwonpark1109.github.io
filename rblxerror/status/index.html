@@ -21,9 +21,14 @@
             --text-main: #393b3d;
             --text-sub: #65676b;
             --border-color: #dee1e2;
-            --status-ok: #00b06f; /* 초록색 (정상) */
-            --status-warn: #f68b1e; /* 주황색 (지연) */
-            --status-error: #f44336; /* 빨간색 (장애) */
+            
+            /* 상태별 색상 (라이트 모드) */
+            --status-ok: #00b06f;
+            --status-ok-bg: rgba(0, 176, 111, 0.1);
+            --status-warn: #f68b1e;
+            --status-warn-bg: rgba(246, 139, 30, 0.1);
+            --status-error: #f44336;
+            --status-error-bg: rgba(244, 67, 54, 0.1);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -34,6 +39,11 @@
                 --text-main: #ffffff;
                 --text-sub: #b8b8b8;
                 --border-color: #333537;
+
+                /* 상태별 색상 (다크 모드 최적화) */
+                --status-ok-bg: rgba(0, 176, 111, 0.2);
+                --status-warn-bg: rgba(246, 139, 30, 0.2);
+                --status-error-bg: rgba(244, 67, 54, 0.2);
             }
             #label_white { display: none !important; }
             #label_black { display: inline-block !important; }
@@ -47,7 +57,6 @@
             transition: background-color 0.3s ease;
         }
 
-        /* 헤더 */
         header {
             background: var(--header-bg);
             padding: 15px 5%;
@@ -65,9 +74,8 @@
             padding: 0 20px;
         }
 
-        /* 메인 상태 바 */
         .main-status {
-            background: var(--status-error); /* 가짜니까 장애 상태로 설정 */
+            background: var(--status-error);
             color: white;
             padding: 20px;
             border-radius: 8px;
@@ -77,23 +85,32 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
         }
 
-        /* 서비스 리스트 */
         .service-list {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             overflow: hidden;
         }
+
+        /* 탭(행) 스타일링 */
         .service-item {
             padding: 20px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background-color 0.2s ease;
         }
         .service-item:last-child { border-bottom: none; }
+
+        /* 배경색 클래스 연동 */
+        .item-error { background-color: var(--status-error-bg); }
+        .item-warn { background-color: var(--status-warn-bg); }
+        .item-ok { background-color: var(--status-ok-bg); }
+
         .service-name { font-weight: 600; font-size: 16px; }
         
         .status-text { font-size: 14px; font-weight: bold; }
@@ -138,27 +155,27 @@
 <div class="container">
     <div class="main-status" id="main-banner">
         <span>전체적으로 오류 발생</span>
-        <span style="font-size: 14px; opacity: 0.9;"></span>
+        <span style="font-size: 14px; opacity: 0.9;">⚠️</span>
     </div>
 
     <div class="service-list">
-        <div class="service-item">
+        <div class="service-item item-error">
             <span class="service-name">사용자 접속</span>
             <span class="status-text status-error">ERROR</span>
         </div>
-        <div class="service-item">
+        <div class="service-item item-error">
             <span class="service-name">게임 플레이</span>
             <span class="status-text status-error">ERROR</span>
         </div>
-        <div class="service-item">
+        <div class="service-item item-warn">
             <span class="service-name">스튜디오/만들기</span>
             <span class="status-text status-warn">Upload Error</span>
         </div>
-        <div class="service-item">
+        <div class="service-item item-error">
             <span class="service-name">홈페이지</span>
             <span class="status-text status-error">ERROR</span>
         </div>
-        <div class="service-item">
+        <div class="service-item item-warn">
             <span class="service-name">아바타 편집</span>
             <span class="status-text status-warn">Save Error</span>
         </div>
@@ -174,7 +191,6 @@
 </footer>
 
 <script>
-    // 현재 시간을 실시간으로 표시 (로블록스 상태 페이지 특징)
     function updateClock() {
         const now = new Date();
         document.getElementById('current-time').innerText = now.toLocaleString('ko-KR', { 
