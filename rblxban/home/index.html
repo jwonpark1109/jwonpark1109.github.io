@@ -2,123 +2,115 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox - Account Terminated</title>
     <style>
-        body {
-            /* 배경화면 경로 수정: images 폴더 안의 background.webp */
-            background: url('images/background.webp') no-repeat center center fixed;
-            background-size: cover;
+        /* 1. 기본 레이아웃 */
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            font-family: 'HCo Gotham SSm', "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            background-color: #333; /* 이미지 로드 실패 시 대비용 배경색 */
         }
 
-        .ban-box {
-            background-color: #ffffff;
+        /* 2. 배경 이미지 레이어 */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 540px;
-            padding: 45px;
+            height: 100%;
+            /* 경로: 현재 위치(/home) 기준 images 폴더 안의 파일 */
+            background: url('images/background.webp') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.6);
+            z-index: -1;
+        }
+
+        /* 3. 밴 메시지 박스 */
+        .ban-card {
+            background: white;
+            width: 480px;
+            padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             text-align: center;
         }
 
-        /* images 폴더 내의 로고나 아이콘을 사용할 경우를 대비 */
         .logo {
-            width: 160px;
-            margin-bottom: 30px;
-            /* 만약 로고 이미지도 images 폴더에 있다면 아래 주석 해제 */
-            /* content: url('images/roblox_logo.png'); */
+            width: 150px;
+            margin-bottom: 25px;
         }
 
-        .title {
+        .alert-title {
+            font-size: 26px;
+            font-weight: 900;
             color: #111;
-            font-size: 28px;
-            font-weight: 700;
             margin-bottom: 20px;
         }
 
-        .content-text {
-            color: #454545;
-            font-size: 16px;
-            line-height: 1.5;
+        .ban-info {
             text-align: left;
-            margin-bottom: 30px;
-            background: #fdfdfd;
+            background: #f8f8f8;
             padding: 20px;
-            border: 1px solid #e1e1e1;
-            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14.5px;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 30px;
         }
 
-        .highlight {
-            font-weight: bold;
-            color: #000;
-        }
+        .bold { font-weight: bold; color: #000; }
+        .danger { color: #d9534f; font-weight: bold; }
 
-        .red-text {
-            color: #d9534f;
-            font-weight: bold;
-        }
-
-        .footer-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 15px;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
+        /* 4. 버튼 */
+        .btn-blue {
+            background-color: #00A2FF;
+            color: white;
             text-decoration: none;
+            padding: 14px;
+            display: block;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 16px;
             transition: 0.2s;
         }
 
-        .btn-logout {
-            background-color: #00A2FF;
-            color: white;
-            border: none;
-        }
+        .btn-blue:hover { background-color: #0084D1; }
 
-        .btn-logout:hover {
-            background-color: #0084D1;
-        }
-
-        /* 장식용 아이콘이 images 폴더에 있다면 아래처럼 추가 가능 */
-        .warning-icon {
-            width: 50px;
-            margin-bottom: 15px;
-            /* src="images/warning_icon.png" 처럼 호출 가능 */
+        .footer-text {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
-    <div class="ban-box">
+    <div class="bg-layer"></div>
+
+    <div class="ban-card">
         <img src="https://images.rbxcdn.com/f04499b247f1c1f4c7d0d087702844ba.png" class="logo" alt="Roblox">
         
-        <div class="title">Account Terminated</div>
+        <div class="alert-title">Account Terminated</div>
         
-        <div class="content-text">
-            Our content monitors have determined that your behavior at Roblox has been in violation of our <span class="highlight">Terms of Use</span>.<br><br>
+        <div class="ban-info">
+            Our content monitors have determined that your behavior at Roblox has been in violation of our <span class="bold">Terms of Use</span>.<br><br>
             
-            <span class="highlight">Reason:</span> <span class="red-text">Sexual Content & Inappropriate Language</span><br>
-            <span class="highlight">Offensive Item:</span> "check out my bio for free robux link"<br><br>
+            <span class="bold">Reason:</span> <span class="danger">Unauthorized Software Injection</span><br>
+            <span class="bold">Offensive Item:</span> <span class="bold">"Local File Tampering Detected"</span><br><br>
             
-            Please be advised that further violations will result in a permanent ip-ban of your hardware.
+            Access to Roblox from this IP address has been restricted. Please review our policies to appeal this decision.
         </div>
 
-        <div class="footer-buttons">
-            <a href="#" class="btn btn-logout" onclick="alert('Logout failed: Error 0x8004005')">Logout</a>
-            <p style="font-size: 12px; color: #999; margin-top: 15px;">Contact us at info@roblox.com for appeals.</p>
-        </div>
+        <a href="#" class="btn-blue" onclick="location.reload();">Log Out</a>
+        <div class="footer-text">©2026 Roblox Corporation. All rights reserved.</div>
     </div>
 
 </body>
