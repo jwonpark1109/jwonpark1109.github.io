@@ -1,10 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>Roblox - Home</title>
+    <meta charset="UTF-8">
+    <title>Roblox - Account Terminated</title>
+    <style>
+        body {
+            /* 사용자님이 준비한 배경화면 설정 */
+            background-image: url('background.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 밴 메시지 박스 스타일 (실제 로블록스 느낌) */
+        .ban-container {
+            background-color: white;
+            width: 450px;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        /* 로블록스 로고 (공식 URL) */
+        .roblox-logo {
+            width: 130px;
+            margin-bottom: 25px;
+        }
+
+        /* 경고 제목 (빨간색) */
+        .ban-title {
+            color: #d9534f; /* 실제 로블록스 경고 색상 */
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* 경고 내용 */
+        .ban-message {
+            color: #393b3d;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: left; /* 내용은 왼쪽 정렬이 더 진짜 같음 */
+        }
+
+        .ban-reason {
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* 버튼 스타일 */
+        .btn-logout {
+            background-color: #393b3d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-logout:hover {
+            background-color: #57595d;
+        }
+    </style>
 </head>
 <body>
-    <h1>개발중입니다!</h1>
-    <p>개발중인 기능입니다.</p>
+
+    <div class="ban-container">
+        <img src="https://images.rbxcdn.com/f04499b247f1c1f4c7d0d087702844ba.png" alt="Roblox" class="roblox-logo">
+        
+        <div class="ban-title">Account Terminated</div>
+        
+        <div class="ban-message">
+            Our content monitors have determined that your behavior at Roblox has been in violation of our Terms of Use.<br><br>
+            
+            <span class="ban-reason">Reason:</span> Bullying and Harassment<br>
+            <span class="ban-reason">Offensive Item:</span> "ez" (Spammed in chat)<br><br>
+            
+            Your account has been terminated. Please log out and review the Roblox Terms of Use for more information.
+        </div>
+
+        <a href="https://www.roblox.com/home" class="btn-logout">Logout</a>
+    </div>
+
 </body>
 </html>
