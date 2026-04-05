@@ -2,96 +2,123 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox - Account Terminated</title>
     <style>
         body {
-            /* 사용자님이 준비한 배경화면 설정 */
-            background-image: url('background.webp');
+            /* 배경화면 경로 수정: images 폴더 안의 background.webp */
+            background: url('images/background.webp') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            font-family: 'HCo Gotham SSm', "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
         }
 
-        /* 밴 메시지 박스 스타일 (실제 로블록스 느낌) */
-        .ban-container {
-            background-color: white;
-            width: 450px;
-            padding: 30px;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        .ban-box {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 540px;
+            padding: 45px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             text-align: center;
         }
 
-        /* 로블록스 로고 (공식 URL) */
-        .roblox-logo {
-            width: 130px;
-            margin-bottom: 25px;
+        /* images 폴더 내의 로고나 아이콘을 사용할 경우를 대비 */
+        .logo {
+            width: 160px;
+            margin-bottom: 30px;
+            /* 만약 로고 이미지도 images 폴더에 있다면 아래 주석 해제 */
+            /* content: url('images/roblox_logo.png'); */
         }
 
-        /* 경고 제목 (빨간색) */
-        .ban-title {
-            color: #d9534f; /* 실제 로블록스 경고 색상 */
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
+        .title {
+            color: #111;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
         }
 
-        /* 경고 내용 */
-        .ban-message {
-            color: #393b3d;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            text-align: left; /* 내용은 왼쪽 정렬이 더 진짜 같음 */
+        .content-text {
+            color: #454545;
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: left;
+            margin-bottom: 30px;
+            background: #fdfdfd;
+            padding: 20px;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
         }
 
-        .ban-reason {
+        .highlight {
             font-weight: bold;
             color: #000;
         }
 
-        /* 버튼 스타일 */
-        .btn-logout {
-            background-color: #393b3d;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
+        .red-text {
+            color: #d9534f;
             font-weight: bold;
-            border-radius: 3px;
+        }
+
+        .footer-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 4px;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
+            transition: 0.2s;
         }
+
+        .btn-logout {
+            background-color: #00A2FF;
+            color: white;
+            border: none;
+        }
+
         .btn-logout:hover {
-            background-color: #57595d;
+            background-color: #0084D1;
+        }
+
+        /* 장식용 아이콘이 images 폴더에 있다면 아래처럼 추가 가능 */
+        .warning-icon {
+            width: 50px;
+            margin-bottom: 15px;
+            /* src="images/warning_icon.png" 처럼 호출 가능 */
         }
     </style>
 </head>
 <body>
 
-    <div class="ban-container">
-        <img src="https://images.rbxcdn.com/f04499b247f1c1f4c7d0d087702844ba.png" alt="Roblox" class="roblox-logo">
+    <div class="ban-box">
+        <img src="https://images.rbxcdn.com/f04499b247f1c1f4c7d0d087702844ba.png" class="logo" alt="Roblox">
         
-        <div class="ban-title">Account Terminated</div>
+        <div class="title">Account Terminated</div>
         
-        <div class="ban-message">
-            Our content monitors have determined that your behavior at Roblox has been in violation of our Terms of Use.<br><br>
+        <div class="content-text">
+            Our content monitors have determined that your behavior at Roblox has been in violation of our <span class="highlight">Terms of Use</span>.<br><br>
             
-            <span class="ban-reason">Reason:</span> Bullying and Harassment<br>
-            <span class="ban-reason">Offensive Item:</span> "ez" (Spammed in chat)<br><br>
+            <span class="highlight">Reason:</span> <span class="red-text">Sexual Content & Inappropriate Language</span><br>
+            <span class="highlight">Offensive Item:</span> "check out my bio for free robux link"<br><br>
             
-            Your account has been terminated. Please log out and review the Roblox Terms of Use for more information.
+            Please be advised that further violations will result in a permanent ip-ban of your hardware.
         </div>
 
-        <a href="https://www.roblox.com/home" class="btn-logout">Logout</a>
+        <div class="footer-buttons">
+            <a href="#" class="btn btn-logout" onclick="alert('Logout failed: Error 0x8004005')">Logout</a>
+            <p style="font-size: 12px; color: #999; margin-top: 15px;">Contact us at info@roblox.com for appeals.</p>
+        </div>
     </div>
 
 </body>
