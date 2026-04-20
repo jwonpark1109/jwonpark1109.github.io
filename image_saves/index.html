@@ -1,1 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 저장소</title>
+    
+    <link rel="icon" href="https://jwonpark1109.github.io/test/images/icon.svg" type="image/x-icon">
+    
+    <style>
+        :root {
+            /* 라이트 모드 변수 */
+            --bg-color: #f2f4f5;
+            --container-bg: #ffffff;
+            --text-main: #393b3d;
+            --text-sub: #65676b;
+            --card-border: #eeeeee;
+            --card-hover-bg: #f9f9f9;
+            --btn-bg: #0366d6;
+            --btn-hover: #005cc5;
+        }
 
+        /* 시스템 설정에 따른 다크 모드 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191b1d;
+                --container-bg: #232527;
+                --text-main: #ffffff; 
+                --text-sub: #b8b8b8;  
+                --card-border: #333537;
+                --card-hover-bg: #2f3133;
+                --btn-bg: #238636;
+                --btn-hover: #2ea043;
+            }
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1 { color: var(--text-main); margin-bottom: 10px; }
+        p { color: var(--text-sub); margin-bottom: 20px; }
+
+        /* 업로드 섹션 스타일 */
+        .upload-section {
+            background: var(--container-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        .upload-section input[type="file"],
+        .upload-section input[type="password"] {
+            padding: 8px 12px;
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            background: var(--bg-color);
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .upload-section button {
+            background-color: var(--btn-bg);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .upload-section button:hover {
+            background-color: var(--btn-hover);
+        }
+
+        .status-bar {
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+            padding: 4px 12px;
+            border-radius: 15px;
+            background: rgba(128, 128, 128, 0.1);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .image-card {
+            background: var(--container-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--card-hover-bg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .preview-box {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            background: rgba(128, 128, 128, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-box img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .image-name {
+            color: var(--text-main); 
+            font-weight: bold;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .image-url {
+            color: var(--text-sub);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .back-link {
+            margin-top: 50px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid var(--text-sub);
+        }
+        .back-link:hover { color: var(--text-main); border-color: var(--text-main); }
+    </style>
+</head>
+<body>
+
+    <h1>이미지 저장소</h1>
+    <p>이미지를 클릭하면 원본 파일 주소로 이동합니다.</p>
+
+    <div class="upload-section">
+        <input type="file" id="fileInput" accept="image/*">
+        <input type="password" id="githubToken" placeholder="GitHub PAT 토큰 입력" title="보안을 위해 토큰은 저장되지 않습니다.">
+        <button onclick="uploadImage()" id="uploadBtn">업로드</button>
+    </div>
+
+    <div class="status-bar" id="status">목록 불러오는 중...</div>
+
+    <div class="gallery" id="gallery"></div>
+
+    <a href="../" class="back-link">이전 페이지로 돌아가기</a>
+
+    <script>
+        const owner = "jwonpark1109";
+        const repo = "jwonpark1109.github.io";
+        const folderPath = "test/images";
+        const baseImgURL = `https://jwonpark1109.github.io/${folderPath}/`;
+
+        async function fetchImages() {
+            const gallery = document.getElementById('gallery');
+            const status = document.getElementById('status');
+            const apiURL = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}?t=${new Date().getTime()}`;
+
+            try {
+                const response = await fetch(apiURL);
+                if (!response.ok) throw new Error('불러오기 실패 (한도 초과 또는 경로 오류)');
+
+                const files = await response.json();
+                const imageExtensions = ['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'ico'];
+                
+                let htmlContent = '';
+                files.forEach(file => {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    if (imageExtensions.includes(ext)) {
+                        htmlContent += `
+                            <a href="${baseImgURL}${file.name}" class="image-card" target="_blank">
+                                <div class="preview-box">
+                                    <img src="${baseImgURL}${file.name}?t=${new Date().getTime()}" alt="${file.name}">
+                                </div>
+                                <div class="image-name">${file.name}</div>
+                                <div class="image-url">/${folderPath}/${file.name}</div>
+                            </a>
+                        `;
+                    }
+                });
+
+                gallery.innerHTML = htmlContent || '<p>폴더에 이미지가 없습니다.</p>';
+                
+                const now = new Date();
+                status.innerText = `최근 업데이트: ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} (1분마다 갱신)`;
+
+            } catch (error) {
+                console.error(error);
+                status.innerText = error.message;
+            }
+        }
+
+        // 이미지 업로드 함수 추가
+        async function uploadImage() {
+            const fileInput = document.getElementById('fileInput');
+            const token = document.getElementById('githubToken').value;
+            const uploadBtn = document.getElementById('uploadBtn');
+            const status = document.getElementById('status');
+
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("업로드할 이미지를 선택해주세요.");
+                return;
+            }
+            if (!token) {
+                alert("GitHub PAT (Personal Access Token)을 입력해주세요.");
+                return;
+            }
+
+            uploadBtn.innerText = "업로드 중...";
+            uploadBtn.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                // Base64 데이터에서 헤더 부분 (data:image/png;base64,) 제거
+                const base64Content = event.target.result.split(',')[1];
+                const apiURL = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}/${file.name}`;
+
+                try {
+                    const response = await fetch(apiURL, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: `Add ${file.name} via Web`,
+                            content: base64Content
+                        })
+                    });
+
+                    if (response.ok) {
+                        alert("업로드 성공!");
+                        fileInput.value = ""; // 파일 선택 초기화
+                        fetchImages(); // 갤러리 새로고침
+                    } else {
+                        const errorData = await response.json();
+                        // 동일한 이름의 파일이 존재할 경우 발생하는 에러 처리 등
+                        if(errorData.message.includes("sha")) {
+                             alert("업로드 실패: 동일한 이름의 파일이 이미 존재합니다.");
+                        } else {
+                             alert(`업로드 실패: ${errorData.message}`);
+                        }
+                    }
+                } catch (error) {
+                    console.error("업로드 에러:", error);
+                    alert("업로드 중 오류가 발생했습니다.");
+                } finally {
+                    uploadBtn.innerText = "업로드";
+                    uploadBtn.disabled = false;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 초기 실행 및 1분 간격 반복
+        fetchImages();
+        setInterval(fetchImages, 60000);
+    </script>
+
+</body>
+</html>
