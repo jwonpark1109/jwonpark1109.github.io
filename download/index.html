@@ -1,1 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다운로드 오류 - 파일을 받을 수 없습니다</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .error-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 60px 80px;
+            max-width: 620px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+        .error-icon {
+            font-size: 120px;
+            margin-bottom: 20px;
+            display: block;
+            animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ff4d4d;
+        }
+        .error-code {
+            font-size: 18px;
+            background: rgba(255, 77, 77, 0.15);
+            color: #ff4d4d;
+            padding: 4px 16px;
+            border-radius: 9999px;
+            display: inline-block;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 30px;
+        }
+        .details {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+        .details ul {
+            list-style: none;
+        }
+        .details li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .details li:last-child { border-bottom: none; }
+        .btn {
+            display: inline-block;
+            background: #ff4d4d;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 77, 77, 0.3);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(255, 77, 77, 0.4);
+        }
+        .footer-text {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <!-- 가짜 오류 아이콘 -->
+        <span class="error-icon">⚠️</span>
+        
+        <h1>다운로드에 실패했습니다</h1>
+        <div class="error-code">ERROR 0x80070057 • 다운로드 중단</div>
+        
+        <p>
+            요청하신 파일을 다운로드하는 도중<br>
+            <strong>예기치 않은 오류</strong>가 발생했습니다.<br>
+            서버에서 파일을 전송할 수 없습니다.
+        </p>
 
+        <div class="details">
+            <strong>오류 상세 정보</strong>
+            <ul>
+                <li><strong>오류 코드:</strong> ERR_DOWNLOAD_FAILED</li>
+                <li><strong>파일명:</strong> important_document.pdf</li>
+                <li><strong>사유:</strong> 서버 연결이 불안정하거나 파일이 손상되었습니다.</li>
+                <li><strong>발생 시간:</strong> <span id="current-time"></span></li>
+            </ul>
+        </div>
+
+        <a href="#" onclick="fakeRetry()" class="btn">다시 다운로드 시도하기</a>
+        
+        <div class="footer-text">
+            문제가 계속되면 브라우저 캐시를 지우거나<br>
+            잠시 후 다시 접속해 주세요.<br>
+            <span style="color:#666;">© 2026 SecureDownload Service</span>
+        </div>
+    </div>
+
+    <script>
+        // 현재 시간 실시간 표시 (더 진짜처럼 보이게)
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.getFullYear() + '년 ' + 
+                           (now.getMonth()+1) + '월 ' + 
+                           now.getDate() + '일 ' + 
+                           now.getHours() + ':' + 
+                           String(now.getMinutes()).padStart(2, '0') + ':' + 
+                           String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('current-time').textContent = timeStr;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 다시 시도 버튼 클릭 시 더 그럴듯한 경고
+        function fakeRetry() {
+            alert('❌ 다시 시도했으나 동일한 오류가 발생했습니다.\n\n파일이 서버에 존재하지 않거나, 권한이 부족합니다.\n\n(이 메시지는 연출된 테스트 오류입니다)');
+            
+            // 1초 후에 페이지 새로고침처럼 보이게
+            setTimeout(() => {
+                location.reload();
+            }, 1200);
+        }
+
+        // 페이지 로드 시 콘솔에 가짜 서버 로그 출력 (개발자 도구에서 확인 가능)
+        console.log('%c[SERVER] 다운로드 요청 거부됨 - ERR_DOWNLOAD_FAILED', 'color:#ff4d4d; font-weight:bold');
+        console.log('%c[CLIENT] index.html에서 오류 페이지 전송 완료', 'color:#888');
+    </script>
+</body>
+</html>
