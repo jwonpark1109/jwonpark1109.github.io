@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>다운로드 서비스</title>
+    <title>파일 다운로드 시스템</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         
@@ -19,7 +19,7 @@
             overflow: hidden;
         }
 
-        /* 초기 상태는 오류창을 숨김 */
+        /* 오류 컨테이너 - 기본적으로 숨김 */
         .error-container {
             display: none; 
             background: rgba(255, 255, 255, 0.08);
@@ -33,19 +33,9 @@
             box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
         }
 
-        /* 로딩 상태 표시 (선택 사항) */
-        #loading-status {
-            font-size: 1.2rem;
-            color: #aaa;
-        }
+        #loading-msg { font-size: 1.2rem; color: #aaa; }
 
-        .error-icon {
-            font-size: 120px;
-            margin-bottom: 20px;
-            display: block;
-            animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
-        }
-
+        .error-icon { font-size: 120px; margin-bottom: 20px; display: block; animation: shake 0.8s both; }
         @keyframes shake {
             10%, 90% { transform: translate3d(-1px, 0, 0); }
             20%, 80% { transform: translate3d(2px, 0, 0); }
@@ -53,131 +43,102 @@
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
 
-        h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; color: #ff4d4d; }
+        h1 { font-size: 32px; color: #ff4d4d; margin-bottom: 12px; }
         .error-code {
-            font-size: 18px;
-            background: rgba(255, 77, 77, 0.15);
-            color: #ff4d4d;
-            padding: 4px 16px;
-            border-radius: 9999px;
-            display: inline-block;
-            margin-bottom: 24px;
-            font-weight: 500;
+            font-size: 18px; background: rgba(255, 77, 77, 0.15); color: #ff4d4d;
+            padding: 4px 16px; border-radius: 9999px; display: inline-block; margin-bottom: 24px;
         }
-        p { font-size: 18px; line-height: 1.6; color: #ddd; margin-bottom: 30px; }
-        .details {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: left;
-            margin-bottom: 30px;
-            font-size: 15px;
-        }
+        .details { background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 30px; font-size: 15px; }
         .details ul { list-style: none; }
         .details li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .details li:last-child { border-bottom: none; }
         
         .btn {
-            display: inline-block;
-            background: #ff4d4d;
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 17px;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(255, 77, 77, 0.3);
-            cursor: pointer;
-            border: none;
+            display: inline-block; background: #ff4d4d; color: white; padding: 16px 40px;
+            border-radius: 50px; text-decoration: none; font-weight: 700; cursor: pointer; border: none;
         }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(255, 77, 77, 0.4); }
-        .footer-text { margin-top: 40px; font-size: 14px; color: #888; }
     </style>
 </head>
 <body>
 
-    <div id="loading-status">파일을 확인 중입니다...</div>
+    <div id="loading-msg">파일을 찾는 중입니다...</div>
 
     <div class="error-container" id="error-ui">
         <span class="error-icon">⚠️</span>
-        <h1>다운로드에 실패했습니다</h1>
-        <div class="error-code">ERROR 0x80070057 • 다운로드 중단</div>
+        <h1>다운로드 실패</h1>
+        <div class="error-code" id="error-code-text">ERROR: FILE_NOT_FOUND</div>
         
-        <p>요청하신 파일을 다운로드하는 도중<br><strong>예기치 않은 오류</strong>가 발생했습니다.<br>서버에서 파일을 전송할 수 없습니다.</p>
-
         <div class="details">
             <strong>오류 상세 정보</strong>
             <ul>
-                <li><strong>오류 코드:</strong> ERR_DOWNLOAD_FAILED</li>
-                <li><strong>파일명:</strong> <span id="file-name-display">important_document.pdf</span></li>
-                <li><strong>사유:</strong> 파일이 존재하지 않거나 경로가 잘못되었습니다.</li>
+                <li><strong>파일명:</strong> <span id="display-filename">-</span></li>
+                <li><strong>요청 경로:</strong> <span id="display-path">-</span></li>
+                <li><strong>사유:</strong> 파일이 서버에 없거나 접근 권한이 없습니다.</li>
                 <li><strong>발생 시간:</strong> <span id="current-time"></span></li>
             </ul>
         </div>
 
-        <button onclick="startDownload()" class="btn">다시 다운로드 시도하기</button>
-        
-        <div class="footer-text">
-            문제가 계속되면 브라우저 캐시를 지우거나<br>잠시 후 다시 접속해 주세요.<br>
-            <span style="color:#666;">© 2026 SecureDownload Service</span>
-        </div>
+        <button onclick="location.reload()" class="btn">다시 시도하기</button>
     </div>
 
     <script>
-        // 다운로드할 파일 설정
-        const TARGET_FILE = 'important_document.pdf'; // 실제 files 폴더 안의 파일명으로 수정하세요
-        const FILE_PATH = `files/${TARGET_FILE}`;
+        // 1. URL 파라미터에서 파일명 추출 (?name=test.zip)
+        const urlParams = new URLSearchParams(window.location.search);
+        const fileName = urlParams.get('name');
+        
+        // 파일이 위치한 상대 경로 (형제 폴더 files)
+        // 현재 경로가 /download/ 인 경우 ../files/파일명 이 됩니다.
+        const FILE_PATH = `../files/${fileName}`;
 
-        // 현재 시간 업데이트
         function updateTime() {
             const now = new Date();
-            const timeStr = now.getFullYear() + '년 ' + (now.getMonth()+1) + '월 ' + now.getDate() + '일 ' + 
-                           now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + 
-                           String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('current-time').textContent = timeStr;
+            document.getElementById('current-time').textContent = now.toLocaleString();
         }
 
-        // 실제 다운로드 로직
-        async function startDownload() {
-            const loading = document.getElementById('loading-status');
+        async function initDownload() {
+            const loading = document.getElementById('loading-msg');
             const errorUI = document.getElementById('error-ui');
-            const fileNameDisplay = document.getElementById('file-name-display');
             
-            fileNameDisplay.textContent = TARGET_FILE;
+            // UI 정보 업데이트
+            document.getElementById('display-filename').textContent = fileName || "파라미터 없음";
+            document.getElementById('display-path').textContent = fileName ? `/files/${fileName}` : "알 수 없음";
             updateTime();
 
+            // 파일명 파라미터가 아예 없는 경우 처리
+            if (!fileName) {
+                loading.style.display = 'none';
+                errorUI.style.display = 'block';
+                document.getElementById('error-code-text').textContent = "ERROR: INVALID_PARAMETER";
+                return;
+            }
+
             try {
-                // 1. 파일이 존재하는지 HEAD 요청으로 먼저 확인
+                // 2. 파일이 실제로 존재하는지 체크 (HEAD 요청)
                 const response = await fetch(FILE_PATH, { method: 'HEAD' });
 
                 if (response.ok) {
-                    // 파일이 있으면 다운로드 실행
                     loading.textContent = "다운로드를 시작합니다...";
+                    
+                    // 3. 실제 다운로드 트리거
                     const link = document.createElement('a');
                     link.href = FILE_PATH;
-                    link.download = TARGET_FILE;
+                    link.download = fileName; // 원본 파일명으로 다운로드
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                     
-                    // 성공 후 메시지 변경 (선택 사항)
-                    setTimeout(() => { loading.textContent = "다운로드가 완료되었습니다."; }, 2000);
+                    setTimeout(() => { loading.textContent = "다운로드 요청 완료"; }, 2000);
                 } else {
-                    // 파일이 없으면(404 등) 에러 UI 표시
-                    throw new Error("File not found");
+                    throw new Error("404");
                 }
             } catch (err) {
-                // 에러 발생 시 UI 전환
+                // 4. 실패 시 디자인된 에러 UI 노출
                 loading.style.display = 'none';
                 errorUI.style.display = 'block';
-                console.error('[SYSTEM] 다운로드 실패:', err);
+                console.error("[SERVER] 파일 응답 없음:", fileName);
             }
         }
 
-        // 페이지 로드 시 즉시 다운로드 시도
-        window.onload = startDownload;
-        setInterval(updateTime, 1000);
+        window.onload = initDownload;
     </script>
 </body>
 </html>
