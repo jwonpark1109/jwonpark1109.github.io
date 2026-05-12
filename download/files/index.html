@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파일 다운로드 시스템</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* 오류 컨테이너 - 기본적으로 숨김 */
+        .error-container {
+            display: none; 
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 60px 80px;
+            max-width: 620px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+
+        #loading-msg { font-size: 1.2rem; color: #aaa; }
+
+        .error-icon { font-size: 120px; margin-bottom: 20px; display: block; animation: shake 0.8s both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        h1 { font-size: 32px; color: #ff4d4d; margin-bottom: 12px; }
+        .error-code {
+            font-size: 18px; background: rgba(255, 77, 77, 0.15); color: #ff4d4d;
+            padding: 4px 16px; border-radius: 9999px; display: inline-block; margin-bottom: 24px;
+        }
+        .details { background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 30px; font-size: 15px; }
+        .details ul { list-style: none; }
+        .details li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        
+        .btn {
+            display: inline-block; background: #ff4d4d; color: white; padding: 16px 40px;
+            border-radius: 50px; text-decoration: none; font-weight: 700; cursor: pointer; border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-msg">파일을 찾는 중입니다...</div>
+
+    <div class="error-container" id="error-ui">
+        <span class="error-icon">⚠️</span>
+        <h1>다운로드 실패</h1>
+        <div class="error-code" id="error-code-text">ERROR: FILE_NOT_FOUND</div>
+        
+        <div class="details">
+            <strong>오류 상세 정보</strong>
+            <ul>
+                <li><strong>파일명:</strong> <span id="display-filename">-</span></li>
+                <li><strong>요청 경로:</strong> <span id="display-path">-</span></li>
+                <li><strong>사유:</strong> 파일이 서버에 없거나 접근 권한이 없습니다.</li>
+                <li><strong>발생 시간:</strong> <span id="current-time"></span></li>
+            </ul>
+        </div>
+
+        <button onclick="location.reload()" class="btn">다시 시도하기</button>
+    </div>
+
+    <script>
+        // 1. URL 파라미터에서 파일명 추출 (?name=test.zip)
+        const urlParams = new URLSearchParams(window.location.search);
+        const fileName = urlParams.get('name');
+        
+        // 파일이 위치한 상대 경로 (형제 폴더 files)
+        // 현재 경로가 /download/ 인 경우 ../files/파일명 이 됩니다.
+        const FILE_PATH = `../files/${fileName}`;
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleString();
+        }
+
+        async function initDownload() {
+            const loading = document.getElementById('loading-msg');
+            const errorUI = document.getElementById('error-ui');
+            
+            // UI 정보 업데이트
+            document.getElementById('display-filename').textContent = fileName || "파라미터 없음";
+            document.getElementById('display-path').textContent = fileName ? `/files/${fileName}` : "알 수 없음";
+            updateTime();
+
+            // 파일명 파라미터가 아예 없는 경우 처리
+            if (!fileName) {
+                loading.style.display = 'none';
+                errorUI.style.display = 'block';
+                document.getElementById('error-code-text').textContent = "ERROR: INVALID_PARAMETER";
+                return;
+            }
+
+            try {
+                // 2. 파일이 실제로 존재하는지 체크 (HEAD 요청)
+                const response = await fetch(FILE_PATH, { method: 'HEAD' });
+
+                if (response.ok) {
+                    loading.textContent = "다운로드를 시작합니다...";
+                    
+                    // 3. 실제 다운로드 트리거
+                    const link = document.createElement('a');
+                    link.href = FILE_PATH;
+                    link.download = fileName; // 원본 파일명으로 다운로드
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    setTimeout(() => { loading.textContent = "다운로드 요청 완료"; }, 2000);
+                } else {
+                    throw new Error("404");
+                }
+            } catch (err) {
+                // 4. 실패 시 디자인된 에러 UI 노출
+                loading.style.display = 'none';
+                errorUI.style.display = 'block';
+                console.error("[SERVER] 파일 응답 없음:", fileName);
+            }
+        }
+
+        window.onload = initDownload;
+    </script>
+</body>
+</html>
