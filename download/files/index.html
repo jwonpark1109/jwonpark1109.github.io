@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jwonpark의 파일 다운로드 사이트</title>
+    <title>안전한 다운로드</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         
@@ -41,8 +41,8 @@
         #progress-bar {
             width: 0%; height: 100%;
             background: linear-gradient(90deg, #ff4d4d, #ff8e8e);
-            transition: width 0.2s ease-out;
-            box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+            transition: width 0.2s ease-out, background 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
         /* 에러 UI (기본 숨김) */
@@ -54,7 +54,7 @@
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
 
-        h1 { font-size: 28px; margin-bottom: 10px; }
+        h1 { font-size: 28px; margin-bottom: 10px; transition: color 0.3s ease; }
         .filename-badge {
             background: rgba(255, 255, 255, 0.1); padding: 5px 15px;
             border-radius: 20px; font-size: 14px; color: #eee; display: inline-block;
@@ -74,10 +74,8 @@
             transition: all 0.3s ease; font-size: 15px; margin: 5px;
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 77, 77, 0.3); }
-        
         .btn-secondary { background: rgba(255, 255, 255, 0.1); }
         .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); box-shadow: none; }
-        
         .btn-dump { background: #ffaa00; color: #000; }
         .btn-dump:hover { box-shadow: 0 10px 20px rgba(255, 170, 0, 0.3); }
     </style>
@@ -101,7 +99,7 @@
         <!-- 에러 발생 시 UI -->
         <div id="error-ui">
             <span class="error-icon">⚠️</span>
-            <h1 style="color: #ff4d4d;">다운로드 실패</h1>
+            <h1 style="color: #ff4d4d;">다운로드 차단됨</h1>
             <div class="details">
                 <p><strong>사유:</strong> <span id="error-reason">파일을 찾을 수 없거나 접근할 수 없습니다.</span></p>
                 <p><strong>요청 시간:</strong> <span id="error-time"></span></p>
@@ -123,15 +121,16 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const fileName = urlParams.get('name');
-        const FILE_PATH = `../../files/${fileName}`; // 폴더 경로 확인 (필요시 수정)
+        const FILE_PATH = `../../files/${fileName}`; 
         
-        let lastErrorDetails = ""; // 덤프 파일에 담을 에러 내용 보관용
+        let lastErrorDetails = ""; 
+        let fileSettings = null; // 추출된 파일 설정을 담을 변수
 
         function goBack() {
             if (document.referrer) {
                 window.history.back();
             } else {
-                location.href = "../"; // 이전 페이지가 없으면 목록으로
+                location.href = "../"; 
             }
         }
 
@@ -152,48 +151,98 @@
             try {
                 const response = await fetch(FILE_PATH);
                 
-                // 1. 상태 코드 확인 (404 등 낚시 방지)
-                if (!response.ok) {
-                    throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
-                }
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
 
-                // 2. 서버가 억지로 HTML 404 페이지를 보냈는지 확인 (요청한 파일이 HTML이 아닐 때)
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('text/html') && !fileName.toLowerCase().endsWith('.html')) {
-                    throw new Error('서버가 실제 파일 대신 HTML(에러 페이지)을 반환했습니다. (유령 파일 방지)');
+                    throw new Error('서버가 실제 파일 대신 HTML을 반환했습니다.');
                 }
 
                 const reader = response.body.getReader();
                 const contentLength = +response.headers.get('Content-Length');
                 
-                if (!contentLength || contentLength === 0) {
-                    progressBar.style.width = '100%';
-                    percentText.textContent = '용량 확인 불가';
-                }
-
                 let receivedLength = 0;
                 let chunks = []; 
+                let isFirstChunk = true;
 
                 while(true) {
                     const {done, value} = await reader.read();
                     if (done) break;
 
-                    chunks.push(value);
-                    receivedLength += value.length;
+                    let chunkData = value;
 
+                    // 첫 번째 청크에서 JSON 설정 파싱 시도
+                    if (isFirstChunk && chunkData.length > 0) {
+                        isFirstChunk = false;
+                        
+                        // 파일이 '{' (ASCII 123) 로 시작하는지 확인
+                        if (chunkData[0] === 123) {
+                            const newlineIdx = chunkData.indexOf(10); // '\n' (ASCII 10) 위치 찾기
+                            
+                            if (newlineIdx !== -1) {
+                                const textDecoder = new TextDecoder('utf-8');
+                                const firstLine = textDecoder.decode(chunkData.slice(0, newlineIdx));
+                                
+                                // 설정 객체인지 확인
+                                if (firstLine.includes('"download-settings"')) {
+                                    try {
+                                        const parsed = JSON.parse(firstLine);
+                                        if (parsed["download-settings"]) {
+                                            fileSettings = parsed["download-settings"];
+                                            // ★ 핵심: 파싱된 첫 번째 줄(설정)을 제외한 나머지 데이터만 잘라서 저장 (파일 오염 방지)
+                                            chunkData = chunkData.slice(newlineIdx + 1);
+                                        }
+                                    } catch (e) {
+                                        console.warn("파일 설정 파싱 실패 (일반 파일로 취급):", e);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // 파일 설정에 따른 실시간 제어
+                    if (fileSettings) {
+                        // 강제 다운로드(not-error)가 true가 "아닐 때만" 오류 처리
+                        if (fileSettings["not-error"] !== "true") {
+                            
+                            if (fileSettings["error"] === "true") {
+                                reader.cancel(); // 다운로드 즉시 중단
+                                throw new Error(`강제 시스템 오류 (오류 코드: ERROR_${fileSettings["error-code"] || "UNKNOWN"})`);
+                            }
+                            
+                            if (fileSettings["not-download"] === "true") {
+                                reader.cancel(); // 다운로드 즉시 중단
+                                throw new Error(`보안 시스템에 의해 차단되었습니다. (접근 불가 파일)`);
+                            }
+                        }
+
+                        // 프로그레스 바 색상 변경
+                        if (fileSettings["prograss-color"]) {
+                            progressBar.style.background = fileSettings["prograss-color"];
+                        }
+                    }
+
+                    if (chunkData.length > 0) {
+                        chunks.push(chunkData);
+                        receivedLength += chunkData.length;
+                    }
+
+                    // 진행률 업데이트 (설정이 잘려나갔으므로 오차가 살짝 생길 수 있으나 육안으로 구분 불가)
                     if (contentLength) {
-                        let step = Math.round((receivedLength / contentLength) * 100);
+                        let step = Math.min(Math.round((receivedLength / contentLength) * 100), 100);
                         progressBar.style.width = step + '%';
                         percentText.textContent = step;
                     }
                 }
 
-                // 최종 용량이 너무 작으면(예: 1KB 미만) 가짜 파일일 확률이 높으므로 의심 (선택적)
-                // if (receivedLength < 500 && !fileName.endsWith('.txt')) { ... }
-
+                // 다운로드 완료 시점 제어
                 statusTitle.textContent = "다운로드 완료";
+                if (fileSettings && fileSettings["text-color"]) {
+                    statusTitle.style.color = fileSettings["text-color"];
+                }
                 successButtons.style.display = "block";
 
+                // 설정 파일을 제외한 순수 데이터만 병합하여 실제 파일로 생성
                 let blob = new Blob(chunks);
                 let downloadUrl = URL.createObjectURL(blob);
                 let a = document.createElement("a");
@@ -208,7 +257,7 @@
             }
         }
 
-        // 에러 UI 표시 함수
+        // 에러 표시
         function showError(errorMsg = "네트워크 연결 실패 또는 파일을 찾을 수 없습니다.") {
             document.getElementById('download-ui').style.display = 'none';
             document.getElementById('error-ui').style.display = 'block';
@@ -217,20 +266,18 @@
             document.getElementById('error-time').textContent = now.toLocaleString();
             document.getElementById('error-reason').textContent = errorMsg;
             
-            // 덤프 데이터 기록
             lastErrorDetails = `[DOWNLOAD ERROR DUMP]\n` +
                                `Time: ${now.toISOString()}\n` +
                                `Requested File: ${fileName}\n` +
                                `Target Path: ${FILE_PATH}\n` +
                                `Error Message: ${errorMsg}\n` +
+                               `Parsed Settings: ${JSON.stringify(fileSettings || "None")}\n` +
                                `User Agent: ${navigator.userAgent}\n` +
                                `Current URL: ${window.location.href}`;
         }
 
-        // 오류 덤프(.txt) 다운로드 함수
         function downloadDump() {
             if (!lastErrorDetails) return;
-            
             const blob = new Blob([lastErrorDetails], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
