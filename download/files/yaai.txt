@@ -1,0 +1,22 @@
+{"download-settings": {"error": "false", "error-code": "200", "not-download": "false", "fast-download": "false", "text-color": "#4ade80", "prograss-color": "#8b5cf6", "yaai": "true"}}
+
+>1
+You are an idiot!
+>2
+You are an idiot!
+>3
+You are an idiot!
+>4
+You are an idiot!
+>5
+You are an idiot!
+>6
+You are an idiot!
+>7
+You are an idiot!
+>8
+You are an idiot!
+>9
+You are an idiot!
+>10
+You are an idiot!
