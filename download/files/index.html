@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>안전한 다운로드</title>
+    <title>jwonpark의 파일 다운로드 사이트</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         
@@ -32,25 +32,14 @@
         }
 
         /* 프로그레스 바 스타일 */
-        .progress-wrapper {
-            margin: 30px 0;
-            display: block;
-        }
-        .progress-text {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #aaa;
-        }
+        .progress-wrapper { margin: 30px 0; display: block; }
+        .progress-text { font-size: 16px; margin-bottom: 10px; color: #aaa; }
         .progress-bg {
             background: rgba(255, 255, 255, 0.1);
-            height: 12px;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
+            height: 12px; border-radius: 10px; overflow: hidden; position: relative;
         }
         #progress-bar {
-            width: 0%;
-            height: 100%;
+            width: 0%; height: 100%;
             background: linear-gradient(90deg, #ff4d4d, #ff8e8e);
             transition: width 0.2s ease-out;
             box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
@@ -65,49 +54,32 @@
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
 
-        /* 공통 텍스트 스타일 */
         h1 { font-size: 28px; margin-bottom: 10px; }
         .filename-badge {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #eee;
+            background: rgba(255, 255, 255, 0.1); padding: 5px 15px;
+            border-radius: 20px; font-size: 14px; color: #eee; display: inline-block;
+        }
+
+        .details {
+            background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 15px;
+            text-align: left; font-size: 14px; margin: 20px 0; color: #ccc;
+            word-break: break-all;
         }
 
         /* 버튼 스타일 */
-        .button-group {
-            margin-top: 30px;
-            display: none; /* 완료 시에만 노출 */
-        }
+        .button-group { margin-top: 30px; display: none; }
         .btn {
-            display: inline-block;
-            background: #ff4d4d;
-            color: white;
-            padding: 14px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
+            display: inline-block; background: #ff4d4d; color: white; padding: 14px 30px;
+            border-radius: 50px; text-decoration: none; font-weight: 700; cursor: pointer; border: none;
+            transition: all 0.3s ease; font-size: 15px; margin: 5px;
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 77, 77, 0.3); }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            margin-top: 15px;
-        }
-        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
-
-        .details {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: left;
-            font-size: 14px;
-            margin: 20px 0;
-            color: #ccc;
-        }
+        
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); box-shadow: none; }
+        
+        .btn-dump { background: #ffaa00; color: #000; }
+        .btn-dump:hover { box-shadow: 0 10px 20px rgba(255, 170, 0, 0.3); }
     </style>
 </head>
 <body>
@@ -116,7 +88,7 @@
         <!-- 다운로드 중 UI -->
         <div id="download-ui">
             <h1 id="status-title">파일 다운로드 중...</h1>
-            <span class="filename-badge" id="display-filename">파일을 찾는 중</span>
+            <span class="filename-badge" id="display-filename">파일 확인 중</span>
 
             <div class="progress-wrapper">
                 <div class="progress-text"><span id="percent">0</span>% 완료</div>
@@ -131,15 +103,19 @@
             <span class="error-icon">⚠️</span>
             <h1 style="color: #ff4d4d;">다운로드 실패</h1>
             <div class="details">
-                <p>• 사유: 파일을 찾을 수 없거나 서버 연결에 실패했습니다.</p>
-                <p>• 요청 시간: <span id="error-time"></span></p>
+                <p><strong>사유:</strong> <span id="error-reason">파일을 찾을 수 없거나 접근할 수 없습니다.</span></p>
+                <p><strong>요청 시간:</strong> <span id="error-time"></span></p>
             </div>
-            <button onclick="location.reload()" class="btn">다시 시도하기</button>
+            <div>
+                <button onclick="location.reload()" class="btn">다시 시도</button>
+                <button onclick="downloadDump()" class="btn btn-dump">오류 덤프 저장</button>
+                <button onclick="goBack()" class="btn btn-secondary">돌아가기</button>
+            </div>
         </div>
 
         <!-- 완료 후 버튼 그룹 -->
         <div class="button-group" id="success-buttons">
-            <p style="margin-bottom: 20px; color: #4ade80;">✓ 다운로드 요청이 완료되었습니다.</p>
+            <p style="margin-bottom: 20px; color: #4ade80; font-weight: bold;">✓ 다운로드 요청이 완료되었습니다.</p>
             <button onclick="goBack()" class="btn btn-secondary">이전 페이지로 돌아가기</button>
         </div>
     </div>
@@ -147,13 +123,15 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const fileName = urlParams.get('name');
-        const FILE_PATH = `../files/${fileName}`;
+        const FILE_PATH = `../../files/${fileName}`; // 폴더 경로 확인 (필요시 수정)
+        
+        let lastErrorDetails = ""; // 덤프 파일에 담을 에러 내용 보관용
 
         function goBack() {
             if (document.referrer) {
                 window.history.back();
             } else {
-                location.href = "/"; // 이전 페이지가 없으면 메인으로
+                location.href = "../"; // 이전 페이지가 없으면 목록으로
             }
         }
 
@@ -162,12 +140,10 @@
             const percentText = document.getElementById('percent');
             const statusTitle = document.getElementById('status-title');
             const successButtons = document.getElementById('success-buttons');
-            const downloadUI = document.getElementById('download-ui');
-            const errorUI = document.getElementById('error-ui');
             const displayFilename = document.getElementById('display-filename');
 
             if (!fileName) {
-                showError();
+                showError("잘못된 접근입니다. (파일 이름 누락)");
                 return;
             }
 
@@ -176,15 +152,23 @@
             try {
                 const response = await fetch(FILE_PATH);
                 
-                if (!response.ok) throw new Error('Network response was not ok');
+                // 1. 상태 코드 확인 (404 등 낚시 방지)
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
+                }
+
+                // 2. 서버가 억지로 HTML 404 페이지를 보냈는지 확인 (요청한 파일이 HTML이 아닐 때)
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html') && !fileName.toLowerCase().endsWith('.html')) {
+                    throw new Error('서버가 실제 파일 대신 HTML(에러 페이지)을 반환했습니다. (유령 파일 방지)');
+                }
 
                 const reader = response.body.getReader();
                 const contentLength = +response.headers.get('Content-Length');
                 
-                // Content-Length 정보가 없는 경우 프로그레스 바 대신 무한 로딩 처리
-                if (!contentLength) {
+                if (!contentLength || contentLength === 0) {
                     progressBar.style.width = '100%';
-                    percentText.textContent = '100';
+                    percentText.textContent = '용량 확인 불가';
                 }
 
                 let receivedLength = 0;
@@ -204,11 +188,12 @@
                     }
                 }
 
-                // 다운로드 완료 처리
+                // 최종 용량이 너무 작으면(예: 1KB 미만) 가짜 파일일 확률이 높으므로 의심 (선택적)
+                // if (receivedLength < 500 && !fileName.endsWith('.txt')) { ... }
+
                 statusTitle.textContent = "다운로드 완료";
                 successButtons.style.display = "block";
 
-                // 파일 합쳐서 실제 다운로드 트리거
                 let blob = new Blob(chunks);
                 let downloadUrl = URL.createObjectURL(blob);
                 let a = document.createElement("a");
@@ -219,14 +204,41 @@
                 URL.revokeObjectURL(downloadUrl);
 
             } catch (err) {
-                showError();
+                showError(err.message);
             }
         }
 
-        function showError() {
+        // 에러 UI 표시 함수
+        function showError(errorMsg = "네트워크 연결 실패 또는 파일을 찾을 수 없습니다.") {
             document.getElementById('download-ui').style.display = 'none';
             document.getElementById('error-ui').style.display = 'block';
-            document.getElementById('error-time').textContent = new Date().toLocaleString();
+            
+            const now = new Date();
+            document.getElementById('error-time').textContent = now.toLocaleString();
+            document.getElementById('error-reason').textContent = errorMsg;
+            
+            // 덤프 데이터 기록
+            lastErrorDetails = `[DOWNLOAD ERROR DUMP]\n` +
+                               `Time: ${now.toISOString()}\n` +
+                               `Requested File: ${fileName}\n` +
+                               `Target Path: ${FILE_PATH}\n` +
+                               `Error Message: ${errorMsg}\n` +
+                               `User Agent: ${navigator.userAgent}\n` +
+                               `Current URL: ${window.location.href}`;
+        }
+
+        // 오류 덤프(.txt) 다운로드 함수
+        function downloadDump() {
+            if (!lastErrorDetails) return;
+            
+            const blob = new Blob([lastErrorDetails], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `error_dump_${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         window.onload = startDownload;
