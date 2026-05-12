@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>다운로드 오류 - 파일을 받을 수 없습니다</title>
+    <title>다운로드 서비스</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         
@@ -18,7 +18,10 @@
             justify-content: center;
             overflow: hidden;
         }
+
+        /* 초기 상태는 오류창을 숨김 */
         .error-container {
+            display: none; 
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
             border-radius: 20px;
@@ -29,24 +32,28 @@
             text-align: center;
             box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
         }
+
+        /* 로딩 상태 표시 (선택 사항) */
+        #loading-status {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
         .error-icon {
             font-size: 120px;
             margin-bottom: 20px;
             display: block;
             animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
         }
+
         @keyframes shake {
             10%, 90% { transform: translate3d(-1px, 0, 0); }
             20%, 80% { transform: translate3d(2px, 0, 0); }
             30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #ff4d4d;
-        }
+
+        h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; color: #ff4d4d; }
         .error-code {
             font-size: 18px;
             background: rgba(255, 77, 77, 0.15);
@@ -57,12 +64,7 @@
             margin-bottom: 24px;
             font-weight: 500;
         }
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #ddd;
-            margin-bottom: 30px;
-        }
+        p { font-size: 18px; line-height: 1.6; color: #ddd; margin-bottom: 30px; }
         .details {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 12px;
@@ -71,14 +73,10 @@
             margin-bottom: 30px;
             font-size: 15px;
         }
-        .details ul {
-            list-style: none;
-        }
-        .details li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
+        .details ul { list-style: none; }
+        .details li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .details li:last-child { border-bottom: none; }
+        
         .btn {
             display: inline-block;
             background: #ff4d4d;
@@ -90,79 +88,96 @@
             font-size: 17px;
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(255, 77, 77, 0.3);
+            cursor: pointer;
+            border: none;
         }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(255, 77, 77, 0.4);
-        }
-        .footer-text {
-            margin-top: 40px;
-            font-size: 14px;
-            color: #888;
-        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(255, 77, 77, 0.4); }
+        .footer-text { margin-top: 40px; font-size: 14px; color: #888; }
     </style>
 </head>
 <body>
-    <div class="error-container">
-        <!-- 가짜 오류 아이콘 -->
+
+    <div id="loading-status">파일을 확인 중입니다...</div>
+
+    <div class="error-container" id="error-ui">
         <span class="error-icon">⚠️</span>
-        
         <h1>다운로드에 실패했습니다</h1>
         <div class="error-code">ERROR 0x80070057 • 다운로드 중단</div>
         
-        <p>
-            요청하신 파일을 다운로드하는 도중<br>
-            <strong>예기치 않은 오류</strong>가 발생했습니다.<br>
-            서버에서 파일을 전송할 수 없습니다.
-        </p>
+        <p>요청하신 파일을 다운로드하는 도중<br><strong>예기치 않은 오류</strong>가 발생했습니다.<br>서버에서 파일을 전송할 수 없습니다.</p>
 
         <div class="details">
             <strong>오류 상세 정보</strong>
             <ul>
                 <li><strong>오류 코드:</strong> ERR_DOWNLOAD_FAILED</li>
-                <li><strong>파일명:</strong> important_document.pdf</li>
-                <li><strong>사유:</strong> 서버 연결이 불안정하거나 파일이 손상되었습니다.</li>
+                <li><strong>파일명:</strong> <span id="file-name-display">important_document.pdf</span></li>
+                <li><strong>사유:</strong> 파일이 존재하지 않거나 경로가 잘못되었습니다.</li>
                 <li><strong>발생 시간:</strong> <span id="current-time"></span></li>
             </ul>
         </div>
 
-        <a href="#" onclick="fakeRetry()" class="btn">다시 다운로드 시도하기</a>
+        <button onclick="startDownload()" class="btn">다시 다운로드 시도하기</button>
         
         <div class="footer-text">
-            문제가 계속되면 브라우저 캐시를 지우거나<br>
-            잠시 후 다시 접속해 주세요.<br>
+            문제가 계속되면 브라우저 캐시를 지우거나<br>잠시 후 다시 접속해 주세요.<br>
             <span style="color:#666;">© 2026 SecureDownload Service</span>
         </div>
     </div>
 
     <script>
-        // 현재 시간 실시간 표시 (더 진짜처럼 보이게)
+        // 다운로드할 파일 설정
+        const TARGET_FILE = 'important_document.pdf'; // 실제 files 폴더 안의 파일명으로 수정하세요
+        const FILE_PATH = `files/${TARGET_FILE}`;
+
+        // 현재 시간 업데이트
         function updateTime() {
             const now = new Date();
-            const timeStr = now.getFullYear() + '년 ' + 
-                           (now.getMonth()+1) + '월 ' + 
-                           now.getDate() + '일 ' + 
-                           now.getHours() + ':' + 
-                           String(now.getMinutes()).padStart(2, '0') + ':' + 
+            const timeStr = now.getFullYear() + '년 ' + (now.getMonth()+1) + '월 ' + now.getDate() + '일 ' + 
+                           now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + 
                            String(now.getSeconds()).padStart(2, '0');
             document.getElementById('current-time').textContent = timeStr;
         }
-        setInterval(updateTime, 1000);
-        updateTime();
 
-        // 다시 시도 버튼 클릭 시 더 그럴듯한 경고
-        function fakeRetry() {
-            alert('❌ 다시 시도했으나 동일한 오류가 발생했습니다.\n\n파일이 서버에 존재하지 않거나, 권한이 부족합니다.\n\n(이 메시지는 연출된 테스트 오류입니다)');
+        // 실제 다운로드 로직
+        async function startDownload() {
+            const loading = document.getElementById('loading-status');
+            const errorUI = document.getElementById('error-ui');
+            const fileNameDisplay = document.getElementById('file-name-display');
             
-            // 1초 후에 페이지 새로고침처럼 보이게
-            setTimeout(() => {
-                location.reload();
-            }, 1200);
+            fileNameDisplay.textContent = TARGET_FILE;
+            updateTime();
+
+            try {
+                // 1. 파일이 존재하는지 HEAD 요청으로 먼저 확인
+                const response = await fetch(FILE_PATH, { method: 'HEAD' });
+
+                if (response.ok) {
+                    // 파일이 있으면 다운로드 실행
+                    loading.textContent = "다운로드를 시작합니다...";
+                    const link = document.createElement('a');
+                    link.href = FILE_PATH;
+                    link.download = TARGET_FILE;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // 성공 후 메시지 변경 (선택 사항)
+                    setTimeout(() => { loading.textContent = "다운로드가 완료되었습니다."; }, 2000);
+                } else {
+                    // 파일이 없으면(404 등) 에러 UI 표시
+                    throw new Error("File not found");
+                }
+            } catch (err) {
+                // 에러 발생 시 UI 전환
+                loading.style.display = 'none';
+                errorUI.style.display = 'block';
+                console.error('[SYSTEM] 다운로드 실패:', err);
+            }
         }
 
-        // 페이지 로드 시 콘솔에 가짜 서버 로그 출력 (개발자 도구에서 확인 가능)
-        console.log('%c[SERVER] 다운로드 요청 거부됨 - ERR_DOWNLOAD_FAILED', 'color:#ff4d4d; font-weight:bold');
-        console.log('%c[CLIENT] index.html에서 오류 페이지 전송 완료', 'color:#888');
+        // 페이지 로드 시 즉시 다운로드 시도
+        window.onload = startDownload;
+        setInterval(updateTime, 1000);
     </script>
 </body>
 </html>
