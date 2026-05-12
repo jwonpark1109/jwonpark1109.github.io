@@ -1,4 +1,4 @@
-{"download-settings": {"error": "true", "error-code": "8007", "not-download": "false", "not-error": "false", "text-color": "#4ade80", "prograss-color": "#8b5cf6"}}
+{"download-settings": {"error": "false", "error-code": "200", "not-download": "false", "not-error": "true", "text-color": "#4ade80", "prograss-color": "#8b5cf6"}}
 
 abcd
 1234
