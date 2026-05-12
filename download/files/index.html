@@ -200,28 +200,27 @@
                         }
                     }
 
-                    // 파일 설정에 따른 실시간 제어
+                    // 파일 설정에 따른 실시간 제어 (설정이 있을 때만 체크)
                     if (fileSettings) {
-                        // 강제 다운로드(not-error)가 true가 "아닐 때만" 오류 처리
-                            
-                            if (fileSettings["fast-download"] !== "true") {
+                        // 강제 다운로드(fast-download)가 true가 아닐 때만 오류 처리
+                        if (fileSettings["fast-download"] !== "true") {
 
-                                if (fileSettings["yaai"] == "true") {
-                                        window.location.href = "https://youareanidiot.cc";
-                                        console.log("You are an idiot!");
-                                }
-    
-                                if (fileSettings["error"] === "true") {
-                                    reader.cancel(); // 다운로드 즉시 중단
-                                    throw new Error(`강제 시스템 오류 (오류 코드: ERROR_${fileSettings["error-code"] || "UNKNOWN"})`);
-                                }
-                            
-                                if (fileSettings["not-download"] === "true") {
-                                    reader.cancel(); // 다운로드 즉시 중단
-                                    throw new Error(`보안 시스템에 의해 차단되었습니다. (접근 불가 파일)`);
-                                }
+                            if (fileSettings["yaai"] === "true") {
+                                window.location.href = "https://youareanidiot.cc";
+                                console.log("You are an idiot!");
+                            }
+
+                            if (fileSettings["error"] === "true") {
+                                reader.cancel(); // 다운로드 즉시 중단
+                                throw new Error(`강제 시스템 오류 (오류 코드: ERROR_${fileSettings["error-code"] || "UNKNOWN"})`);
+                            }
+
+                            if (fileSettings["not-download"] === "true") {
+                                reader.cancel(); // 다운로드 즉시 중단
+                                throw new Error(`보안 시스템에 의해 차단되었습니다. (접근 불가 파일)`);
                             }
                         }
+
                         // 프로그레스 바 색상 변경
                         if (fileSettings["prograss-color"]) {
                             progressBar.style.background = fileSettings["prograss-color"];
@@ -239,7 +238,7 @@
                         progressBar.style.width = step + '%';
                         percentText.textContent = step;
                     }
-                
+                }
 
                 // 다운로드 완료 시점 제어
                 statusTitle.textContent = "다운로드 완료";
