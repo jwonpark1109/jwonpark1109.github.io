@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 터미널</title>
+    <style>
+        :root {
+            --bg-color: #030303;
+            --terminal-green: #99ff00;
+            --text-gray: #aaaaaa;
+            --alert-red: #ff3333;
+            --goi-blue: #00ccff;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-gray);
+            font-family: 'Courier New', Courier, monospace;
+            padding: 30px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+        }
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
+        }
+        .terminal-logo {
+            width: 70px;
+            filter: drop-shadow(0 0 8px rgba(153, 255, 0, 0.4));
+        }
+        .title-text h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 3px;
+        }
+        .title-text p {
+            margin: 5px 0 0 0;
+            color: var(--terminal-green);
+            font-size: 0.9rem;
+        }
+        .terminal-output {
+            flex: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .green-text { color: var(--terminal-green); }
+        .red-text { color: var(--alert-red); font-weight: bold; }
+        .blue-text { color: var(--goi-blue); font-weight: bold; }
+        .white-text { color: #fff; }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        .prompt {
+            color: var(--terminal-green);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .cmd-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            outline: none;
+            caret-color: var(--terminal-green);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-header">
+        <img src="images/sdgicon.png" alt="SDP Logo" class="terminal-logo">
+        <div class="title-text">
+            <h1>SDP FOUNDATION CENTRAL TERMINAL</h1>
+            <p>보안 등급: LEVEL 4 (OVERSEER ACCESSIBLE ONLY)</p>
+        </div>
+    </div>
+
+    <div class="terminal-output" id="output">SDP 재단 중앙 메인프레임에 접속 중...
+인증 성공: 인가된 단말기입니다.
+
+<span class="white-text">명령어 도움말을 확인하려면 <span class="green-text">help</span>를 입력하십시오.</span>
+
+</div>
+
+    <div class="input-line">
+        <span class="prompt">SDP-OS:/></span>
+        <input type="text" id="commandInput" class="cmd-input" autofocus onkeydown="handleCommand(event)">
+    </div>
+
+    <script>
+        const outputDiv = document.getElementById('output');
+        const inputField = document.getElementById('commandInput');
+
+        document.addEventListener('click', () => inputField.focus());
+
+        function handleCommand(event) {
+            if (event.key === 'Enter') {
+                const rawCommand = inputField.value;
+                const command = rawCommand.trim();
+                inputField.value = '';
+
+                outputDiv.innerHTML += `<span class="white-text">SDP-OS:/> ${command}</span>\n`;
+                processCommand(command);
+                
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        }
+
+        function processCommand(rawCmd) {
+            // 대소문자 구분 없이 처리하기 위해 소문자로 변환
+            const cmd = rawCmd.toLowerCase().trim();
+
+            // 1. 도움말 기능
+            if (cmd === 'help') {
+                outputDiv.innerHTML += `
+======================================================================
+ <span class="green-text">사용 가능한 터미널 명령어 목록</span>
+======================================================================
+ <span class="white-text">lists /sdp</span>       - 현재 격리된 SDP 개체 목록 표시
+ <span class="white-text">lists /goi</span>       - 재단 주시 단체(GOI) 목록 표시
+ <span class="white-text">open [번호/이름]</span>  - 해당 SDP 문서 파일 열기 (예: open 102, open sdp-666)
+ <span class="white-text">cls</span> 또는 <span class="white-text">clear</span>    - 현재 터미널 로그 화면 초기화
+======================================================================\n`;
+            } 
+            
+            // 2. 화면 초기화 기능 (cls, clear 둘 다 지원)
+            else if (cmd === 'cls' || cmd === 'clear') {
+                outputDiv.innerHTML = '';
+            } 
+            
+            // 3. 목록 표시 기능 (lists /sdp 또는 lists /goi)
+            else if (cmd === 'lists /sdp') {
+                outputDiv.innerHTML += `
+재단 내부 SDP 데이터베이스 색인 검색 중...
+--------------------------------------------------
+ 일련번호    | 명칭            | 등급
+--------------------------------------------------
+ <span class="red-text">SDP-001</span>     | S.D. 로크의 제안 | Apollyon
+ <span class="green-text">SDP-102</span>     | 공포의 도형     | Euclid
+ <span class="red-text">SDP-666</span>     | 얼굴 수집가     | Keter
+--------------------------------------------------
+* 열람을 원하시면 'open [번호]'를 입력하십시오.\n`;
+            } 
+            else if (cmd === 'lists /goi') {
+                outputDiv.innerHTML += `
+재단 정보자산부 산하 주시 단체(GOI) 색인 검색 중...
+--------------------------------------------------
+ 단체명(코드) | 상세 명칭
+--------------------------------------------------
+ <span class="blue-text">GFC</span>          | 세계(Global) 싸움(Fight) 센터(Center)
+ <span class="blue-text">닭의 손</span>       | 닭의 손 (Hand of the Chicken)
+ <span class="blue-text">조커의 반란</span>   | 조커의 반란 (Joker's Rebellion)
+--------------------------------------------------\n`;
+            }
+            
+            // 4. 문서 열기 기능 (open [이름])
+            else if (cmd.startsWith('open ')) {
+                // 'open ' 부분을 지우고 순수하게 입력한 타겟팅 텍스트만 추출
+                let target = cmd.replace('open ', '').trim();
+                // 'sdp-102' 나 'sdp102' 처럼 입력했을 때 숫자만 추출하도록 처리
+                target = target.replace('sdp-', '').replace('sdp', '');
+
+                if (target === '001' || target === '1') {
+                    outputDiv.innerHTML += `<span class="green-text">SDP-001 기밀 보고서 데이터 링크 연결 중...</span>\n`;
+                    setTimeout(() => window.location.href = 'sdg001.html', 800);
+                } else if (target === '102') {
+                    outputDiv.innerHTML += `<span class="green-text">SDP-102 기밀 보고서 데이터 링크 연결 중...</span>\n`;
+                    setTimeout(() => window.location.href = 'sdg102.html', 800);
+                } else if (target === '666') {
+                    outputDiv.innerHTML += `<span class="green-text">SDP-666 기밀 보고서 데이터 링크 연결 중...</span>\n`;
+                    setTimeout(() => window.location.href = 'sdg666.html', 800);
+                } else {
+                    outputDiv.innerHTML += `<span class="red-text">[액세스 거부] 데이터베이스에 SDP-${target} 파일이 존재하지 않거나 보안 승인이 부족합니다.</span>\n`;
+                }
+            } 
+            
+            // 5. 빈 엔터나 잘못된 명령어 예외 처리
+            else if (cmd === '') {
+                // 줄바꿈만 발생
+            }
+            else {
+                outputDiv.innerHTML += `<span class="red-text">명령어 오류: '${rawCmd}'은(는) 내부 시스템 명령어로 인식되지 않습니다. 도움말은 'help'를 입력하십시오.</span>\n`;
+            }
+        }
+    </script>
+</body>
+</html>
