@@ -42,6 +42,28 @@
             font-size: 1.1rem;
             margin: 10px 0;
         }
+        /* 문서 헤더 및 로고 레이아웃 */
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.3)); /* 붉은빛 그림자 */
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
         /* 본문 내용 레이아웃 */
         .content-block {
             background-color: #0a0a0a;
@@ -74,21 +96,12 @@
             color: #ff3333;
             font-weight: bold;
         }
-        h2 {
-            color: #fff;
-            border-bottom: 2px solid #333;
-            padding-bottom: 15px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 2rem;
-            margin-top: 50px;
-        }
         /* 태양빛 테마를 강조하기 위한 주황/붉은색 하이라이트 */
         .day-breaks-theme {
             color: #ff6600;
             font-weight: bold;
             text-shadow: 0 0 8px rgba(255, 102, 0, 0.4);
         }
-        /* 연출용 소름돋는 텍스트 */
         .creepy-text {
             text-align: center;
             margin-top: 40px;
@@ -117,7 +130,10 @@
             > 파일 로딩: SDG-001 (아폴리온)
         </div>
 
-        <h2>SDG-001 파일</h2>
+        <div class="doc-header">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo">
+            <h2>SDG-001 파일</h2>
+        </div>
 
         <div class="content-block">
             <p><strong>일련번호:</strong> SDG-001</p>
