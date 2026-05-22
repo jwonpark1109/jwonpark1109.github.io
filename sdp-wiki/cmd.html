@@ -84,8 +84,8 @@
     <div class="terminal-header">
         <img src="images/sdgicon.png" alt="SDP Logo" class="terminal-logo">
         <div class="title-text">
-            <h1>SDP FOUNDATION CENTRAL TERMINAL</h1>
-            <p>보안 등급: LEVEL 4 (OVERSEER ACCESSIBLE ONLY)</p>
+            <h1>SDP FOUNDATION TERMINAL</h1>
+            <p>보안 등급: LEVEL 3</p>
         </div>
     </div>
 
@@ -130,6 +130,7 @@
 ======================================================================
  <span class="green-text">사용 가능한 터미널 명령어 목록</span>
 ======================================================================
+ <span class="white-text">exit</span>    - 메인으로 돌아가기
  <span class="white-text">lists /sdp</span>       - 현재 격리된 SDP 개체 목록 표시
  <span class="white-text">lists /goi</span>       - 재단 주시 단체(GOI) 목록 표시
  <span class="white-text">open [번호/이름]</span>  - 해당 SDP 문서 파일 열기 (예: open 102, open sdp-666)
@@ -140,6 +141,10 @@
             // 2. 화면 초기화 기능 (cls, clear 둘 다 지원)
             else if (cmd === 'cls' || cmd === 'clear') {
                 outputDiv.innerHTML = '';
+            } 
+                
+            else if (cmd === 'exit') {
+                window.location.href = "https://jwonpark1109.github.io/sdp-wiki/";
             } 
             
             // 3. 목록 표시 기능 (lists /sdp 또는 lists /goi)
