@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-666 - 데이터베이스 보고서</title>
+    <style>
+        body {
+            background-color: #0c0d0e;
+            color: #d4d4d4;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #b30000; /* 케테르 등급 강조 (붉은색) */
+            padding-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(179, 0, 0, 0.5));
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+        }
+        .class-rating {
+            margin-left: auto;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #b30000;
+            border: 2px solid #b30000;
+            padding: 5px 15px;
+            text-transform: uppercase;
+        }
+        .content-block {
+            background-color: #111315;
+            border-left: 5px solid #555;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .content-block.procedure {
+            border-left-color: #b30000; /* 최상위 위험 격리 절차 */
+        }
+        .content-block p {
+            margin: 0 0 15px 0;
+        }
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+        .content-block strong {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        /* 시각 자료(이미지) 스타일 */
+        .visual-data {
+            text-align: center;
+            margin: 40px 0;
+            border: 1px solid #333;
+            padding: 10px;
+            background-color: #050505;
+        }
+        .visual-data img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #555;
+        }
+        .visual-data .caption {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        /* 위험/경고 강조 스타일 */
+        .danger-text {
+            color: #ff3333;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 51, 51, 0.3);
+        }
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #b30000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo">
+            <h2>SDP-666 기밀 문서</h2>
+            <div class="class-rating">Keter</div>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-666</p>
+            <p><strong>별칭:</strong> 얼굴 수집가 (The Face Collector)</p>
+            <p><strong>등급:</strong> 케테르 (Keter)</p>
+        </div>
+
+        <div class="visual-data">
+            <img src="images/sdg666_trueform.png" alt="SDG-666 거울 속 본모습">
+            <div class="caption">부록 666-V1: 특수 작전 요원의 전술 거울에 포착된 SDG-666의 실체. 다수의 구강 구조가 확인된다.</div>
+        </div>
+
+        <div class="content-block procedure">
+            <p><strong>격리 절차:</strong></p>
+            <p>SDP-666은 대한민국 [데이터 말소됨]에 위치한 폐쇄된 지하철 역사 내부의 암흑 구역에 격리되어 있다. 격리 구역 반경 500m는 민간인 접근이 철저히 통제되며, 상시 고출력 조명 시스템이 가동되어야 한다.</p>
+            <p>개체와의 직접적인 교신 및 관측은 엄격히 금지된다. 대응 매뉴얼 666-'반사'에 의거하여, 현장 요원들은 다음과 같은 수칙을 준수해야 한다:</p>
+            <ul>
+                <li><strong><span class="danger-text">안면 응시 금지:</span></strong> 개체의 안면부를 10초 이상 지속적으로 응시해서는 안 된다. 인지 재해(정신 오염)가 발생하여 심각한 환각을 유발한다.</li>
+                <li><strong><span class="danger-text">음성 응답 금지:</span></strong> 개체는 목격자의 지인 목소리를 완벽하게 모사한다. 어떠한 음성적 신호에도 절대 응답해서는 안 된다. 응답 시 즉각적으로 위치를 추적당한다.</li>
+                <li><strong>고출력 조명 운용:</strong> 개체는 어둠 속에서만 완전한 물리적 형태를 유지한다. 교전 시 5,000 루멘 이상의 고출력 조명을 집중 가동하여 개체의 형태 유지력을 무력화해야 한다.</li>
+                <li><strong>전술 거울 장비:</strong> 모든 현장 요원은 특수 제작된 전술 거울 장비를 지참해야 한다. 거울을 통해서만 개체의 인지 재해 효과를 우회하여 본모습을 안전하게 관측할 수 있다.</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+            <p>SDP-666은 인지 재해 및 의태 능력을 가진 고도로 위험한 변칙 개체이다. 해당 개체는 어둠이 짙게 깔린 폐쇄된 공간(주로 지하 시설)에서 활동하며, 인간의 얼굴을 '수집'하여 자신의 형태를 의태하는 습성을 보인다.</p>
+            <p>이 개체의 가장 큰 특징은 거울에 비친 모습과 평소 육안으로 관측되는 모습이 다르다는 점이다. 평소에는 수집한 타인의 얼굴을 하고 있으나, 거울 속에는 <span class="highlight">얼굴이 없는 검은 형체의 몸에 여러 개의 입이 무질서하게 부착된</span> 본래의 모습이 비친다. (부록 666-V1 참고)</p>
+            <p>SDP 요원들은 개체가 수집한 얼굴들이 빛에 노출될 때 녹아내리듯 흐려지는 현상을 발견했으며, 이를 이용해 개체를 압박하는 전술을 수립했다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>발견 기록 (사고 보고서 666-A):</strong></p>
+            <p>대한민국 서울 소재의 폐쇄된 지하철 역사인 [데이터 말소됨]역에서 민간인 수색 작업 중이던 구조팀이 전원 행방불명되는 사고가 발생했다. 현장에 파견된 SDG 현장 부대는 구조팀원들의 유류품과 함께, 개체의 인지 재해에 오염되어 자신의 지인 목소리를 모사하는 SDP-666을 포착했다. (상세 발견 경위는 시각 자료 부록 666-V2 [접근 제한] 참고)</p>
+        </div>
+
+        <a href="index.html" class="back-btn">< 메인 데이터베이스로 돌아가기</a>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-998 - 데이터베이스 보고서</title>
+    <style>
+        body {
+            background-color: #0c0d0e;
+            color: #d4d4d4;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #99ff00; /* 재단 로고색 강조 */
+            padding-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(153, 255, 0, 0.5));
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+        }
+        .content-block {
+            background-color: #111315;
+            border-left: 5px solid #555;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .content-block.procedure {
+            border-left-color: #ffcc00; /* 경고/주의 색상 */
+        }
+        .content-block p {
+            margin: 0 0 15px 0;
+        }
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+        .content-block strong {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #99ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo">
+            <h2>SDP-998 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-998</p>
+            <p><strong>별칭:</strong> 행복 괴물 (Happiness Monster)</p>
+            <p><strong>등급:</strong> 안전 (Safe)</p>
+        </div>
+
+        <div class="content-block procedure">
+            <p><strong>특수 격리 절차:</strong></p>
+            <p>SDP-998는 제19기지의 SDP-998 전용 격리실에 격리한다. 인원들은 SDP-998과 언제든 상호작용할 수 있으며, 먹이를 줄 수 있다.</p>
+            <p>또한 SDP-998은 제 19기지의 안전 SCP격리 구역 일부 구역을 <span class="highlight">자유롭게 돌아다닐 수 있다.</span> </p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+            <p>SDP-998는 노란색의 젤리와 비슷하게 생겼으며, 같은 안전 등급인 SDP-999과 비슷하거나 같은 평행세계에서 온것으로 추정된다. 포유류가 SDP-998과 접촉시 극도의 행복감을 느낀다.</p>
+            <p>본 개체는 대한민국 파주 소재의 ■통 ■■동 ■■에서 최초로 발견되었다. 당시 현장을 지나던 민간인 <span class="highlight">박■■(park ■■)</span> 씨가 변칙 존재를 인지한 후, 경찰에 신고를 하여 당시 경찰에 잠복 근무 중이던 SDP 기동특무부대 ■-■ "■■■■■"의 최■■ 요원이 신고 전화를 들어 상부에 보고 후 확보되었다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>부록 998-A (연구 기록):</strong></p>
+            <p>김■■ 박사: SDP-998실험을 시작하겠습니다.</p>
+            <p>D-8932: 뭐여 이건?</p>
+            <p>김■■ 박사: 그거 만지셈 ㅇㅇ</p>
+            <p>D-8932: 뭐라는겨 박사 맞아?</p>
+            <p>김■■ 박사: 그게 중요한게 아니라 그거 만지라니깐요?</p>
+            <p>D-8932: 미친 총을... 알았어요 만지면 되잖아!!!</p>
+            <p>D-8932: 행복행 (: 너무 기분 좋아 이거 뭐야</p>
+            <p>김■■ 박사: 오 이놈 뭐야 안전 등급으로 하면 좋을듯?</p>
+            <p>김■■ 박사: 직원 복지로 하는거 건의해봐야겠다.</p>
+        </div>
+      
+        <div class="content-block">
+            <p><strong>부록 998-B (건의):</strong></p>
+            <p>건의자: 김■■ 박사</p>
+            <p>상태: 승인 대기중</p>
+            <p>설명: SDP-998은 연구 결과 인간에게 아무 해도 끼치지 않으며 오히려 행복해지는등 선한 영향을 주어 직원 복지로 하는것을 건의합니다.</p>
+        </div>
+
+        <a href="index.html" class="back-btn">< 메인 데이터베이스로 돌아가기</a>
+
+    </div>
+
+</body>
+</html>
