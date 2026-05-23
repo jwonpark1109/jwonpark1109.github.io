@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-014 - 데이터베이스 보고서</title>
+    <style>
+        body {
+            background-color: #0c0d0e;
+            color: #d4d4d4;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #99ff00; /* 재단 로고색 강조 */
+            padding-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(153, 255, 0, 0.5));
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+        }
+        .content-block {
+            background-color: #111315;
+            border-left: 5px solid #555;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .content-block.procedure {
+            border-left-color: #ffcc00; /* 경고/주의 색상 */
+        }
+        .content-block p {
+            margin: 0 0 15px 0;
+        }
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+        .content-block strong {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #99ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo">
+            <h2>SDP-014 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-014</p>
+            <p><strong>별칭:</strong> 심해 공포증 (Thalassophobia)</p>
+            <p><strong>등급:</strong> 유클리드 (Euclid)</p>
+        </div>
+
+        <div class="content-block procedure">
+            <p><strong>특수 격리 절차:</strong></p>
+            <p>SDP-014는 제45기지의 표준 격리실에 보관된다. 격리실 내부에는 상시 감시 카메라가 작동 중이어야 하며, 인원들은 SDP-014를 실시간으로 모니터링해야 한다.</p>
+            <p>만약 SDP-014가 [데이터 말소]현상이 나타날시 014-A규약을 따라야한다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+            <p>SDP-014는 눈으로는 평범한 접시 처럼 보이지만, 접촉시 심해 공포증을 유발하는 심해 한가운데로 빠진듯한 환각을 보여주며, 환각이 끝난 후 014를 탈출시켜 특정한 위치로 이동시키려하는 현상이 발생한다.</p>
+            <p>본 개체는 대한민국 부산의 앞바다에서 최초로 발견되었다. SDP-014를 발견한 사■■ 요원이 보고하여 빠르게 SDP 기동특무부대 사타9 (Sata-9) "환각팔이"가 출동하여 개체의 격리를 성공적으로 완수했다.</p>
+        </div>
+
+        <a href="index.html" class="back-btn">< 메인 데이터베이스로 돌아가기</a>
+
+    </div>
+
+</body>
+</html>
