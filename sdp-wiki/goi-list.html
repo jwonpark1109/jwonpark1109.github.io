@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 요주의 단체(GoI)</title>
+    <style>
+        /* CSS는 첫 번째 파일과 동일하게 유지됩니다 */
+        :root {
+            --bg-color: #0a0b0d;
+            --text-color: #ccc;
+            --sdg-green: #99ff00;
+            --border-color: #222;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--sdg-green);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo {
+            width: 50px;
+            filter: drop-shadow(0 0 5px rgba(153, 255, 0, 0.5));
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+        .back-home {
+            color: #888;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        .back-home:hover {
+            color: var(--sdg-green);
+        }
+        .db-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .db-card {
+            background-color: #111316;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.2s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+        }
+        .db-card:hover {
+            border-color: var(--sdg-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(153, 255, 0, 0.1);
+        }
+        .db-card .item-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .db-card:hover .item-number {
+            color: var(--sdg-green);
+        }
+        .db-card .item-name {
+            font-size: 1rem;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+        .db-card .item-class {
+            font-size: 0.85rem;
+            padding: 3px 8px;
+            background-color: #222;
+            align-self: flex-start;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        /* 위협도별 색상 (기존 클래스 재활용) */
+        .threat-extreme { color: #ff3333; border: 1px solid #ff3333; font-weight: bold; } /* Keter style */
+        .threat-high { color: #ffcc00; border: 1px solid #ffcc00; } /* Euclid style */
+        .threat-neutral { color: #808080; border: 1px solid #808080; } /* Unknown style */
+        .threat-low { color: #7fff00; border: 1px solid #7fff00; } /* Safe style */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <img src="images/sdgicon.png" alt="SDG Logo" class="logo">
+                <h1>요주의 단체 (GoI) 색인</h1>
+            </div>
+            <a href="index.html" class="back-home">< 메인 터미널</a>
+        </div>
+
+        <div class="db-grid">
+            <a href="gfc-hub.html" class="db-card">
+                <div>
+                    <div class="item-number">GoI-001</div>
+                    <div class="item-name">세계 싸움 센터</div>
+                </div>
+                <div class="item-class threat-high">위협도: 보통</div>
+            </a>
+
+            <a href="ji-hub.html" class="db-card">
+                <div>
+                    <div class="item-number">GoI-002</div>
+                    <div class="item-name">조커의 반란</div>
+                </div>
+                <div class="item-class threat-extreme">위협도: 매우 높음</div>
+            </a>
+
+            <a href="ch-hub.html" class="db-card">
+                <div>
+                    <div class="item-number">GoI-003</div>
+                    <div class="item-name">닭의 손</div>
+                </div>
+                <div class="item-class threat-high">위협도: 높음</div>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
