@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 시설 데이터베이스</title>
+    <style>
+        /* CSS는 첫 번째 파일과 동일하게 유지됩니다 */
+        :root {
+            --bg-color: #0a0b0d;
+            --text-color: #ccc;
+            --sdg-green: #99ff00;
+            --border-color: #222;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--sdg-green);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo {
+            width: 50px;
+            filter: drop-shadow(0 0 5px rgba(153, 255, 0, 0.5));
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+        .back-home {
+            color: #888;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        .back-home:hover {
+            color: var(--sdg-green);
+        }
+        .db-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .db-card {
+            background-color: #111316;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.2s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+        }
+        .db-card:hover {
+            border-color: var(--sdg-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(153, 255, 0, 0.1);
+        }
+        .db-card .item-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .db-card:hover .item-number {
+            color: var(--sdg-green);
+        }
+        .db-card .item-name {
+            font-size: 1rem;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+        .db-card .item-class {
+            font-size: 0.85rem;
+            padding: 3px 8px;
+            background-color: #222;
+            align-self: flex-start;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* 보안 등급별 색상 (기존 클래스 재활용) */
+        .level-top-secret { color: #800080; border: 1px solid #800080; font-weight: bold; } /* Apollyon style */
+        .level-4 { color: #ff3333; border: 1px solid #ff3333; font-weight: bold; } /* Keter style */
+        .level-3 { color: #ffcc00; border: 1px solid #ffcc00; } /* Euclid style */
+        .level-2 { color: #7fff00; border: 1px solid #7fff00; } /* Safe style */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <img src="images/sdgicon.png" alt="SDG Logo" class="logo">
+                <h1>재단 시설 (Site) 색인</h1>
+            </div>
+            <a href="index.html" class="back-home">< 메인 터미널</a>
+        </div>
+
+        <div class="db-grid">
+            <a href="#" class="db-card">
+                <div>
+                    <div class="item-number">제01기지 (Site-01)</div>
+                    <div class="item-name">O5 평의회 감독부</div>
+                </div>
+                <div class="item-class level-top-secret">보안등급: 5등급</div>
+            </a>
+
+            <a href="#" class="db-card">
+                <div>
+                    <div class="item-number">제17기지 (Site-17)</div>
+                    <div class="item-name">저위험군 인간형 개체 격리</div>
+                </div>
+                <div class="item-class level-3">보안등급: 3등급</div>
+            </a>
+
+            <a href="site19.html" class="db-card">
+                <div>
+                    <div class="item-number">제19기지 (Site-19)</div>
+                    <div class="item-name">재단 최대 격리 시설</div>
+                </div>
+                <div class="item-class level-4">보안등급: 4등급</div>
+            </a>
+            
+            <a href="#" class="db-card">
+                <div>
+                    <div class="item-number">제14무장제14구역</div>
+                    <div class="item-name">위험성 변칙개체 무장 격리</div>
+                </div>
+                <div class="item-class level-4">보안등급: 4등급</div>
+            </a>
+            
+            <a href="#" class="db-card">
+                <div>
+                    <div class="item-number">제45기지 (Site-45)</div>
+                    <div class="item-name">해양 변칙 개체 연구</div>
+                </div>
+                <div class="item-class level-2">보안등급: 2등급</div>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
