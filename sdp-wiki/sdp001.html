@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-001 - 기밀 제안서 목록</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #d4d4d4;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 50px 20px;
+        }
+        /* 시각적 살해 에이전트 경고창 스타일 */
+        .warning-box {
+            border: 3px solid #ff3333;
+            background-color: rgba(255, 51, 51, 0.05);
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+            box-shadow: 0 0 25px rgba(255, 51, 51, 0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px rgba(255, 51, 51, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(255, 51, 51, 0.4); }
+            100% { box-shadow: 0 0 15px rgba(255, 51, 51, 0.1); }
+        }
+        .warning-box h1 {
+            color: #ff3333;
+            font-size: 2.5rem;
+            margin: 0 0 15px 0;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+        .warning-box p {
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        /* 쩌는 리스트 컨테이너 */
+        .list-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .proposal-item {
+            display: block;
+            background-color: #0a0b0d;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+            padding: 25px 30px;
+            text-decoration: none;
+            color: #ccc;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        /* 마우스 올렸을 때 왼쪽에 차오르는 빨간색 바 효과 */
+        .proposal-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            background-color: #ff3333;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            transform-origin: bottom;
+        }
+        .proposal-item:hover {
+            background-color: #111316;
+            border-color: #ff3333;
+            transform: translateX(15px); /* 오른쪽으로 살짝 밀리는 애니메이션 */
+            box-shadow: -5px 5px 20px rgba(255, 51, 51, 0.15);
+        }
+        .proposal-item:hover::before {
+            transform: scaleY(1);
+        }
+        .p-title {
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .p-desc {
+            color: #ff3333;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+            color: #666;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #99ff00; /* SDP 메인 형광녹색 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="warning-box">
+        <h1>LEVEL 5 경고</h1>
+        <p>이 데이터베이스는 SDP 재단 최고 관리자(O5) 전용입니다.<br>인가되지 않은 인원이 아래의 제안서 중 하나라도 열람을 시도할 경우,<br>즉각적인 추적 및 처분 프로토콜이 가동됩니다.</p>
+    </div>
+
+    <div class="list-container">
+        <a href="sdp-001_proposal1.html" class="proposal-item">
+            <div class="p-title">코드네임: S. D. 라크</div>
+            <div class="p-desc">제안서 1: 새벽이 밝아올 때</div>
+        </a>
+
+        <a href="sdp-001_proposal2.html" class="proposal-item">
+            <div class="p-title">코드네임: 기어스 박사</div>
+            <div class="p-desc">제안서 2: 프로토타입</div>
+        </a>
+
+        <a href="sdp-001_proposal3.html" class="proposal-item">
+            <div class="p-title">코드네임: 클레프 박사</div>
+            <div class="p-desc">제안서 3: 문지기</div>
+        </a>
+    </div>
+
+    <a href="list.html" class="back-btn">< 일반 데이터베이스 색인으로 복귀</a>
+
+</body>
+</html>
