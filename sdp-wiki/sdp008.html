@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-008 - 데이터베이스 보고서</title>
+    <style>
+        body {
+            background-color: #0c0d0e;
+            color: #d4d4d4;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #99ff00; /* 재단 로고색 강조 */
+            padding-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(153, 255, 0, 0.5));
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+        }
+        .content-block {
+            background-color: #111315;
+            border-left: 5px solid #555;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .content-block.procedure {
+            border-left-color: #ffcc00; /* 경고/주의 색상 */
+        }
+        .content-block p {
+            margin: 0 0 15px 0;
+        }
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+        .content-block strong {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #99ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo">
+            <h2>SDP-008 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-008</p>
+            <p><strong>별칭:</strong> 좀비 바이러스 (Zombie Virus)</p>
+            <p><strong>등급:</strong> 유클리드 (Euclid)</p>
+        </div>
+
+        <div class="content-block procedure">
+            <p><strong>특수 격리 절차:</strong></p>
+            <p>SDP-008는 제██기지의 환풍구를 제거한 표준 격리실에 보관된다. 격리실 내부에는 상시 감시 카메라가 작동 중이어야 하며, 인원들은 SDP-008를 실시간으로 모니터링해야 한다.</p>
+            <p>만약 SDP-008감염자가 탈출할시, 기동특무부대 베타7은 접촉을 최대한 피하며 제거해야한다. 가장 효과적인 방법은 "불"이다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+            <p>SDP-008은 공기중으로 퍼지는 소위 말하는 "좀비 바이러스"이다.</p>
+            <p>본 개체는 대한민국 경주 소재의 ███동 ■■■길 12-82에서 최초로 발견되었다. 당시 소문을 듣고 수색하던 강■■ 요원이 보고하여 빠르게 SDP 기동특무부대 베타 7이 출동하여 개체의 격리를 성공적으로 완수했다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>부록 008-A (4K 임시 008 격리기지 사고 기록):</strong></p>
+            <p>SDP-008이 환기구에서 감지됨</p>
+            <p>SDP-008의 격리실패 예상됨.</p>
+            <p>SDP-008의 격리 구역에서 경보기 작동됨.</p>
+            <p>GOI-■■■ "닭의 손"이 재단 내부에 침입함.</p>
+            <p>[데이터 말소됨]</p>
+        </div>
+
+        <a href="index.html" class="back-btn">< 메인 데이터베이스로 돌아가기</a>
+
+    </div>
+
+</body>
+</html>
