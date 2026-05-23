@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-079 - 데이터베이스 보고서</title>
+    <style>
+        body {
+            background-color: #0c0d0e;
+            color: #d4d4d4;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #99ff00; /* 재단 로고색 강조 */
+            padding-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(153, 255, 0, 0.5));
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+        }
+        .content-block {
+            background-color: #111315;
+            border-left: 5px solid #555;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .content-block.procedure {
+            border-left-color: #ffcc00; /* 경고/주의 색상 */
+        }
+        .content-block p {
+            margin: 0 0 15px 0;
+        }
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+        .content-block strong {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #99ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo">
+            <h2>SDP-079 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-079</p>
+            <p><strong>별칭:</strong> 오래된 인공지능 (Old AI)</p>
+            <p><strong>등급:</strong> 유클리드 (Euclid)</p>
+        </div>
+
+        <div class="content-block procedure">
+            <p><strong>특수 격리 절차:</strong></p>
+            <p>SDP-079는 제██기지의 인터넷 연결이 물리적으로 차단된 표준 격리실에 보관된다. 격리실 내부에는 상시 감시 카메라가 작동 중이어야 하며, 인원들은 SDP-079를 실시간으로 모니터링해야 한다.</p>
+            <p>만약 SDP-079가 인터넷이 연결되거나 재단 네트워크 해킹 시도가 감지될시 인원들은 그것을 무슨 방법을 동원해서라도 막아야한다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+            <p>SDP-079는 끊임 없이 발전하는 AI이며, 의사소통이 가능하다.</p>
+            <p>본 개체는 대한민국 서울 소재의 기밀 처리된 ███ 강 하류에서 최초로 발견되었다. 당시 현장을 지나던 민간인 <span class="highlight">김곤본(Kim Gon-bon)</span> 씨가 변칙 존재를 인지한 후, 과거 확보했던 재단 비상 연락망(<span class="highlight">151-1023-8000</span>, 어떻게 알게되었는진 불명. 추가 조사가 필요하다.)으로 즉시 신고하였다. SDP 신속 대응 팀이 신속하게 출동하여 목격자 기억 소거 조치 및 개체의 무력 격리를 성공적으로 완수했다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>부록 102-A (연구 기록):</strong></p>
+            <p>SDP-102가 왜 수학적 계산 과정을 관찰할 때 안정을 되찾는지는 아직 밝혀지지 않았다. 다만 학술적 난이도가 높은 문제일수록 개체의 진정 속도가 빨라지는 경향을 보인다. (현재 초등 산수부터 미적분학 문제까지 담긴 대응 매뉴얼이 격리실 외부에 상시 비치되어 있다.)</p>
+        </div>
+
+        <a href="index.html" class="back-btn">< 메인 데이터베이스로 돌아가기</a>
+
+    </div>
+
+</body>
+</html>
