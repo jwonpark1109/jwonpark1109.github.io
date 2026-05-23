@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 제45기지 시설 기록</title>
+    <style>
+        :root {
+            --bg-deep-sea: #010a15;
+            --text-main: #8ab4f8;
+            --neon-cyan: #00f0ff;
+            --neon-blue: #0055ff;
+            --alert-red: #ff2a2a;
+            --panel-bg: rgba(2, 18, 36, 0.7);
+            --border-glow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+        
+        body {
+            background-color: var(--bg-deep-sea);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 브라운관(CRT) 모니터 스캔라인 효과 */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.6;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 헤더 디자인: 심해 감성의 네온 타이포그래피 */
+        .header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--neon-cyan);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.1);
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .logo {
+            width: 60px;
+            filter: drop-shadow(0 0 8px var(--neon-cyan));
+            animation: pulse-glow 3s infinite alternate;
+        }
+        @keyframes pulse-glow {
+            0% { filter: drop-shadow(0 0 5px var(--neon-cyan)); }
+            100% { filter: drop-shadow(0 0 20px var(--neon-cyan)); }
+        }
+        .header-text h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: var(--neon-cyan);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .back-link {
+            color: #5588cc;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: 0.3s;
+            border: 1px solid #5588cc;
+            padding: 5px 10px;
+        }
+        .back-link:hover {
+            color: #fff;
+            background-color: var(--neon-blue);
+            box-shadow: var(--border-glow);
+        }
+
+        /* 라이브 상태 모니터 기믹 (오른쪽 위 레이더 느낌) */
+        .live-status {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--neon-cyan);
+        }
+        .blinking-dot {
+            display: inline-block;
+            width: 10px; height: 10px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        /* 소나 레이더 애니메이션 (장식용) */
+        .sonar-wrapper {
+            position: relative;
+            width: 100%;
+            height: 4px;
+            background-color: #001122;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .sonar-line {
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            animation: sonar-sweep 3s linear infinite;
+        }
+        @keyframes sonar-sweep {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        /* 메인 콘텐츠 패널 */
+        .dossier-header {
+            background-color: var(--alert-red);
+            color: #fff;
+            padding: 8px 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(255, 42, 42, 0.6);
+            margin-bottom: 20px;
+        }
+        
+        .info-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--neon-blue);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--neon-cyan);
+            box-shadow: inset 0 0 20px rgba(0, 85, 255, 0.2);
+            position: relative;
+        }
+        /* 패널 모서리 데코레이션 */
+        .info-panel::before, .info-panel::after {
+            content: ''; position: absolute;
+            width: 15px; height: 15px;
+            border: 2px solid var(--neon-cyan);
+        }
+        .info-panel::before { top: -2px; right: -2px; border-bottom: none; border-left: none; }
+        .info-panel::after { bottom: -2px; left: -2px; border-top: none; border-right: none; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 12px 20px;
+        }
+        .info-grid strong {
+            color: var(--neon-cyan);
+        }
+        .info-grid span {
+            color: #fff;
+        }
+
+        h2 {
+            color: #fff;
+            border-bottom: 1px solid var(--neon-blue);
+            padding-bottom: 8px;
+            margin-top: 50px;
+            font-size: 1.5rem;
+            text-shadow: 0 0 5px var(--neon-blue);
+            position: relative;
+        }
+        h2::before {
+            content: '>>';
+            color: var(--neon-cyan);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        ul {
+            list-style-type: square;
+            color: #fff;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        li strong {
+            color: var(--neon-cyan);
+        }
+
+        /* 하이테크 데이터 테이블 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            background-color: rgba(0, 15, 30, 0.8);
+            border: 1px solid var(--neon-blue);
+        }
+        th, td {
+            border-bottom: 1px solid #003366;
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(0, 85, 255, 0.2);
+            color: var(--neon-cyan);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        tr:hover {
+            background-color: rgba(0, 240, 255, 0.1);
+            color: #fff;
+        }
+        
+        /* 뱃지 스타일 (해양기지에 맞게 조정) */
+        .badge {
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            background-color: #000;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 3px;
+        }
+        .keter { color: #ff2a2a; border: 1px solid #ff2a2a; box-shadow: 0 0 5px #ff2a2a; }
+        .euclid { color: #ffcc00; border: 1px solid #ffcc00; }
+        .safe { color: #00f0ff; border: 1px solid #00f0ff; }
+        .thaumiel { color: #cc00ff; border: 1px solid #cc00ff; box-shadow: 0 0 5px #cc00ff; }
+        
+        /* 심해 데이터 손상(글리치) 효과 검열 */
+        .redacted {
+            background-color: #222;
+            color: #222;
+            user-select: none;
+            padding: 0 6px;
+            position: relative;
+        }
+        .redacted:hover {
+            background-color: transparent;
+            color: var(--alert-red);
+            animation: text-glitch 0.2s infinite;
+        }
+        @keyframes text-glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 1px) }
+            40% { transform: translate(2px, -1px) }
+            60% { transform: translate(-1px, 2px) }
+            80% { transform: translate(1px, -2px) }
+            100% { transform: translate(0) }
+        }
+        
+        a {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            color: #fff;
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        /* 텔레메트리 (심해 상태 표시기) */
+        .telemetry {
+            display: flex;
+            justify-content: space-between;
+            background-color: #000;
+            border: 1px solid #333;
+            padding: 15px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+        .tel-item { text-align: center; }
+        .tel-value { font-size: 1.5rem; color: var(--neon-cyan); font-weight: bold; font-family: Impact, sans-serif; letter-spacing: 2px;}
+        .tel-label { color: #666; font-size: 0.75rem; text-transform: uppercase; }
+        .warning { color: var(--alert-red); animation: blink 1s infinite; }
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <div class="live-status">
+            <span class="blinking-dot"></span> CONNECTION STABLE<br>
+            LOCAL TIME: <span id="clock">00:00:00</span>
+        </div>
+
+        <div class="header">
+            <div class="header-title">
+                <img src="images/sdgicon.png" alt="SDP Logo" class="logo">
+                <div class="header-text">
+                    <h1>보안 시설 기록: SITE-45</h1>
+                    <p>MARINE CONTAINMENT & RESEARCH FACILITY</p>
+                </div>
+            </div>
+            <a href="site-list.html" class="back-link">[ SYSTEM_RETURN ]</a>
+        </div>
+
+        <div class="sonar-wrapper">
+            <div class="sonar-line"></div>
+        </div>
+
+        <div class="dossier-header">보안 인가 등급: 4등급 (기밀)</div>
+
+        <div class="info-panel">
+            <div class="info-grid">
+                <strong>공식 명칭:</strong> <span>제45해양격리연구기지 (Site-45)</span>
+                <strong>위치:</strong> <span>인도양 [데이터 말소], 수심 3,420m</span>
+                <strong>설립 연도:</strong> <span>1988년 (2004년 심해 확장 공사 완료)</span>
+                <strong>주요 기능:</strong> <span>수서형 변칙 개체 격리, 심해 유적 탐사, 고수압 환경 연구</span>
+                <strong>기지 이사관:</strong> <span>M. <span class="redacted">아쿠아틱</span> 제독</span>
+            </div>
+        </div>
+
+        <p>제45기지는 SDP 재단이 운용하는 최대 규모의 해저 시설입니다. 일반적인 방법으로 격리가 불가능한 거대 수서 생물, 해저 지각 변동을 일으키는 변칙 개체, 그리고 심해에 가라앉은 초상 기술 유물들을 감시하고 연구합니다. 기지 전체가 특수 티타늄 합금과 초공간 차폐장으로 보호받고 있습니다.</p>
+
+        <div class="telemetry">
+            <div class="tel-item">
+                <div class="tel-value">3,420 M</div>
+                <div class="tel-label">CURRENT DEPTH</div>
+            </div>
+            <div class="tel-item">
+                <div class="tel-value">345 ATM</div>
+                <div class="tel-label">EXTERNAL PRESSURE</div>
+            </div>
+            <div class="tel-item">
+                <div class="tel-value warning">98.2%</div>
+                <div class="tel-label">HULL INTEGRITY</div>
+            </div>
+            <div class="tel-item">
+                <div class="tel-value">ACTIVE</div>
+                <div class="tel-label">SONAR ARRAY</div>
+            </div>
+        </div>
+
+        <h2>부지 및 구역 구조 (Facility Layout)</h2>
+        <p>기지는 5개의 거대한 돔형 모듈이 터널로 연결된 형태를 띄며, 유사시 각 모듈은 독립적인 잠수정으로 분리되어 부상할 수 있습니다.</p>
+        <ul>
+            <li><strong>알파 돔 (Sector Alpha):</strong> 중앙 통제실, 거주 구역, 원자로 및 산소 발생기.</li>
+            <li><strong>베타 돔 (Sector Beta):</strong> 해양 생물학 연구소, Safe 및 Euclid 등급 소형 수서 개체 수조.</li>
+            <li><strong>감마 구역 (Sector Gamma):</strong> <strong>수중 격리 구역(Aquatic Containment Zone).</strong> 기지 외곽의 심해 해구를 직접 격리실로 사용하는 거대 개체용 수역. 접근 엄격히 통제됨.</li>
+            <li><strong>델타 도크 (Sector Delta):</strong> 심해 탐사용 잠수정(바티스카프) 출격장 및 보급선 도킹 스테이션.</li>
+        </ul>
+
+        <h2>인력 현황 (Staffing Information)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>직군</th>
+                    <th>인원 수</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>관리 및 행정직</td>
+                    <td>18명</td>
+                    <td>수압 적응 훈련 필수 이수자</td>
+                </tr>
+                <tr>
+                    <td>해양학 및 생물 연구진</td>
+                    <td>112명</td>
+                    <td>심해 생태계 전문가 다수 포진</td>
+                </tr>
+                <tr>
+                    <td>보안 및 특무부대</td>
+                    <td>85명</td>
+                    <td>기동특무부대 Gamma-6 ("심해의 포식자들") 주둔</td>
+                </tr>
+                <tr>
+                    <td>D계급 인원</td>
+                    <td>약 40명</td>
+                    <td>주로 심해 외부 활동(EVA) 소모 인력</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>주요 수용 개체 (Currently Contained Anomalies)</h2>
+        <p>현재 제45기지의 통제 하에 있는 주요 해양 특수 격리 대상입니다. 심해 스캐너에 의해 실시간 추적 중입니다.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>일련번호</th>
+                    <th>개체명</th>
+                    <th>등급</th>
+                    <th>수용 구역</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="sdp112.html">SDP-014</a></td>
+                    <td>심해 공포증</td>
+                    <td><span class="badge euclid">Euclid</span></td>
+                    <td>Beta 돔 - 고압 차폐 수조 B-04</td>
+                </tr>
+
+        <h2>최근 시스템 로그 (System Logs)</h2>
+        <p style="color: var(--alert-red); font-family: monospace;">> [경고] 04:00 AM - 감마 구역 외곽에서 미확인 소나 신호 포착됨. 크기 추정 불가.<br>> [알림] 기동특무부대 Gamma-6 출격 대기 중.</p>
+        
+    </div>
+
+    <script>
+        // 우측 상단 실시간 시계 스크립트
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
