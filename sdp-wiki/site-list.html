@@ -25,7 +25,7 @@
             margin: 0 auto;
         }
 
-        /* 헤더 애니메이션 */
+        /* 헤더 및 버튼 스타일 */
         .header {
             display: flex;
             align-items: center;
@@ -37,6 +37,22 @@
         }
 
         .header h1 { margin: 0; font-size: 1.8rem; color: #fff; letter-spacing: 2px; }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid var(--sdg-green);
+            color: var(--sdg-green);
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--sdg-green);
+            color: #000;
+        }
 
         /* 섹션 구분 */
         .section-label {
@@ -56,7 +72,7 @@
             gap: 20px;
         }
 
-        /* 카드 등장 애니메이션 (슝슝 효과) */
+        /* 카드 등장 애니메이션 */
         .db-card {
             background-color: #111316;
             border: 1px solid var(--border-color);
@@ -99,6 +115,7 @@
     <div class="container">
         <div class="header">
             <h1>재단 시설 색인</h1>
+            <button onclick="history.back()" class="back-btn">← 이전 페이지로</button>
         </div>
 
         <div class="section-label">[ 기지 (Site) ]</div>
