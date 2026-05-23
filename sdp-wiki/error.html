@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRITICAL ERROR - SDP FOUNDATION</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #d4d4d4;
+            --accent-color: #ff1a1a; /* 에러 상황이므로 더 밝고 위험한 빨간색 */
+            --border-color: #441111;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, #1c0505 0%, #000 100%);
+            overflow: hidden;
+        }
+        .error-container {
+            border: 3px dashed var(--accent-color);
+            background-color: rgba(15, 5, 5, 0.95);
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 650px;
+            width: 85%;
+            box-shadow: 0 0 40px rgba(255, 26, 26, 0.3);
+            position: relative;
+        }
+        /* 글자가 깜빡이는 경고 효과 */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .glitch-title {
+            color: var(--accent-color);
+            font-size: 3.5rem;
+            margin: 0 0 10px 0;
+            letter-spacing: 5px;
+            text-shadow: 0 0 15px rgba(255, 26, 26, 0.7);
+            animation: blink 2s infinite;
+        }
+        .status-code {
+            font-size: 1.5rem;
+            color: #ff8888;
+            background-color: #300;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .message-box {
+            text-align: left;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 20px;
+            margin: 25px 0;
+            line-height: 1.6;
+        }
+        .message-box p {
+            margin: 10px 0;
+            color: #b5b5b5;
+        }
+        .message-box strong {
+            color: #fff;
+        }
+        .btn-retry {
+            display: inline-block;
+            margin-top: 30px;
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 5px rgba(255, 26, 26, 0.2);
+        }
+        .btn-retry:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.6);
+            transform: translateY(-2px);
+        }
+        /* 장식용 스캔라인 효과 */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+
+    <div class="error-container">
+        <h1 class="glitch-title">CRITICAL ERROR</h1>
+        <div class="status-code">CODE: Unknown</div>
+        
+        <div class="message-box">
+            <p><strong>[경고]</strong> 메인 프레임 워크플로우에 예외가 발생했습니다.</p>
+            <p><strong>[조치]</strong> 추가적인 데이터 오염을 방지하기 위해 터미널을 안전 모드로 강제 격리했습니다.</p>
+        </div>
+
+        <!-- 메인 페이지(index.html)로 복귀하는 버튼 -->
+        <a href="index.html" class="btn-retry">메인 터미널 재부팅</a>
+    </div>
+</body>
+</html>
