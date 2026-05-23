@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 통합 데이터베이스 목록</title>
+    <style>
+        :root {
+            --bg-color: #0a0b0d;
+            --text-color: #ccc;
+            --sdg-green: #99ff00;
+            --border-color: #222;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--sdg-green);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo {
+            width: 50px;
+            filter: drop-shadow(0 0 5px rgba(153, 255, 0, 0.5));
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+        .back-home {
+            color: #888;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        .back-home:hover {
+            color: var(--sdg-green);
+        }
+        
+        /* 메인 카테고리 리스트 레이아웃 */
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .category-card {
+            background-color: #111316;
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.2s, border-color 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--sdg-green);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .category-card:hover {
+            border-color: var(--sdg-green);
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(153, 255, 0, 0.05);
+        }
+        .category-card:hover::before {
+            opacity: 1;
+        }
+        .category-card .title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 0;
+        }
+        .category-card:hover .title {
+            color: var(--sdg-green);
+        }
+        .category-card .desc {
+            font-size: 1rem;
+            color: #aaa;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .category-card .meta {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <img src="images/sdgicon.png" alt="SDG Logo" class="logo">
+                <h1>데이터베이스 디렉토리</h1>
+            </div>
+            <a href="index.html" class="back-home">< 메인 터미널</a>
+        </div>
+
+        <div class="category-list">
+            <a href="sdp-list.html" class="category-card">
+                <div class="title">일반 데이터베이스 (SDP)</div>
+                <div class="desc">재단이 확보한 변칙 개체, 독립체 및 현상에 대한 공식 특수 격리 절차(SDP) 문서 열람.</div>
+                <div class="meta">접근 인가: 레벨 1 이상</div>
+            </a>
+
+            <a href="goi-list.html" class="category-card">
+                <div class="title">요주의 단체 (GoI)</div>
+                <div class="desc">재단 외부에 존재하는 초상 단체, 위협 그룹 및 관련 변칙 연합에 대한 정보 데이터베이스.</div>
+                <div class="meta">접근 인가: 레벨 2 이상</div>
+            </a>
+
+            <a href="site-list.html" class="category-card">
+                <div class="title">보안 시설 (Site / Area)</div>
+                <div class="desc">전 세계에 배치된 재단의 보안 기지, 무장 구역, 연구 시설 및 격리 구역 위치/정보 열람.</div>
+                <div class="meta">접근 인가: 레벨 2 이상</div>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
