@@ -42,72 +42,46 @@
             font-size: 1.1rem;
             margin: 10px 0;
         }
-        /* 문서 헤더 및 로고 레이아웃 */
-        .doc-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 15px;
-            margin-top: 50px;
-            margin-bottom: 30px;
-        }
-        .doc-logo {
-            width: 80px;
-            filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.3)); /* 붉은빛 그림자 */
-        }
-        .doc-header h2 {
+        
+        /* 생체 인증 버튼 스타일 */
+        .auth-btn {
+            background-color: #8b0000;
             color: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 2rem;
-            margin: 0;
-            border: none;
-            padding: 0;
-        }
-        /* 본문 내용 레이아웃 */
-        .content-block {
-            background-color: #0a0a0a;
-            border-left: 5px solid #444;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-        }
-        .content-block p {
-            margin: 0 0 15px 0;
-        }
-        .content-block p:last-child {
-            margin-bottom: 0;
-        }
-        .content-block strong {
-            color: #fff;
-            font-size: 1.1rem;
-        }
-        /* 터미널 시스템 로깅 효과 */
-        .terminal {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #050505;
-            color: #00ff00;
-            padding: 20px;
-            border: 1px solid #333;
-            margin: 30px 0;
-            font-size: 0.95rem;
-        }
-        .terminal .red-text {
-            color: #ff3333;
+            border: 2px solid #ff3333;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        /* 태양빛 테마를 강조하기 위한 주황/붉은색 하이라이트 */
-        .day-breaks-theme {
-            color: #ff6600;
-            font-weight: bold;
-            text-shadow: 0 0 8px rgba(255, 102, 0, 0.4);
+        .auth-btn:hover {
+            background-color: #ff3333;
+            box-shadow: 0 0 25px rgba(255, 51, 51, 0.8);
+            color: #000;
         }
-        .creepy-text {
+
+        /* 스크롤용 공백 영역 */
+        .spacer {
+            height: 50vh;
+        }
+
+        /* 권한 부족 메시지 (기본 상태: 숨김 + 투명도 0) */
+        .error-message {
+            display: none;
+            opacity: 0;
             text-align: center;
-            margin-top: 40px;
-            font-size: 1.3rem;
-            color: #aaa;
-            font-style: italic;
+            font-family: 'Courier New', Courier, monospace;
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
+            transition: opacity 1s ease-in-out; /* 1초 동안 부드럽게 나타남 */
+            margin: 40px 0;
         }
     </style>
 </head>
@@ -119,88 +93,38 @@
             <h1>경고: 1등급 기밀</h1>
             <p>이하의 문서는 SDP 재단 최고 관리자(O5 등급) 전용으로 분류되어 있습니다.</p>
             <p>인가되지 않은 자가 이 문서에 접근할 경우 치명적인 밈적 살해 에이전트가 작동하며, 즉각적인 처분이 이루어집니다.</p>
-            <p>아래로 스크롤 시 귀하의 생체 인식이 자동으로 진행됩니다.</p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p>권한이 부족합니다.</p>
+            <p>아래 버튼을 눌러 생체 인증을 진행한 뒤 문서를 열람하십시오.</p>
+            
+            <button class="auth-btn" onclick="startAuth()">[ 생체 인증 진행 ]</button>
         </div>
+
+        <!-- 스크롤을 만들어주기 위한 공간 -->
+        <div class="spacer"></div>
+
+        <!-- 결과 메시지 영역 -->
+        <div id="denied-msg" class="error-message">
+            권한이 부족합니다.
+        </div>
+        
+        <div class="spacer"></div>
     </div>
+
+    <script>
+        function startAuth() {
+            const msg = document.getElementById('denied-msg');
+            
+            // 1. 요소를 보이게 전환 (아직 투명함)
+            msg.style.display = 'block';
+            
+            // 2. 부드럽게 메시지 위치로 스크롤
+            msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // 3. 브라우저가 처리를 마친 후 투명도를 조절해 페이드 인 효과 적용
+            setTimeout(() => {
+                msg.style.opacity = '1';
+            }, 100);
+        }
+    </script>
 
 </body>
 </html>
