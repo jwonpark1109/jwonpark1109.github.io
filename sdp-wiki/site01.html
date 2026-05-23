@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 제01기지 시설 기록</title>
+    <style>
+        :root {
+            --bg-color: #0a0b0d;
+            --text-color: #ccc;
+            --sdg-green: #99ff00;
+            --sdg-red: #8b00ff;
+            --border-color: #333;
+            --panel-bg: #111316;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--sdg-red);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo {
+            width: 50px;
+            filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.5));
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+        .back-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: var(--sdg-red);
+        }
+
+        /* 메인 콘텐츠 스타일 */
+        .dossier-header {
+            background-color: var(--sdg-red);
+            color: #000;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .info-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--sdg-red);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px 20px;
+        }
+        .info-grid strong {
+            color: #fff;
+        }
+
+        h2 {
+            color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+            margin-top: 40px;
+            font-size: 1.4rem;
+        }
+        h3 {
+            color: var(--sdg-green);
+            margin-top: 25px;
+            font-size: 1.1rem;
+        }
+
+        /* 테이블 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 30px;
+            background-color: var(--panel-bg);
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #1a1d24;
+            color: #fff;
+        }
+        
+        /* 등급/라벨 뱃지 */
+        .badge {
+            padding: 3px 8px;
+            font-size: 0.85rem;
+            background-color: #222;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .keter { color: #ff3333; border: 1px solid #ff3333; }
+        .euclid { color: #ffcc00; border: 1px solid #ffcc00; }
+        
+        .redacted {
+            background-color: #333;
+            color: #333;
+            user-select: none;
+            padding: 0 5px;
+        }
+        .redacted:hover {
+            background-color: transparent;
+            color: #ff3333;
+        }
+        
+        a {
+            color: var(--sdg-green);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <!-- 제01기지는 5등급 시설이므로 빨간색 로고 강조 -->
+                <img src="images/sdgicon.png" alt="SDG Logo" class="logo">
+                <h1>보안 시설 기록</h1>
+            </div>
+            <a href="site-list.html" class="back-link">< 시설 목록으로</a>
+        </div>
+
+        <div class="dossier-header">인가 등급: 5등급 (기밀)</div>
+
+        <div class="info-panel">
+            <div class="info-grid">
+                <strong>공식 명칭:</strong> <span>제01기지 (Site-01)</span>
+                <strong>위치:</strong> <span>[데이터 말소]</span>
+                <strong>설립 연도:</strong> <span>1950년</span>
+                <strong>주요 기능:</strong> <span>O5 안전 가옥</span>
+                <strong>기지 이사관:</strong> </span>O5</span> <span>-<span class="redacted"> ██████</span>
+            </div>
+        </div>
+
+        <p>제01기지는 O5의 안전 가옥 역할을 수행합니다.</p>
+
+        <h2>부지 및 구역 구조 (Facility Layout)</h2>
+        <p>제01기지는 지상 3층, 지하 12층 구조로 이루어져 있으며, 격리 실패를 대비해 각 구역 간 완전 폐쇄 시스템이 갖춰져 있습니다.</p>
+        <ul>
+            <li><strong>지상 구역 (Sector 1):</strong> 행정 시설, 외부 물자 수송 터미널, 내부보안부 사무실.</li>
+            <li><strong>지하 1층 (Sector 2):</strong> 정보국 사무실, 의료 부서, 섹터 2 제어실</li>
+            <li><strong>지하 2층 (Sector 3):</strong> 알파 핵탄두 보관실, 기동특무부대 및 신속대응팀 사무실, 섹터 3 제어실.</li>
+            <li><strong>지하 3~14층 (Sector 3A):</strong> 섹터 3 유지보수, [데이터 말소]</li>
+            <li><strong>지하 15층 (Sector 3B):</strong> O5전용 벙커 및 지열 발전소, 좋합 제어실, 알파 핵탄두 제어실</li>
+            <li><strong>동관 (Wing E):</strong> D계급 인원 수용소 및 생체 실험 구역.</li>
+        </ul>
+
+        <h2>인력 현황 (Staffing Information)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>직군</th>
+                    <th>인원 수</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>관리 및 행정직</td>
+                    <td>13명</td>
+                    <td>O5-01부터 O5-13까지의 O5들.</td>
+                </tr>
+                <tr>
+                    <td>연구 및 의료진</td>
+                    <td>1000명</td>
+                    <td>생물학, 인공지능, 오컬트 전문가 다수 포진.</td>
+                </tr>
+                <tr>
+                    <td>보안 및 전술 대응 인원</td>
+                    <td>100명</td>
+                    <td>기동특무부대 Alpha-1 ("붉은 오른손").</td>
+                </tr>
+                <tr>
+                    <td>D계급 인원</td>
+                    <td>0명</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>주요 수용 개체 (Currently Contained Anomalies)</h2>
+        <p>해당 사항 없음</p>
+        <h2>추가 기록 (Addenda)</h2>
+        <p>[데이터 말소됨]</p>
+        
+    </div>
+
+</body>
+</html>
