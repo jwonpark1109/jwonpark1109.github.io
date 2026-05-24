@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 화물 목록 (Cargo Manifest)</title>
+    <style>
+        :root {
+            --bg-color: #090a0c;
+            --text-color: #d4d4d4;
+            --logistics-orange: #ff9900;
+            --panel-bg: #111418;
+            --border-color: #2a3036;
+            --status-ok: #2ecc71;
+            --status-wait: #f1c40f;
+            --status-alert: #d9281c;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-image: 
+                linear-gradient(rgba(255, 153, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 153, 0, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* 물류부 터미널 헤더 */
+        .logistics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 3px solid var(--logistics-orange);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .logo-section { display: flex; align-items: center; gap: 20px; }
+        .sdg-logo { width: 60px; filter: drop-shadow(0 0 8px rgba(255, 153, 0, 0.5)); }
+
+        .title-group h1 {
+            color: var(--logistics-orange);
+            margin: 0; font-size: 1.8rem;
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+        .title-group p {
+            color: #888; margin: 5px 0 0 0;
+            font-weight: bold; font-size: 1rem;
+        }
+
+        .back-link {
+            color: #888; text-decoration: none;
+            font-size: 1rem; font-weight: bold;
+            transition: color 0.3s;
+            margin-bottom: 5px;
+        }
+        .back-link:hover { color: var(--logistics-orange); }
+
+        /* 컨트롤 패널 (검색 및 필터) */
+        .control-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            background: #000; border: 1px solid #444;
+            color: var(--logistics-orange);
+            padding: 8px 15px; font-family: inherit;
+            width: 300px; outline: none;
+        }
+        .search-box:focus { border-color: var(--logistics-orange); }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 15px; cursor: pointer;
+            font-family: inherit; transition: 0.2s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--logistics-orange);
+            color: var(--logistics-orange);
+        }
+
+        /* 화물 목록 테이블 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--panel-bg);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: #1a1e24;
+            color: var(--logistics-orange);
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        tbody tr:hover { background-color: #161a20; }
+
+        .tracking-id {
+            color: #fff; font-weight: bold;
+            display: flex; flex-direction: column;
+        }
+        .fake-barcode {
+            font-size: 0.6rem; color: #555;
+            letter-spacing: -1px; margin-top: 3px;
+        }
+
+        .cargo-name { color: #ccc; font-weight: bold; }
+        .cargo-desc { font-size: 0.85rem; color: #777; margin-top: 4px; }
+
+        /* 상태 배지 */
+        .status {
+            padding: 4px 10px; border-radius: 2px;
+            font-size: 0.85rem; font-weight: bold;
+            display: inline-block; text-align: center;
+            min-width: 70px;
+        }
+        .s-stored { border: 1px solid var(--status-ok); color: var(--status-ok); background: rgba(46, 204, 113, 0.1); }
+        .s-transit { border: 1px solid var(--status-wait); color: var(--status-wait); background: rgba(241, 196, 15, 0.1); }
+        .s-quarantine { border: 1px solid var(--status-alert); color: var(--status-alert); background: rgba(217, 40, 28, 0.1); }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logistics-header">
+            <div class="logo-section">
+                <img src="images/sdgicon.png" alt="SDG Logo" class="sdg-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSIzMCIgeT0iMzAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY5OTAwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4='">
+                <div class="title-group">
+                    <h1>화물 적재 목록</h1>
+                    <p>CARGO MANIFEST DATABASE</p>
+                </div>
+            </div>
+            <a href="logistics_main.html" class="back-link">&larr; 제어반으로 복귀</a>
+        </div>
+
+        <div class="control-panel">
+            <input type="text" class="search-box" placeholder="송장 번호 또는 품목명 검색...">
+            <div>
+                <button class="filter-btn active">전체 보기</button>
+                <button class="filter-btn">운송 중</button>
+                <button class="filter-btn">입고 완료</button>
+                <button class="filter-btn" style="color: var(--status-alert); border-color: var(--status-alert);">주의 요망</button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>송장 번호 (ID)</th>
+                    <th>품목 정보</th>
+                    <th>수량</th>
+                    <th>목적지</th>
+                    <th>현재 상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="tracking-id">TRK-9021A</div>
+                        <div class="fake-barcode">|| ||| | ||| ||</div>
+                    </td>
+                    <td>
+                        <div class="cargo-name">A등급 기억소거제 (스프레이형)</div>
+                        <div class="cargo-desc">위험도: 낮음 / 온도 유지 필요</div>
+                    </td>
+                    <td>50 BOX</td>
+                    <td>제17격리기지</td>
+                    <td><span class="status s-stored">입고 완료</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="tracking-id">CNT-4410X</div>
+                        <div class="fake-barcode">||| | || || |||</div>
+                    </td>
+                    <td>
+                        <div class="cargo-name">스크랜턴 현실성 닻 (SRA) 예비 부품</div>
+                        <div class="cargo-desc">취급 주의 / 충격 방지 포장</div>
+                    </td>
+                    <td>2 EA</td>
+                    <td>제01기지</td>
+                    <td><span class="status s-transit">운송 중</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="tracking-id">BIO-1109D</div>
+                        <div class="fake-barcode">| ||| ||| | || |</div>
+                    </td>
+                    <td>
+                        <div class="cargo-name">D계급 인원 주간 영양 배급 식량</div>
+                        <div class="cargo-desc">표준 합성 단백질 블록</div>
+                    </td>
+                    <td>5,000 KG</td>
+                    <td>제19기지</td>
+                    <td><span class="status s-transit">분류 대기</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="tracking-id">SPC-0099Z</div>
+                        <div class="fake-barcode">|| || ||| || |||</div>
+                    </td>
+                    <td>
+                        <div class="cargo-name">[데이터 접근 불가]</div>
+                        <div class="cargo-desc">생물학적 오염 징후 감지됨</div>
+                    </td>
+                    <td>1 CRATE</td>
+                    <td><span style="color: var(--status-alert);">격리 구역 4</span></td>
+                    <td><span class="status s-quarantine">검역 중</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
