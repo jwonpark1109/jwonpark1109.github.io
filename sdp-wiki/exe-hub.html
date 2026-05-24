@@ -4,144 +4,236 @@
     <meta charset="UTF-8">
     <script src="error-handler.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDP 재단 - 메인 데이터베이스</title>
+    <title>SDP 재단 - 행정부 중앙 인트라넷</title>
     <style>
         :root {
-            --bg-color: #050505;
-            --text-color: #d4d4d4;
-            --accent-color: #b30000;
-            --border-color: #333;
+            --bg-color: #0a0f16; /* 깊고 차분한 네이비/블랙 */
+            --text-color: #cfd8dc;
+            --admin-blue: #2980b9; /* 행정부 상징 컬러 */
+            --admin-accent: #3498db;
+            --alert-red: #c0392b;
+            --panel-bg: #111820;
+            --border-color: #2c3e50;
         }
+        
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            background-image: radial-gradient(circle at center, #111 0%, #000 100%);
+            background-image: linear-gradient(180deg, #0a0f16 0%, #05080c 100%);
         }
-        .header {
+
+        /* 최상단 행정 시스템 바 */
+        .top-bar {
+            width: 100%;
+            background-color: #05080c;
+            border-bottom: 2px solid var(--admin-blue);
+            padding: 8px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            letter-spacing: 1px;
+        }
+
+        .header-section {
             text-align: center;
-            margin-bottom: 60px;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 20px;
+            margin: 50px 0 40px 0;
             width: 80%;
             max-width: 800px;
         }
-        .warning-box {
-            border: 4px solid #8b0000;
-            background-color: #120000;
-            padding: 40px 30px;
-            text-align: center;
-            margin-bottom: 50px;
-            box-shadow: 0 0 30px rgba(139, 0, 0, 0.6);
-            border-radius: 2px;
-        }
-        .warning-box h1 {
-            color: #ff3333;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 2.8rem;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-        .warning-box p {
-            color: #ff8888;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin: 10px 0;
-        }
-        /* 로고 스타일 추가 */
+
         .sdg-logo {
-            width: 180px;
+            width: 120px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(153, 255, 0, 0.4)); /* 연두색 네온 효과 */
+            filter: drop-shadow(0 0 10px rgba(41, 128, 185, 0.4));
         }
-        .header h1 {
-            font-size: 3.5rem;
+
+        .header-section h1 {
+            font-size: 2.8rem;
             margin: 0;
-            letter-spacing: 8px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(179, 0, 0, 0.5);
+            letter-spacing: 5px;
+            color: #ffffff;
+            font-weight: 300;
         }
-        .header p {
-            color: var(--accent-color);
-            font-size: 1.2rem;
+
+        .header-section p {
+            color: var(--admin-accent);
+            font-size: 1.1rem;
             margin-top: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        /* 행정부 공식 공지 (경고창) */
+        .official-notice {
+            background-color: #1a1111;
+            border: 1px solid var(--alert-red);
+            border-left: 6px solid var(--alert-red);
+            width: 80%;
+            max-width: 800px;
+            padding: 25px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(192, 57, 43, 0.15);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .official-notice::before {
+            content: "긴급 행정 지시 사항 (URGENT)";
+            display: block;
+            color: var(--alert-red);
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(192, 57, 43, 0.3);
+            padding-bottom: 5px;
+        }
+
+        .official-notice p {
+            margin: 10px 0;
+            line-height: 1.6;
+            color: #e0a4a4;
+            font-size: 0.95rem;
+        }
+
+        .notice-sign {
+            text-align: right;
+            margin-top: 20px;
+            color: var(--alert-red);
             font-weight: bold;
         }
+
+        /* 서류철(Folder) 스타일의 메뉴 */
         .menu-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
             width: 80%;
             max-width: 800px;
         }
+
         .menu-item {
-            background-color: rgba(15, 15, 15, 0.8);
+            background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
-            padding: 30px 20px;
-            text-align: center;
+            border-top: 4px solid var(--admin-blue);
+            padding: 25px 20px;
             text-decoration: none;
             color: var(--text-color);
-            font-size: 1.2rem;
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(179, 0, 0, 0.3), transparent);
-            transition: left 0.4s ease;
+
+        .menu-item .icon {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #7f8c8d;
+            transition: color 0.3s;
         }
+
+        .menu-item .title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ecf0f1;
+            letter-spacing: 1px;
+        }
+
+        .menu-item .desc {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+
         .menu-item:hover {
-            border-color: var(--accent-color);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(179, 0, 0, 0.4), inset 0 0 10px rgba(179, 0, 0, 0.2);
+            background-color: #15202b;
+            border-color: var(--admin-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.2);
         }
-        .menu-item:hover::before {
-            left: 100%;
+
+        .menu-item:hover .icon {
+            color: var(--admin-accent);
         }
+
+        /* 오염된 파일(SCP) 전용 스타일 */
+        .menu-item.glitch-file {
+            border-top-color: var(--alert-red);
+        }
+        .menu-item.glitch-file:hover {
+            border-color: var(--alert-red);
+            box-shadow: 0 5px 15px rgba(192, 57, 43, 0.2);
+        }
+        .menu-item.glitch-file .title {
+            color: #e74c3c;
+            text-shadow: 1px 0 0 rgba(255,0,0,0.5);
+        }
+
         .footer {
             margin-top: 60px;
-            font-size: 0.9rem;
+            padding: 20px;
+            font-size: 0.85rem;
             color: #555;
-            letter-spacing: 1px;
+            text-align: center;
+            border-top: 1px solid #1a252f;
+            width: 80%;
+            max-width: 800px;
         }
     </style>
 </head>
 <body>
-        <div class="warning-box">
-            <h1>공지: 시스템 오류 공지</h1>
-            <p>현재 SDP 재단 데이터베이스에 특정한 변칙 현상이 발생하여 "SCP 재단"이라 불리는 평행세계의 SDP 재단의 데이터 베이스와 정보가 섞였습니다.</p>
-            <p>인가되지 않은 자가 이 문서에 접근할 경우 즉각적인 처분이 이루어집니다.</p>
-            <p>- 관리자</p>
-        </div>
-    <div class="header">
+
+    <div class="top-bar">
+        <span>SDP FOUNDATION - DEPT. OF ADMINISTRATION</span>
+        <span>SECURE INTRANET ACCESS</span>
+    </div>
+
+    <div class="header-section">
         <img src="images/sdgicon.png" alt="SDG Foundation Logo" class="sdg-logo">
         <h1>행정부</h1>
-        <p>재단의 행정은 우리가 맡는다!</p>
+        <p>"재단의 행정은 우리가 맡는다!"</p>
     </div>
+
+    <div class="official-notice">
+        <p>현재 SDP 재단 메인 데이터베이스에 특정한 차원 변칙 현상이 발생하여, <strong>"SCP 재단"</strong>이라 불리는 평행 세계의 데이터가 당 행정부 서버에 일부 혼선되어 기록되고 있습니다.</p>
+        <p>인가되지 않은 직원이 해당 비인가 파일에 접근할 경우, 행정법 제4장 12조에 의거하여 <strong>즉각적인 인사 조치 및 처분</strong>이 이루어집니다.</p>
+        <div class="notice-sign">- 행정부 최고 관리자 서명됨</div>
+    </div>
+
     <div class="menu-container">
-        <a href="list.html" class="menu-item">[일반 데이터베이스]</a>
-        <a href="scp.html" class="menu-item">[??9 S   C?  P?]</a>
-        <a href="cmd.html" class="menu-item">[보안 인가 터미널]</a>
+        <a href="list.html" class="menu-item">
+            <span class="icon">📁</span>
+            <span class="title">일반 데이터베이스</span>
+            <span class="desc">표준 인사 및 자산 기록</span>
+        </a>
+
+        <a href="scp.html" class="menu-item glitch-file">
+            <span class="icon">⚠️</span>
+            <span class="title">[??9 S C? P?]</span>
+            <span class="desc">미등록 오염 데이터 폴더</span>
+        </a>
+
+        <a href="cmd.html" class="menu-item">
+            <span class="icon">🔐</span>
+            <span class="title">보안 인가 터미널</span>
+            <span class="desc">관리자 권한 승인 요청</span>
+        </a>
     </div>
+
     <div class="footer">
-        경고: 인가되지 않은 접근은 즉각적인 추적 및 처분의 대상이 됩니다.
+        경고: 모든 행정부 인트라넷 접속 기록은 감시 및 보존됩니다. 인가되지 않은 접근은 즉각적인 추적 및 처분의 대상이 됩니다.
     </div>
+
 </body>
 </html>
