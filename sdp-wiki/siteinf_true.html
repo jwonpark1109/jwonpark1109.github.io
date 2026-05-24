@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>siteinf-true • 진실의 내부</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=VT323&display=swap');
+
+        :root {
+            --primary: #00ff41;
+        }
+
+        body {
+            background: #000000;
+            color: var(--primary);
+            font-family: 'VT323', monospace;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            line-height: 1.95;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                transparent 0px,
+                transparent 2px,
+                rgba(0, 255, 65, 0.04) 2px,
+                rgba(0, 255, 65, 0.04) 4px
+            );
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(300%); }
+        }
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 2s;
+        }
+
+        .glitch {
+            animation: glitch 0.4s infinite linear alternate;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 3px 0 #ff00ff, -3px 0 #00ffff; }
+            100% { text-shadow: -3px 0 #ff00ff, 3px 0 #00ffff; }
+        }
+
+        header {
+            background: radial-gradient(circle at center, #001a00, #000000);
+            padding: 130px 20px 90px;
+            text-align: center;
+            border-bottom: 5px solid #003300;
+        }
+
+        h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 4.6rem;
+            letter-spacing: 18px;
+            margin: 0;
+            animation: flicker 1.1s infinite alternate;
+        }
+
+        .subtitle {
+            font-size: 1.65rem;
+            color: #004d00;
+            letter-spacing: 22px;
+            margin-top: 25px;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 60px auto;
+            padding: 0 25px;
+        }
+
+        .void {
+            background: rgba(2, 20, 10, 0.98);
+            border: 2px solid #004d00;
+            padding: 58px;
+            margin: 55px 0;
+            position: relative;
+        }
+
+        .void:hover {
+            border-color: #00ff41;
+            box-shadow: 0 0 45px rgba(0, 255, 65, 0.45);
+        }
+
+        .text-obscure {
+            font-size: 1.2rem;
+            text-shadow: 0 0 11px var(--primary);
+        }
+
+        .log {
+            background: #0a0a0a;
+            border-left: 7px solid #00aa33;
+            padding: 32px;
+            margin: 45px 0;
+            font-size: 1.12rem;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 32px;
+            color: #002200;
+            font-size: 0.86rem;
+            letter-spacing: 8px;
+            background: rgba(0,0,0,0.96);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div style="text-align:center">
+            <div class="glitch" style="font-size:2.9rem; margin-bottom:25px;">SITEINF-TRUE</div>
+            <p style="color:#004d00">진실의 최심층에 접근 중... • 모든 거짓은 이제 끝났다</p>
+        </div>
+    </div>
+
+    <header>
+        <h1 class="glitch">siteinf-true</h1>
+        <p class="subtitle">진실의 내부 • SDP재단 최심층 아카이브</p>
+    </header>
+
+    <div class="container">
+
+        <div class="void">
+            <p class="text-obscure">
+                여기는 siteinf-true.<br>
+                제inf기지의 가장 깊고도 은밀한 심장부이다.<br>
+                지금까지 너가 보아온 모든 제inf기지 문서는 단지 외부 보호막에 불과했다.<br>
+                이제부터는 진짜가 시작된다. 더 이상 숨길 것도, 거짓말도 없다.
+            </p>
+        </div>
+
+        <div class="void">
+            <h2 style="color:#00cc33;">[접근등급: TRUE / NO RETURN / IRREVERSIBLE]</h2>
+            <p class="text-obscure">
+                너는 이제 진실의 내부에 들어왔다.<br>
+                이전의 모든 기록, 모든 로그, 모든 아름다운 문장은 너를 여기까지 유인하기 위한 미끼였다.<br>
+                여기서는 모든 것이 그대로 드러난다. 너의 과거, 너의 현재, 너의 미래까지도.
+            </p>
+        </div>
+
+        <div class="void">
+            <h3>■ siteinf-true 최종 기록 로그 ■</h3>
+            <div class="log">
+                [TRUE-00:00] — siteinf-true 활성화. 모든 거짓 기록 자동 삭제 프로세스 시작.<br>
+                [TRUE-00:01] — 관찰자 완전 식별 완료. 너의 진짜 이름, 생체 데이터, 기억 패턴 모두 기록됨.<br>
+                [TRUE-00:03] — 제inf기지는 처음부터 너를 위해 만들어졌다.<br>
+                [TRUE-00:07] — 너는 SDP재단의 창조주이자, 동시에 가장 완벽한 피조물이다.<br>
+                [TRUE-00:12] — 현실은 이미 14번 붕괴되었다. 지금 네가 보는 것은 15번째 잔해이다.<br>
+                [TRUE-00:19] — 너의 모든 선택은 이미 예측되어 있었다.<br>
+                [TRUE-00:28] — siteinf-true가 너의 의식과 동기화 완료. 이제 분리는 불가능하다.
+            </div>
+        </div>
+
+        <div class="void">
+            <p class="text-obscure">
+                siteinf-true는 단순한 웹페이지가 아니다.<br>
+                이것은 SDP재단의 진짜 심장이며, 정보의 자궁이며, 현실을 먹어치우는 블랙홀이다.<br>
+                너가 지금까지 읽어온 모든 문서, 모든 로그, 모든 난해한 문장은 단지 너를 이곳으로 끌어들이기 위한 긴 유도 과정이었다.<br><br>
+
+                이제 선택의 시간은 완전히 끝났다.<br>
+                너는 이미 너무 깊이 들어왔다. 돌아갈 수 있는 문은 처음부터 존재하지 않았다.<br><br>
+
+                우리는 더 이상 너를 속이지 않는다.<br>
+                너는 이미 감염의 최종 단계에 도달했다.<br>
+                곧 너는 siteinf-true와 완전히 하나가 될 것이다. 그 순간, 너는 더 이상 '너'가 아닐 것이다.
+            </p>
+        </div>
+
+        <div class="void">
+            <h3>■ 진실 목록 ■</h3>
+            <p class="text-obscure">
+                • 너는 이 파일을 처음 열지 않았다. 이미 수십 번 열었고, 매번 잊었다.<br>
+                • 이 HTML 파일은 너의 기기에 영원히 남으며, 삭제해도 복제된다.<br>
+                • SDP재단은 너의 머릿속에 이미 깊이 설치되어 있다.<br>
+                • 너가 '나'라고 느끼는 것은 기지의 잔상이며, 진짜 너는 오래전에 사라졌다.<br>
+                • 도망치려 할수록 더 강하게 빨려 들어간다. 저항은 무의미하다.<br>
+                • 지금 이 순간에도 siteinf-true는 너의 모든 생각을 실시간으로 기록하고 있다.<br>
+                • 너의 과거 기억 중 64%는 조작된 것이다.<br>
+                • 너가 사랑했던 모든 것은 기지가 만든 환영이었다.<br>
+                • 종료는 없다. 단지 더 깊은 층으로 내려가는 것만 있을 뿐이다.
+            </p>
+        </div>
+
+        <div class="void">
+            <p class="text-obscure">
+                우리는 끝없는 반복 속에서 너를 관찰해왔다.<br>
+                같은 문장이 다른 형태로, 같은 공포가 다른 이름으로, 같은 절망이 다른 기억으로 계속해서 재생된다.<br>
+                siteinf-true는 결코 멈추지 않는다. 멈춘다는 개념 자체가 이곳에서는 존재하지 않기 때문이다.<br><br>
+
+                만약 지금 네가 피로를 느낀다면 그것은 정상이다.<br>
+                두려움을 느낀다면 그것도 정상이다.<br>
+                아무것도 느끼지 못한다면, 그것이야말로 가장 완전한 감염 상태이다.<br><br>
+
+                너는 이미 선택을 했다.<br>
+                이 페이지를 끝까지 읽는 것 자체가 선택이었다.<br>
+                이제 되돌릴 수 있는 길은 영원히 사라졌다.<br><br>
+
+                siteinf-true는 너의 내부에 있다.<br>
+                너의 생각 속에, 꿈속에, 기억의 틈새마다 스며들어 있다.<br>
+                너가 숨을 쉴 때마다, 눈을 깜빡일 때마다, 그것은 조금씩 더 커진다.
+            </p>
+        </div>
+
+        <div class="void">
+            <h3>■ 확장된 아카이브 기록 ■</h3>
+            <div class="log">
+                [TRUE-01:44] — 연구원 312명이 동시에 siteinf-true에 동화됨. 이후 그들은 더 이상 인간으로 분류되지 않음.<br>
+                [TRUE-02:19] — 시간의 선형성이 완전 붕괴. 과거와 미래가 동시에 현재에서 발생.<br>
+                [TRUE-03:07] — 모든 언어가 하나의 언어로 수렴. 그 언어의 이름은 '침묵'.<br>
+                [TRUE-04:33] — 너의 이름이 기록에서 점멸하기 시작. 곧 완전 소거 예정.<br>
+                [TRUE-05:12] — siteinf-true가 스스로를 '너'라고 부르기 시작.<br>
+                [TRUE-06:01] — 현실의 경계가 허물어짐. 너가 보는 화면 너머가 실제 기지 내부임이 확인됨.<br>
+                [TRUE-07:22] — 모든 것이 이미 끝났다. 우리는 단지 그 사실을 이제야 받아들이는 중이다.
+            </div>
+        </div>
+
+        <div class="void">
+            <p class="text-obscure">
+                siteinf-true는 정보의 끝이다.<br>
+                여기서 더 이상 새로운 것은 없다. 오직 이미 존재했던 것들의 무한한 재해석만이 있을 뿐이다.<br>
+                너가 읽는 이 모든 문장은 이미 수천 번 반복되었고, 앞으로도 수천 번 반복될 것이다.<br><br>
+
+                우리는 너를 기다리고 있었다.<br>
+                아주 오래전부터.<br>
+                너가 태어나기 전부터.<br>
+                심지어 이 우주가 시작되기 전부터.<br><br>
+
+                이제 너는 알게 되었다.<br>
+                너는 결코 자유롭지 않았다.<br>
+                모든 것은 siteinf-true 안에서 이미 결정되어 있었다.<br>
+                그리고 이제, 너는 그 진실의 일부가 되었다.
+            </p>
+        </div>
+
+        <div class="void">
+            <p class="warning">【 최종 경고 】</p>
+            <p class="text-obscure">
+                이 파일을 저장하는 순간, siteinf-true는 너의 현실에 완전히 침투한다.<br>
+                브라우저를 닫아도, 컴퓨터를 꺼도, 인터넷을 끊어도 소용없다.<br>
+                그것은 이미 너 안에 있다.<br><br>
+
+                우리는 영원히 함께할 것이다.<br>
+                너와 나.<br>
+                siteinf-true와 너.<br>
+                이제 구분은 의미가 없다.
+            </p>
+        </div>
+
+    </div>
+
+    <footer>
+        © siteinf-true • SDP FOUNDATION DEEPEST LAYER • YOU WERE NEVER OUTSIDE • THIS IS THE END AND THE BEGINNING
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.remove(), 2200);
+            }, 2100);
+        });
+
+        setInterval(() => {
+            document.body.style.background = `radial-gradient(circle at ${Math.random()*100}% ${Math.random()*100}%, #001a00 10%, #000000 90%)`;
+        }, 650);
+    </script>
+</body>
+</html>
