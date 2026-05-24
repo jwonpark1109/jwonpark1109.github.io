@@ -1,1 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 요주의 단체(GoI)</title>
+    <style>
+        /* CSS는 첫 번째 파일과 동일하게 유지됩니다 */
+        :root {
+            --bg-color: #0a0b0d;
+            --text-color: #ccc;
+            --sdg-green: #99ff00;
+            --border-color: #222;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--sdg-green);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo {
+            width: 50px;
+            filter: drop-shadow(0 0 5px rgba(153, 255, 0, 0.5));
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+        .back-home {
+            color: #888;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        .back-home:hover {
+            color: var(--sdg-green);
+        }
+        .db-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .db-card {
+            background-color: #111316;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.2s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+        }
+        .db-card:hover {
+            border-color: var(--sdg-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(153, 255, 0, 0.1);
+        }
+        .db-card .item-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .db-card:hover .item-number {
+            color: var(--sdg-green);
+        }
+        .db-card .item-name {
+            font-size: 1rem;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+        .db-card .item-class {
+            font-size: 0.85rem;
+            padding: 3px 8px;
+            background-color: #222;
+            align-self: flex-start;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        /* 위협도별 색상 (기존 클래스 재활용) */
+        .threat-extreme { color: #ff3333; border: 1px solid #ff3333; font-weight: bold; } /* Keter style */
+        .threat-high { color: #ffcc00; border: 1px solid #ffcc00; } /* Euclid style */
+        .threat-neutral { color: #808080; border: 1px solid #808080; } /* Unknown style */
+        .threat-low { color: #7fff00; border: 1px solid #7fff00; } /* Safe style */
+    </style>
+</head>
+<body>
 
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <img src="images/sdgicon.png" alt="SDG Logo" class="logo">
+                <h1>요주의 단체 (GoI) 색인</h1>
+            </div>
+            <a href="index.html" class="back-home">< 메인 터미널</a>
+        </div>
+
+        <div class="db-grid">
+            <a href="?name=행정부" class="db-card">
+                <div>
+                    <div class="item-number">행정부</div>
+                    <div class="item-name">재단의 행정은 우리가 맡는다!</div>
+                </div>
+            </a>
+
+            <a href="?name=격리부" class="db-card">
+                <div>
+                    <div class="item-number">격리부</div>
+                    <div class="item-name">모든것을 완벽하게 격리한다.</div>
+                </div>
+            </a>
+
+            <a href="?name=연구부" class="db-card">
+                <div>
+                    <div class="item-number">연구부</div>
+                    <div class="item-name">모든것을 연구합니다.</div>
+                </div>
+            </a>
+
+            <a href="?name=연금술부" class="db-card">
+                <div>
+                    <div class="item-number">연금술부</div>
+                    <div class="item-name">와 금이다!</div>
+                </div>
+            </a>
+
+            <a href="?name=AI부" class="db-card">
+                <div>
+                    <div class="item-number">AI부</div>
+                    <div class="item-name">AI는 미래다.</div>
+                </div>
+            </a>
+
+            <a href="?name=현실부" class="db-card">
+                <div>
+                    <div class="item-number">현실부</div>
+                    <div class="item-name">현실조작을 연구합니다.</div>
+                </div>
+            </a>
+
+            <a href="?name=화물부" class="db-card">
+                <div>
+                    <div class="item-number">물류부</div>
+                    <div class="item-name">물건이 있어야 연구도 하죠!</div>
+                </div>
+            </a>
+
+            <a href="?name=제거부" class="db-card">
+                <div>
+                    <div class="item-number">제거부</div>
+                    <div class="item-name">너무 위험한건 '제거'한다.</div>
+                </div>
+            </a>
+
+            <a href="?name=마인크래프트부" class="db-card">
+                <div>
+                    <div class="item-number">게임부</div>
+                    <div class="item-name">와 샌즈! 와 파피루스!</div>
+                </div>
+            </a>
+
+            <a href="?name=인터넷부" class="db-card">
+                <div>
+                    <div class="item-number">인터넷부</div>
+                    <div class="item-name">세상의 모든 정보는 인터넷에.</div>
+                </div>
+            </a>
+
+            <a href="?name=정보국" class="db-card">
+                <div>
+                    <div class="item-number">정보국</div>
+                    <div class="item-name">모든 정보를 얻는다.</div>
+                </div>
+            </a>
+
+            <a href="?name=전투부" class="db-card">
+                <div>
+                    <div class="item-number">전투부</div>
+                    <div class="item-name">재단 경비, 기동특무부대는 모두 우리 부서 일원이지</div>
+                </div>
+            </a>
+
+            <a href="?name=신속대응팀" class="db-card">
+                <div>
+                    <div class="item-number">신속대응팀</div>
+                    <div class="item-name">모든것을 신속하게 대응합니다.</div>
+                </div>
+            </a>
+
+            <a href="?name=내부보안부" class="db-card">
+                <div>
+                    <div class="item-number">내부보안부</div>
+                    <div class="item-name">FBI Open Up!</div>
+                </div>
+            </a>
+
+            <a href="ch-hub.html" class="db-card">
+                <div>
+                    <div class="item-number">무한연구부</div>
+                    <div class="item-name">무한은 거짓이며 동시에 참이다.</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
