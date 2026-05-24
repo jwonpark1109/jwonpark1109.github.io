@@ -2,254 +2,155 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="error-handler.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDP 재단 - 제17기지 시설 기록</title>
+    <title>SDP 재단 - 제17기지 연구 기록</title>
     <style>
         :root {
-            --bg-color: #0a0b0d;
-            --text-color: #ccc;
-            --sdg-green: #99ff00;
-            --sdg-red: #ff3333;
-            --border-color: #99ff00;
-            --panel-bg: #111316;
+            --bg-color: #f4f7f6; /* 밝고 깨끗한 연구소 배경 */
+            --text-color: #333;
+            --sdg-safe: #2ecc71; /* 차분한 초록색 */
+            --accent-blue: #3498db;
+            --panel-bg: #ffffff;
+            --border-color: #dcdde1;
         }
+        
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 40px 20px;
             line-height: 1.6;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid var(--sdg-red);
+            border-bottom: 3px solid var(--sdg-safe);
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .logo {
-            width: 50px;
-            filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.5));
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: #fff;
-            letter-spacing: 2px;
-        }
-        .back-link {
-            color: #888;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s;
-        }
-        .back-link:hover {
-            color: var(--sdg-red);
+        
+        .header h1 { margin: 0; font-size: 1.6rem; color: #2c3e50; }
+        .back-link { color: var(--accent-blue); text-decoration: none; font-weight: bold; }
+
+        /* 연구소 카드 스타일 */
+        .card {
+            background: var(--panel-bg);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
         }
 
-        /* 메인 콘텐츠 스타일 */
-        .dossier-header {
-            background-color: var(--sdg-green);
-            color: #000;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
+        .status-pill {
             display: inline-block;
-        }
-        
-        .info-panel {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            margin-bottom: 30px;
-            border-left: 4px solid var(--sdg-red);
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: 150px 1fr;
-            gap: 10px 20px;
-        }
-        .info-grid strong {
-            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: #e8f8f0;
+            color: var(--sdg-safe);
+            margin-bottom: 15px;
         }
 
-        h2 {
-            color: #fff;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-            margin-top: 40px;
-            font-size: 1.4rem;
-        }
-        h3 {
-            color: var(--sdg-green);
-            margin-top: 25px;
-            font-size: 1.1rem;
-        }
-
-        /* 테이블 스타일 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            margin-bottom: 30px;
-            background-color: var(--panel-bg);
-        }
-        th, td {
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #1a1d24;
-            color: #fff;
-        }
+        .info-grid { display: grid; grid-template-columns: 150px 1fr; gap: 15px; }
         
-        /* 등급/라벨 뱃지 */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th { background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid var(--border-color); }
+        td { padding: 12px; border-bottom: 1px solid var(--border-color); }
+
         .badge {
-            padding: 3px 8px;
-            font-size: 0.85rem;
-            background-color: #222;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
             text-transform: uppercase;
             font-weight: bold;
-            display: inline-block;
         }
-        .keter { color: #ff3333; border: 1px solid #ff3333; }
-        .euclid { color: #ffcc00; border: 1px solid #ffcc00; }
-        .safe { color: #99ff00; border: 1px solid #99ff00; }
-        
-        .redacted {
-            background-color: #333;
-            color: #333;
-            user-select: none;
-            padding: 0 5px;
-        }
-        .redacted:hover {
-            background-color: transparent;
-            color: #ff3333;
-        }
-        
-        a {
-            color: var(--sdg-green);
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        .safe { background-color: var(--sdg-safe); color: white; }
+
+        .footer-note { font-size: 0.9rem; color: #7f8c8d; font-style: italic; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="header">
-            <div class="header-title">
-                <!-- 제19기지는 4등급 시설이므로 빨간색 로고 강조 -->
-                <img src="images/sdgicon.png" alt="SDG Logo" class="logo">
-                <h1>보안 시설 기록</h1>
-            </div>
-            <a href="site-list.html" class="back-link">< 시설 목록으로</a>
+            <h1>제17기지 (Site-17) 터미널</h1>
+            <a href="site-list.html" class="back-link">&larr; 기지 목록</a>
         </div>
 
-        <div class="dossier-header">인가 등급: 2등급 (낮음)</div>
-
-        <div class="info-panel">
+        <div class="card">
+            <div class="status-pill">LEVEL 2 CLEARANCE</div>
+            <h2>시설 개요</h2>
             <div class="info-grid">
-                <strong>공식 명칭:</strong> <span>제17격리기지 (Site-17)</span>
-                <strong>위치:</strong> <span>[데이터 비공개]</span>
-                <strong>설립 연도:</strong> <span>1975년</span>
-                <strong>주요 기능:</strong> <span>저위험 개체 격리</span>
-                <strong>기지 이사관:</strong> <span>T. <span class="redacted">██████</span> 박사</span>
+                <strong>명칭:</strong> <span>제17격리기지</span>
+                <strong>시설 유형:</strong> <span>저위험 생물/개체 연구 특화</span>
+                <strong>설립:</strong> <span>1975년</span>
+                <strong>주요 목적:</strong> <span>Safe 등급 변칙 개체 및 비지성체 장기 연구</span>
             </div>
         </div>
 
-        <p>제17기지는 현존하는 SDP 재단 시설 중 가장 안전한 격리 시설입니다. 주로 무생물 변칙 개체 및 저위험군 지성체의 장기 격리를 담당하고 있으며, 재단 내에서 가장 많은 Safe 등급 개체를 수용하고 있습니다.</p>
+        <p>제17기지는 재단에서 가장 활발한 연구가 이루어지는 '개방형 연구소'의 성격을 띱니다. 엄격한 보안보다는 효율적인 연구 환경에 최적화되어 있으며, 쾌적한 내부 환경을 통해 연구원들이 변칙 개체와 더 안전하고 친밀하게 상호작용할 수 있도록 설계되었습니다.</p>
 
-        <h2>부지 및 구역 구조 (Facility Layout)</h2>
-        <p>제17기지는 지상 2층, 지하 3층 구조로 이루어져 있으며, 격리 실패를 대비해 각 구역 간 완전 폐쇄 시스템이 갖춰져 있습니다.</p>
-        <ul>
-            <li><strong>지상 구역 (Sector 1):</strong> 행정 시설, 일반 직원 숙소, 외부 물자 수송 터미널, 정보국 사무실, 종합 제어실.</li>
-            <li><strong>지하 1층 (Sector 2):</strong> 안전 등급의 개체 격리동. 의료 부서, 섹터 2 제어실</li>
-            <li><strong>지하 2~3층 (Sector 3):</strong> D계급 인원 수용소, 기동특무부대 및 신속대응팀 사무실, 섹터 3 제어실.</li>
-        </ul>
-
-        <h2>인력 현황 (Staffing Information)</h2>
+        <h2>연구 인프라 현황</h2>
         <table>
             <thead>
                 <tr>
-                    <th>직군</th>
-                    <th>인원 수</th>
-                    <th>비고</th>
+                    <th>부서</th>
+                    <th>운용 인원</th>
+                    <th>상태</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>관리 및 행정직</td>
+                    <td>관리 및 행정</td>
                     <td>34명</td>
-                    <td>기지 감독관 및 부서장 포함</td>
+                    <td>정상</td>
                 </tr>
                 <tr>
                     <td>연구 및 의료진</td>
                     <td>427명</td>
-                    <td>해당 사항 없음</td>
+                    <td>운용 중</td>
                 </tr>
                 <tr>
-                    <td>보안 및 전술 대응 인원</td>
+                    <td>보안 (Sata-17)</td>
                     <td>241명</td>
-                    <td>기동특무부대 Sata-17 ("눈가리고") 주둔지 포함</td>
-                </tr>
-                <tr>
-                    <td>D계급 인원</td>
-                    <td>약 150명</td>
-                    <td>매월 갱신됨</td>
+                    <td>대기 중</td>
                 </tr>
             </tbody>
         </table>
 
-        <h2>주요 수용 개체 (Currently Contained Anomalies)</h2>
-        <p>현재 제17기지에 격리 중인 주요 특수 격리 절차 대상은 다음과 같습니다. (전체 목록은 터미널에서 검색 요망)</p>
+        <h2>현재 수용 중인 주요 개체</h2>
         <table>
             <thead>
                 <tr>
                     <th>일련번호</th>
                     <th>개체명</th>
                     <th>등급</th>
-                    <th>수용 구역</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="sdp998.html">SDP-998</a></td>
+                    <td>SDP-998</td>
                     <td>행복 괴물</td>
                     <td><span class="badge safe">Safe</span></td>
-                    <td>Sector 2 - SDP-998 전용 격리실 1A-01</td>
                 </tr>
                 <tr>
-                    <td><a href="sdp999.html">SDP-999</a></td>
+                    <td>SDP-999</td>
                     <td>행복해 죽겠네!</td>
                     <td><span class="badge safe">Safe</span></td>
-                    <td>Sector 2 - cctv가 없는 표준 격리실 4C-21</td>
                 </tr>
             </tbody>
         </table>
 
-        <h2>추가 기록 (Addenda)</h2>
-        <p>해당사항 없음</p>
-        
+        <div class="footer-note">
+            * 연구 제안서 및 개체 관찰 보고서는 인가된 연구원 계정으로 접속하여 확인할 수 있습니다.
+        </div>
     </div>
 
 </body>
