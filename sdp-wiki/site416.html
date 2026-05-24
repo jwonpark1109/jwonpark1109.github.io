@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SDP DATABASE: VIRTUAL SITE-416</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #2b2b2b; /* 마인크래프트 돌(Stone) 블록 색상 베이스 */
+            color: #a8ff53;
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            margin: 0; padding: 40px;
+            /* 픽셀 테두리 효과 */
+            box-shadow: inset 0 0 0 10px #555, inset 0 0 0 15px #333;
+            min-height: 100vh; box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px; margin: 0 auto; background: #000; padding: 30px;
+            border: 4px solid #555; outline: 4px solid #000;
+        }
+        
+        /* 서버 핑 깜빡임 애니메이션 */
+        .server-ping { display: inline-block; animation: ping 1.5s infinite step-start; }
+        @keyframes ping { 50% { opacity: 0; } }
+
+        h1 { color: #55ff55; text-shadow: 3px 3px 0 #005500; font-size: 3rem; margin-top: 0; }
+        h2 { color: #ddd; border-bottom: 2px dashed #555; padding-bottom: 5px; }
+        
+        .mc-block {
+            background-color: #3c3c3c; border: 2px solid #111; border-top-color: #777; border-left-color: #777;
+            padding: 15px; margin: 15px 0; color: #fff; text-shadow: 1px 1px 0 #000;
+        }
+        .op-tag { background: #aa0000; color: white; padding: 2px 6px; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>[+] VIRTUAL SITE-416</h1>
+        <p style="color: #ccc;">> SERVER STATUS: <span style="color: #55ff55;">ONLINE</span> <span class="server-ping">_</span><br>
+        > HOST IP: [데이터 말소] (Hosted @ Site-19 Server Room)</p>
+
+        <div class="mc-block">
+            <strong>인가 등급:</strong> 3등급 <span class="op-tag">[Server OP]</span><br>
+            <strong>공식 명칭:</strong> 제416격리연구기지<br>
+            <strong>위치:</strong> 가상 복셀 환경 (Minecraft Server ver 26.1)<br>
+            <strong>주요 기능:</strong> 디지털 지성체 및 복셀 기반 변칙 개체 격리
+        </div>
+
+        <h2>> 시설 개요</h2>
+        <p>제416기지는 물리적 현실에 존재하지 않습니다. 이 기지는 제19기지 지하 2층 서버실 내의 독립된 폐쇄망 서버에 구축된 마인크래프트 월드입니다. 현실에서 격리하기 까다로운 디지털 데이터 형태의 변칙 개체나, 특정 알고리즘에 반응하는 정보재해 개체들을 기반암(Bedrock)으로 둘러싸인 청크(Chunk) 안에 가두어 둡니다.</p>
+
+        <h2>> 격리 프로토콜: [커맨드 블록]</h2>
+        <p>모든 격리실은 레드스톤 회로와 커맨드 블록으로 통제됩니다. 만약 개체가 탈출을 시도할 경우, 서버 관리자(T. 박사)는 즉각 <code>/kill @e[type=sdp:anomaly]</code> 명령어를 입력해야 합니다. 서버 램(RAM) 누수 발생 시 즉시 기지를 리부트합니다.</p>
+    </div>
+</body>
+</html>
