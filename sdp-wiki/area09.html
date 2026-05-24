@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SDP DATABASE: CONTAINMENT AREA-09</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #cccccc;
+            font-family: 'Arial Black', Impact, sans-serif;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 둔탁한 강철 격벽 컨테이너 */
+        .blast-door-container {
+            width: 90%; max-width: 800px;
+            background: #2b2b2b;
+            border: 8px solid #444;
+            border-radius: 2px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
+            padding: 40px;
+            position: relative;
+        }
+
+        /* 공장/감옥 느낌의 경고 스트라이프 */
+        .warning-stripes {
+            position: absolute; top: 0; left: 0; width: 100%; height: 15px;
+            background: repeating-linear-gradient(
+                45deg,
+                #ffcc00, #ffcc00 10px,
+                #111 10px, #111 20px
+            );
+        }
+        .warning-stripes.bottom { top: auto; bottom: 0; }
+
+        /* 봉쇄(Lockdown) 경고 점멸등 */
+        .lockdown-pulse {
+            position: absolute; top: 15px; right: 15px;
+            color: #ff3333; font-size: 1.5rem; text-shadow: 0 0 10px #ff3333;
+            animation: lockdown 1.5s infinite alternate;
+        }
+        @keyframes lockdown { from { opacity: 0.2; } to { opacity: 1; } }
+
+        h1 { color: #ffffff; text-transform: uppercase; font-size: 2.5rem; border-bottom: 4px solid #555; padding-bottom: 10px; margin-top: 10px; }
+        h2 { color: #ffcc00; font-size: 1.5rem; background-color: #333; padding: 10px; border-left: 5px solid #ffcc00; }
+        p, li { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.1rem; line-height: 1.6; font-weight: 500; }
+        
+        .containment-cell {
+            border: 2px solid #666; padding: 20px; background: #222;
+            margin-top: 20px;
+        }
+        .status-secured { color: #ff3333; border: 1px solid #ff3333; padding: 2px 5px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="blast-door-container">
+        <div class="warning-stripes"></div>
+        <div class="lockdown-pulse">SECURE. CONTAIN. PROTECT.</div>
+        
+        <h1>⛓️ AREA-09 CONTAINMENT ZONE</h1>
+        <p><strong>인가 등급:</strong> 4등급 (보안 및 전술 인력 전용)<br>
+        <strong>공식 명칭:</strong> 제09격리구역<br>
+        <strong>위치:</strong> [데이터 말소] 빙하 지대 지하 영구동토층<br>
+        <strong>주요 기능:</strong> 물리적 통제가 극히 까다로운 고위험 개체의 영구 격리</p>
+
+        <h2>시설 개요</h2>
+        <p>제09구역에는 '연구실'이 존재하지 않습니다. 이곳의 유일한 목적은 세상에 풀려나면 안 되는 것들을 영원히 콘크리트와 강철 속에 가두는 것입니다. 시설 내벽은 두께 5m의 합금 콘크리트로 주조되었으며, 모든 격리실은 독립된 동력원을 사용하는 중력장 및 전자기장 억제기로 통제됩니다.</p>
+
+        <h2>격리 수칙 (ABSOLUTE DIRECTIVE)</h2>
+        <ul>
+            <li>개체와의 어떠한 대화, 관찰, 실험도 구역 이사관의 서면 승인 없이는 엄격히 금지됩니다.</li>
+            <li>격리 실패(Breach) 경보가 울릴 시, 가장 가까운 에어록을 수동 폐쇄하십시오. 구조대는 오지 않습니다.</li>
+            <li>정전 발생 시 보조 전력은 1순위로 격리실 자기장 유지에 사용되며, 산소 공급은 후순위로 차단됩니다.</li>
+        </ul>
+
+        <div class="containment-cell">
+            <h3 style="color:#fff; margin-top:0;">[수용 블록 D-4]</h3>
+            <p><strong>격리 대상:</strong> SDP-??? <span class="status-secured">MAX SECURITY</span><br>
+            <strong>현재 상태:</strong> 3중 티타늄 큐브 내부에 안치됨. 주변 50m 반경 내 생명체 접근 금지.</p>
+        </div>
+        
+        <div class="warning-stripes bottom"></div>
+    </div>
+
+</body>
+</html>
