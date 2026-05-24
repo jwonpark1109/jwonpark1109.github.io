@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SDP DATABASE: LOGISTICS SITE-64</title>
+    <style>
+        body {
+            background-color: #eef2f5;
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0;
+        }
+        /* 바코드 스캐너 레이저 효과 */
+        .scanner-laser {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 3px;
+            background: #00ccff;
+            box-shadow: 0 0 15px #00ccff, 0 0 30px #00ccff;
+            animation: scan 4s infinite linear;
+            z-index: 100; pointer-events: none;
+        }
+        @keyframes scan { 0% { top: -10px; } 50% { top: 100vh; } 100% { top: -10px; } }
+
+        /* 컨베이어 벨트 전광판 */
+        .ticker-wrap {
+            width: 100%; background-color: #111; border-bottom: 4px solid #00ccff;
+            overflow: hidden; padding: 10px 0; color: #00ccff; font-family: monospace; font-size: 1.2rem;
+        }
+        .ticker {
+            display: inline-block; white-space: nowrap; animation: ticker 15s linear infinite;
+        }
+        @keyframes ticker { 0% { transform: translate3d(100vw, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        .container { max-width: 900px; margin: 40px auto; background: #fff; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 8px; }
+        h1 { color: #005580; display: flex; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .barcode { font-family: 'Courier New', Courier, monospace; letter-spacing: -2px; font-weight: bold; background: #000; color: #fff; padding: 0 10px; margin-left: auto; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-family: monospace; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f5f5f5; color: #005580; }
+        .status-ok { background: #e6ffed; color: #00802b; font-weight: bold; padding: 4px 8px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="scanner-laser"></div>
+    
+    <div class="ticker-wrap">
+        <div class="ticker">
+            TRACKING ID: 8492-A [DELIVERED TO SITE-17] &nbsp; | &nbsp; D-CLASS BATCH #99 [IN TRANSIT TO SITE-19] &nbsp; | &nbsp; AMNESTIC CLASS-A [LOADING DOCK 4]
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>📦 SITE-64 LOGISTICS HUB <span class="barcode">||| |||| || |||||</span></h1>
+        <p><strong>인가 등급:</strong> 2등급 (낮음)</p>
+        <p><strong>주요 기능:</strong> 재단 표준 물자 보급, Safe 등급 개체 장기 보관, D계급 환승 터미널</p>
+
+        <h2>시설 개요</h2>
+        <p>제64기지는 SDP 재단의 거대한 '심장' 역할을 하는 물류 허브입니다. 자동화된 무인 로봇과 거대한 컨베이어 벨트 시스템이 24시간 가동되며, 각 기지로 향하는 무기, 식량, 연구 장비들이 이곳을 거쳐 갑니다.</p>
+
+        <h2>실시간 화물 추적 로그</h2>
+        <table>
+            <tr><th>화물 ID</th><th>품목</th><th>목적지</th><th>상태</th></tr>
+            <tr><td>#CR-992</td><td>표준 규격 티타늄 격리실 부품</td><td>Area-45</td><td><span class="status-ok">배송 중</span></td></tr>
+            <tr><td>#BIO-01</td><td>SDP-008 백신 실험 샘플</td><td>Site-04</td><td><span class="status-ok">검수 완료</span></td></tr>
+            <tr><td>#SDP-998-2B</td><td>행복 괴물 전용 M&M 초콜릿 1톤)</td><td>Site-17</td><td><span class="status-ok">하역 중</span></td></tr>
+        </table>
+    </div>
+</body>
+</html>
