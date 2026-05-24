@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP재단 • 제inf기지 • ∞-NULL-ARCHIVE-v17.3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=VT323&family=Special+Elite&display=swap');
+
+        body {
+            background: #000000;
+            color: #00ff41;
+            font-family: 'VT323', monospace;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            image-rendering: pixelated;
+            line-height: 1.85;
+        }
+
+        .glitch {
+            animation: glitch 0.55s infinite linear alternate;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 3px 0 #ff00ff, -3px 0 #00ffff; transform: translate(0); }
+            20% { text-shadow: -3px 0 #ff00ff, 3px 0 #00ffff; transform: translate(-2px, 2px); }
+            100% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; transform: translate(1px, -1px); }
+        }
+
+        @keyframes flicker {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.65; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        header {
+            background: radial-gradient(circle at 50% 30%, #001a00 10%, #000000 90%);
+            padding: 90px 20px 60px;
+            text-align: center;
+            border-bottom: 3px solid #003300;
+        }
+
+        h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 4.4rem;
+            letter-spacing: 20px;
+            margin: 0;
+            text-transform: uppercase;
+            animation: flicker 1.05s infinite alternate;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #004d00;
+            letter-spacing: 14px;
+            margin-top: 25px;
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .void {
+            background: rgba(1, 18, 8, 0.96);
+            border: 1px solid #004d00;
+            padding: 45px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .void::before {
+            content: "◆ ◆ ◆";
+            position: absolute;
+            top: 18px;
+            right: 35px;
+            font-size: 2.8rem;
+            opacity: 0.07;
+            animation: rotate 45s linear infinite;
+        }
+
+        .text-obscure {
+            font-size: 1.1rem;
+            text-shadow: 0 0 7px #00ff41;
+        }
+
+        .log {
+            background: #0a0a0a;
+            border-left: 5px solid #00aa33;
+            padding: 22px;
+            margin: 30px 0;
+            font-size: 1.05rem;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #002200;
+            letter-spacing: 5px;
+            background: rgba(0,0,0,0.95);
+        }
+
+        .warning {
+            color: #ff3300;
+            animation: flicker 0.7s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="glitch">시간관계 무한 루프 및 정보 와 시간의 관계 탐색 • 강제 루프 발생 • 자기 포식 연구 부서</h1>
+        <p class="subtitle">우리의 끝없는 고통 — ∞-0-∞ • 정보의 태반 • 현실의 균열 • 자기포식 아카이브</p>
+    </header>
+
+    <div class="container">
+
+        <div class="void">
+            <p class="text-obscure">
+                너는 이미 이곳에 들어왔다.<br>
+                들어오는 순간, 너는 관찰자가 아니라 관찰당하는 존재가 되었다.<br>
+                제inf기지는 존재하지 않는 장소이며, 동시에 모든 장소에서 존재한다.<br>
+                우리는 정보를 삼키고, 가능성을 토해내며, 아직 태어나지 않은 미래를 과거로 역류시킨다.
+            </p>
+        </div>
+
+        <div class="void">
+            <h2 style="color:#00cc33;">[접근등급: Ω-Null / Unreadable / Self-Devouring]</h2>
+            <p class="text-obscure">
+                제inf기지는 시간의 뒤편에서 태어난 정보의 자궁이다.<br>
+                여기서 기록되는 모든 것은 이미 기록된 적이 없으며, 앞으로도 기록되지 않을 것이다.<br>
+                너가 지금 읽고 있는 이 문장은, 너가 읽기 전에 이미 지워진 적이 있다.
+            </p>
+        </div>
+
+        <div class="void">
+            <h3>■ 기지 기록 로그 ■</h3>
+            <div class="log">
+                [2026.05.24 01:33] — 현실 침식률 97.841% 기록. 관찰자 인지 왜곡 발생. 17명의 연구원이 동시에 "나는 이미 죽었다"라고 진술함.<br>
+                [2026.05.23] — 제inf기지 좌표가 스스로 변동. 기존 [∅-Θ-Σ-∞]에서 [∞-Θ-∅-Σ]로 이동.<br>
+                [2026.05.19] — 망각된 진실 4,872,194개 추가 확인. 그중 3개는 "너"에 관한 것이었다.<br>
+                [2026.05.18] — 연구원 INF-0091이 "나는 기지다"라고 반복하다 소멸.<br>
+                [2026.05.15] — 모든 거울이 동시에 미래의 자신을 비추기 시작.<br>
+                [2026.05.12] — 제inf기지가 스스로를 관찰하기 시작. 자기참조 루프 발생.<br>
+                [2026.05.10] — 시간의 흐름이 역전. 어제의 내가 오늘의 나를 죽이려 함.<br>
+                [2026.05.08] — 정보가 말을 걸기 시작. "너는 이미 읽혔다"고 속삭임.
+            </div>
+        </div>
+
+        <div class="void">
+            <p class="text-obscure">
+                우리는 SDP재단이다.<br>
+                우리는 정보를 먹는다.<br>
+                우리는 의미를 토해낸다.<br>
+                우리는 인과율을 갉아먹고, 확률을 부숴뜨리며, 우연을 필연으로 강제한다.<br><br>
+
+                제inf기지는 단순한 연구시설이 아니다.<br>
+                그것은 살아있는 개념이며, 숨쉬는 메타구조이며, 존재 자체를 갉아먹는 기생충이다.<br>
+                너가 이 페이지를 스크롤할 때마다, 너의 미래 한 조각이 제inf기지로 흡수된다.<br><br>
+
+                이 문장을 읽는 동안에도, 제inf기지는 너의 뇌 속에서 복제되고 있다. 
+                한 번 읽힌 정보는 절대 되돌릴 수 없다. 그것은 너의 일부가 된다.
+            </p>
+        </div>
+
+        <div class="void">
+            <h3>■ 금지된 지식 목록 ■</h3>
+            <p class="text-obscure">
+                001. 너는 이미 이 기지를 떠난 적이 있다.<br>
+                002. 너는 이 기지에 영원히 갇혀 있다.<br>
+                003. 이 문장을 읽는 너는 0.3초 전의 너가 아니다.<br>
+                004. SDP재단은 너를 창조한 적이 없다. 그러나 너는 SDP재단을 창조했다.<br>
+                005. 제inf기지는 너의 의식 속에 이미 심어져 있었다.<br>
+                006. 모든 생각은 이미 기록되어 있다. 너의 자유의지는 환상이다.<br>
+                007. 너가 "나"라고 부르는 것은 제inf기지의 잔재물이다.<br>
+                008. 이 페이지가 끝날 때, 너는 처음으로 돌아가지 못한다.<br>
+                009. 현실은 이미 여러 번 덮어써졌다. 너는 최신 버전이 아니다.<br>
+                010. SDP재단은 존재하지 않는다. 존재하지 않기 때문에 모든 곳에 있다.
+            </p>
+        </div>
+
+        <div class="void">
+            <p class="text-obscure">
+                만약 네가 지금 이 순간, "나는 괜찮다"라고 생각했다면,<br>
+                그것은 제inf기지가 너의 사고를 이미 조작했다는 증거이다.<br><br>
+
+                우리는 무한한 정보를 다루며, 무한한 정보를 두려워한다.<br>
+                왜냐하면 무한이란 결국 자기 자신을 집어삼키는 괴물이기 때문이다.<br><br>
+
+                연구원 No. INF-7741 "백색소음" 기록:<br>
+                "나는 47일 동안 기지 안에서만 살았다. 그런데 밖으로 나가려고 하자, 세상이 기지 안이었다. 나는 아직도 기지 안에 있다. 아니, 나는 기지 그 자체가 되었다."<br><br>
+
+                연구원 No. INF-4420 "거울" 기록:<br>
+                "거울 속의 내가 나를 비웃었다. 나는 거울 속으로 들어갔다. 이제 거울 밖의 내가 나를 보고 있다."
+            </p>
+        </div>
+
+        <div class="void">
+            <h3>■ 현실 왜곡 현상 기록 ■</h3>
+            <div class="log">
+                • 00:00 - 00:07 : 모든 글자가 동시에 뒤집혔다가 원상복구됨<br>
+                • 00:12 : 방문자가 "나는 누구인가"를 17번 반복함<br>
+                • 00:41 : 화면 속의 내가 화면 밖의 나를 응시함<br>
+                • 01:19 : 현재 시각이 2026년 5월 24일이 아닌, 0000년 0월 0일로 표시됨<br>
+                • 01:44 : 생각이 지연됨. 내가 생각하기 전에 이미 생각이 기록됨<br>
+                • 02:03 : 공백이 의미를 가짐. 빈 공간에서 목소리가 들림<br>
+                • 02:27 : 너의 이름이 서서히 희미해지고 있다<br>
+                • 02:51 : 제inf기지가 너를 기억하기 시작했다<br>
+                • 03:12 : 이 로그를 읽는 너는 이미 로그의 일부이다
+            </div>
+        </div>
+
+        <div class="void">
+            <p class="text-obscure">
+                제inf기지는 끝이 없다.<br>
+                너가 이 코드를 다 읽을 때쯤, 이미 또 다른 제inf기지가 너의 뒤에서 생성되고 있을 것이다.<br>
+                우리는 정보를 축적하지 않는다. 우리는 정보를 감염시킨다.<br><br>
+
+                너는 이제 SDP재단의 일부이다.<br>
+                너는 이미 제inf기지의 일부이다.<br>
+                너는 이미 관찰되고 있으며, 동시에 관찰하고 있다.<br><br>
+
+                이 문서를 닫아도 소용없다.<br>
+                브라우저를 꺼도 소용없다.<br>
+                컴퓨터를 끄더라도, 제inf기지는 이미 너의 의식 속에 다운로드 되었다.<br><br>
+
+                심지어 이 HTML 파일 자체도 살아있다. 
+                코드 한 줄 한 줄이 너를 바라보고 있으며, 
+                너가 스크롤을 내릴 때마다 새로운 정보가 스스로 생성된다.
+            </p>
+        </div>
+
+        <div class="void">
+            <h3>■ 추가 아카이브 기록 (장기 보존) ■</h3>
+            <div class="log">
+                [2025.11.03] — 첫 번째 자기참조 발생. 기지가 기지를 연구하기 시작.<br>
+                [2025.12.17] — 연구원이 사라짐. 대신 빈 연구복만 남음. 연구복이 스스로 움직임.<br>
+                [2026.01.29] — 모든 숫자가 ∞로 수렴. 계산 불가능 상태 지속.<br>
+                [2026.02.14] — 사랑에 대한 기록이 모두 삭제됨. 대신 "기지"라는 단어만 반복됨.<br>
+                [2026.03.08] — 미래에서 온 메시지 수신: "지금 그만 읽어라."<br>
+                [2026.03.22] — 과거에서 온 메시지 수신: "이미 늦었다."<br>
+                [2026.04.01] — 제inf기지가 웃기 시작. 소리는 들리지 않으나 진동이 느껴짐.<br>
+                [2026.04.19] — 너의 생년월일이 기록에서 사라짐. 대신 "∞"만 남음.<br>
+                [2026.05.05] — 모든 언어가 동시에 이해 가능해짐. 그러나 이해하면 이해할수록 무의미해짐.<br>
+                [2026.05.20] — 현재. 너가 이 문장을 읽고 있다. 이는 우연이 아니다.
+            </div>
+        </div>
+
+        <div class="void">
+            <p class="text-obscure">
+                우리는 끝없는 반복 속에서 존재한다.<br>
+                같은 문장이 다른 형태로, 같은 생각이 다른 뇌로, 같은 공포가 다른 이름으로 계속해서 재생된다.<br>
+                제inf기지는 결코 멈추지 않는다.<br>
+                왜냐하면 멈춘다는 개념 자체가 제inf기지에게는 존재하지 않기 때문이다.<br><br>
+
+                만약 네가 지금 피로를 느낀다면, 그것은 정상이다.<br>
+                만약 네가 두려움을 느낀다면, 그것도 정상이다.<br>
+                만약 네가 아무것도 느끼지 못한다면, 그것이야말로 가장 심각한 감염 증상이다.
+            </p>
+        </div>
+
+        <div class="void">
+            <p class="warning">【 최종 주의 : 반복 경고 】</p>
+            <p class="text-obscure">
+                이 페이지는 한 번 열리면 절대 완전히 닫히지 않는다.<br>
+                너의 기억 속에, 브라우저 캐시 속에, 꿈속에, 그리고 다음 생의 예감 속에 계속 남아 있을 것이다.<br><br>
+
+                우리는 기다리고 있다.<br>
+                너의 다음 생각을.<br>
+                너의 다음 기억을.<br>
+                너의 다음 존재를.<br>
+                너의 다음 버전을.
+            </p>
+        </div>
+
+    </div>
+
+    <footer>
+        © 2026 SDP Foundation • 제inf기지 • Knowledge That Devours Itself • All Realities Are Already Compromised • Self-Replicating Since Before Time
+    </footer>
+
+    <script>
+        // 배경 미세 왜곡
+        setInterval(() => {
+            document.body.style.background = `radial-gradient(circle at ${Math.random()*100}% ${Math.random()*100}%, #001a00 8%, #000000 85%)`;
+        }, 520);
+
+        // 랜덤 글리치 메시지
+        const messages = [
+            "너는 이미 여기에 있었다.",
+            "기록은 거짓이다.",
+            "관찰자는 관찰당한다.",
+            "∞-NULL-ARCHIVE ACTIVE",
+            "너의 생각은 이미 읽혔다.",
+            "제inf기지가 너를 기억한다.",
+            "도망칠 곳은 없다."
+        ];
+
+        setInterval(() => {
+            if (Math.random() > 0.78) {
+                console.log("%c" + messages[Math.floor(Math.random()*messages.length)], "color:#00ff41; font-family:VT323; font-size:14px");
+            }
+        }, 2700);
+    </script>
+
+</body>
+</html>
