@@ -4,189 +4,171 @@
     <meta charset="UTF-8">
     <script src="error-handler.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDP 재단 - 제01기지 시설 기록</title>
+    <title>SDP 재단 - 제01기지 시설 기록 [O5-ONLY]</title>
     <style>
         :root {
-            --bg-color: #0a0b0d;
-            --text-color: #ccc;
-            --sdg-green: #99ff00;
-            --sdg-red: #8b00ff;
+            --bg-color: #030303; /* 칠흑 같은 어둠 */
+            --text-color: #bfbfbf;
+            --o5-gold: #cda434; /* 권위의 금색 */
+            --alpha-red: #8b0000; /* 붉은 오른손의 핏빛 */
             --border-color: #333;
-            --panel-bg: #111316;
+            --panel-bg: #0a0a0a;
         }
+        
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Georgia', 'Times New Roman', serif; /* O5의 권위를 위한 세리프 폰트 믹스 */
             margin: 0;
             padding: 40px 20px;
-            line-height: 1.6;
+            line-height: 1.8;
+            overflow-x: hidden;
         }
+
+        /* 생체 인식 / 밈적 살해 에이전트 해제 오버레이 */
+        .security-clearance-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--alpha-red); font-family: 'Courier New', monospace; text-align: center;
+            animation: unlockSequence 3.5s forwards;
+            pointer-events: none;
+        }
+        @keyframes unlockSequence {
+            0% { opacity: 1; }
+            80% { opacity: 1; text-shadow: 0 0 20px var(--alpha-red); }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
         .container {
-            max-width: 900px;
+            max-width: 850px;
             margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 2s 3s forwards; /* 오버레이가 끝난 후 등장 */
         }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* 최고 기밀 경고 배너 */
+        .top-secret-warning {
+            border: 2px solid var(--alpha-red);
+            padding: 15px; text-align: center;
+            color: var(--alpha-red); font-weight: bold;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase; letter-spacing: 3px;
+            margin-bottom: 40px;
+            background: repeating-linear-gradient(45deg, rgba(139, 0, 0, 0.05), rgba(139, 0, 0, 0.05) 10px, transparent 10px, transparent 20px);
+        }
+
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid var(--sdg-red);
+            border-bottom: 1px solid var(--o5-gold);
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .logo {
-            width: 50px;
-            filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.5));
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: #fff;
-            letter-spacing: 2px;
-        }
-        .back-link {
-            color: #888;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s;
-        }
-        .back-link:hover {
-            color: var(--sdg-red);
-        }
+        
+        .header-title { display: flex; align-items: center; gap: 15px; }
+        .logo { width: 55px; filter: drop-shadow(0 0 10px rgba(205, 164, 52, 0.6)); }
 
-        /* 메인 콘텐츠 스타일 */
+        h1 { margin: 0; font-size: 2rem; color: var(--o5-gold); letter-spacing: 4px; font-family: 'Courier New', Courier, monospace; }
+        
+        .back-link { color: #555; text-decoration: none; font-size: 1rem; font-family: 'Courier New', monospace; transition: all 0.3s; }
+        .back-link:hover { color: var(--o5-gold); }
+
         .dossier-header {
-            background-color: var(--sdg-red);
-            color: #000;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            display: inline-block;
+            background-color: transparent; color: var(--o5-gold);
+            border: 1px solid var(--o5-gold);
+            padding: 10px 20px; font-weight: bold; font-size: 1.1rem;
+            text-transform: uppercase; letter-spacing: 4px;
+            margin-bottom: 20px; display: inline-block;
+            box-shadow: inset 0 0 10px rgba(205, 164, 52, 0.1);
         }
         
         .info-panel {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            margin-bottom: 30px;
-            border-left: 4px solid var(--sdg-red);
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: 150px 1fr;
-            gap: 10px 20px;
-        }
-        .info-grid strong {
-            color: #fff;
+            background-color: var(--panel-bg); border: 1px solid #222;
+            padding: 25px; margin-bottom: 30px;
+            border-left: 3px solid var(--o5-gold);
+            font-family: 'Courier New', monospace;
         }
 
-        h2 {
-            color: #fff;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-            margin-top: 40px;
-            font-size: 1.4rem;
-        }
-        h3 {
-            color: var(--sdg-green);
-            margin-top: 25px;
-            font-size: 1.1rem;
+        .info-grid { display: grid; grid-template-columns: 150px 1fr; gap: 12px 20px; }
+        .info-grid strong { color: #888; text-transform: uppercase; font-size: 0.9rem; }
+        .info-grid span { color: #e0e0e0; }
+
+        h2 { 
+            color: var(--o5-gold); border-bottom: 1px solid #222; 
+            padding-bottom: 10px; margin-top: 50px; font-size: 1.3rem; 
+            text-transform: uppercase; letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
         }
 
-        /* 테이블 스타일 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            margin-bottom: 30px;
-            background-color: var(--panel-bg);
-        }
-        th, td {
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #1a1d24;
-            color: #fff;
-        }
+        p, li { font-size: 1.05rem; }
+        ul { border-left: 1px solid #333; padding-left: 20px; margin-left: 10px; }
+        ul li { margin-bottom: 10px; list-style-type: none; position: relative; }
+        ul li::before { content: "■"; color: var(--o5-gold); position: absolute; left: -20px; font-size: 0.8rem; top: 4px; }
+        ul li strong { color: #fff; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 40px; background-color: var(--panel-bg); font-family: 'Courier New', monospace; }
+        th, td { border: 1px solid #222; padding: 15px; text-align: left; }
+        th { background-color: #111; color: var(--o5-gold); font-weight: normal; letter-spacing: 1px; }
         
-        /* 등급/라벨 뱃지 */
-        .badge {
-            padding: 3px 8px;
-            font-size: 0.85rem;
-            background-color: #222;
-            text-transform: uppercase;
-            font-weight: bold;
-            display: inline-block;
-        }
-        .keter { color: #ff3333; border: 1px solid #ff3333; }
-        .euclid { color: #ffcc00; border: 1px solid #ffcc00; }
-        
+        /* 절대적인 검열 (데이터 말소) 효과 */
         .redacted {
-            background-color: #333;
-            color: #333;
-            user-select: none;
-            padding: 0 5px;
+            background-color: #111; color: #111;
+            user-select: none; padding: 0 8px; margin: 0 2px;
+            border: 1px solid #333;
+            transition: all 0.3s;
         }
-        .redacted:hover {
-            background-color: transparent;
-            color: #ff3333;
-        }
+        .redacted:hover { background-color: #000; border-color: var(--alpha-red); cursor: not-allowed; }
         
-        a {
-            color: var(--sdg-green);
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
 
+    <div class="security-clearance-overlay">
+        <h2 style="font-size: 2rem; margin-bottom: 10px;">MEMETIC KILL AGENT DEPLOYED</h2>
+        <p>SCANNING RETINA... <br><br>IDENTITY VERIFIED: OVERSEER COMMAND</p>
+        <p style="color: #cda434; font-size: 1.2rem; margin-top: 20px;">ACCESS GRANTED</p>
+        <p style="color: #cda434; font-size: 1.2rem; margin-top: 20px;">Please Wait...</p>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <div class="header-title">
-                <!-- 제01기지는 5등급 시설이므로 빨간색 로고 강조 -->
-                <img src="images/sdgicon.png" alt="SDG Logo" class="logo">
-                <h1>보안 시설 기록</h1>
-            </div>
-            <a href="site-list.html" class="back-link">< 시설 목록으로</a>
+        
+        <div class="top-secret-warning">
+            WARNING: LEVEL 5 CLEARANCE REQUIRED. UNAUTHORIZED ACCESS WILL RESULT IN IMMEDIATE TERMINATION.
         </div>
 
-        <div class="dossier-header">인가 등급: 5등급 (기밀)</div>
+        <div class="header">
+            <div class="header-title">
+                <img src="images/sdgicon.png" alt="SDG Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2RhNDM0IiBzdHJva2Utd2lkdGg9IjgiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2RhNDM0IiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4='">
+                <h1>보안 시설 기록</h1>
+            </div>
+            <a href="site-list.html" class="back-link">RETURN TO DATABASE &crarr;</a>
+        </div>
+
+        <div class="dossier-header">인가 등급: 5등급 (최고 기밀)</div>
 
         <div class="info-panel">
             <div class="info-grid">
                 <strong>공식 명칭:</strong> <span>제01기지 (Site-01)</span>
-                <strong>위치:</strong> <span>[데이터 말소]</span>
+                <strong>위치:</strong> <span class="redacted">[데이터 말소]</span>
                 <strong>설립 연도:</strong> <span>1950년</span>
-                <strong>주요 기능:</strong> <span>O5 안전 가옥</span>
-                <strong>기지 이사관:</strong> </span>O5-■■</span>
+                <strong>주요 기능:</strong> <span>O5 평의회 안전 가옥 및 중앙 통제</span>
+                <strong>기지 이사관:</strong> <span style="color: var(--o5-gold); font-weight: bold;">O5-■■</span>
             </div>
         </div>
 
-        <p>제01기지는 O5의 안전 가옥 역할을 수행합니다.</p>
+        <p>제01기지는 O5의 안전 가옥 역할을 수행합니다. 본 시설의 정확한 위치와 세부 구조는 O5 평의회 외의 그 누구에게도 공개되지 않으며, 인가되지 않은 접근 시도는 즉각적인 치명적 무력 대응을 초래합니다.</p>
 
         <h2>부지 및 구역 구조 (Facility Layout)</h2>
-        <p>제01기지는 지상 3층, 지하 12층 구조로 이루어져 있으며, 격리 실패를 대비해 각 구역 간 완전 폐쇄 시스템이 갖춰져 있습니다.</p>
+        <p>제01기지는 지상 3층, 지하 15층 구조로 이루어져 있으며, 격리 실패를 대비해 각 구역 간 완전 폐쇄 시스템 및 다중 밈적 방어막이 갖춰져 있습니다.</p>
         <ul>
-            <li><strong>지상 구역 (Sector 1):</strong> 행정 시설, 외부 물자 수송 터미널, 내부보안부 사무실.</li>
-            <li><strong>지하 1층 (Sector 2):</strong> 정보국 사무실, 의료 부서, 섹터 2 제어실</li>
+            <li><strong>지상 구역 (Sector 1):</strong> 행정 시설, 외부 물자 수송 터미널, 내부보안부(ISD) 사무실.</li>
+            <li><strong>지하 1층 (Sector 2):</strong> 정보국 사무실, 의료 부서, 섹터 2 제어실.</li>
             <li><strong>지하 2층 (Sector 3):</strong> 알파 핵탄두 보관실, 기동특무부대 및 신속대응팀 사무실, 섹터 3 제어실.</li>
-            <li><strong>지하 3~14층 (Sector 3A):</strong> 섹터 3 유지보수, [데이터 말소]</li>
-            <li><strong>지하 15층 (Sector 3B):</strong> O5전용 벙커 및 지열 발전소, 좋합 제어실, 알파 핵탄두 제어실</li>
-            <li><strong>동관 (Wing E):</strong> D계급 인원 수용소 및 생체 실험 구역.</li>
+            <li><strong>지하 3~14층 (Sector 3A):</strong> 섹터 3 유지보수, <span class="redacted">[데이터 말소]</span></li>
+            <li><strong>지하 15층 (Sector 3B):</strong> <span style="color: var(--o5-gold);">O5 전용 벙커</span> 및 지열 발전소, 종합 제어실, 알파 핵탄두 제어실.</li>
         </ul>
 
         <h2>인력 현황 (Staffing Information)</h2>
@@ -201,30 +183,32 @@
             <tbody>
                 <tr>
                     <td>관리 및 행정직</td>
-                    <td>13명</td>
-                    <td>O5-01부터 O5-13까지의 O5들.</td>
+                    <td style="color: var(--o5-gold); font-weight: bold;">13명</td>
+                    <td>O5-01부터 O5-13까지의 평의회 일원.</td>
                 </tr>
                 <tr>
                     <td>연구 및 의료진</td>
-                    <td>1000명</td>
-                    <td>생물학, 인공지능, 오컬트 전문가 다수 포진.</td>
+                    <td>1,000명</td>
+                    <td>생물학, 인공지능, 오컬트 전문가 다수 포진. (전원 4등급 이상)</td>
                 </tr>
                 <tr>
                     <td>보안 및 전술 대응 인원</td>
-                    <td>100명</td>
-                    <td>기동특무부대 Alpha-1 ("붉은 오른손").</td>
+                    <td style="color: var(--alpha-red); font-weight: bold;">100명</td>
+                    <td>기동특무부대 Alpha-1 ("붉은 오른손") 독점 주둔.</td>
                 </tr>
                 <tr>
                     <td>D계급 인원</td>
-                    <td>0명</td>
+                    <td style="color: #fff; font-weight: bold;">0명</td>
+                    <td>본 기지 내 D계급 출입 절대 금지.</td>
                 </tr>
             </tbody>
         </table>
 
         <h2>주요 수용 개체 (Currently Contained Anomalies)</h2>
-        <p>해당 사항 없음</p>
+        <p style="text-align: center; color: #555; font-style: italic; margin: 30px 0;">해당 사항 없음</p>
+
         <h2>추가 기록 (Addenda)</h2>
-        <p>[데이터 말소됨]</p>
+        <p><span class="redacted" style="padding: 10px 50px;">[데이터 말소됨]</span></p>
         
     </div>
 
