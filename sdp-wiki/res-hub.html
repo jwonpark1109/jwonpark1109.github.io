@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 연구부 통합 데이터 네트워크</title>
+    <style>
+        :root {
+            --bg-color: #000810;
+            --text-color: #e0f4ff;
+            --research-cyan: #00d2ff; /* 연구부 상징: 실험용 레이저/홀로그램 색상 */
+            --data-blue: #004e92;
+            --alert-purple: #a100ff; /* 정보재해/데이터 오염 경고색 */
+            --panel-bg: rgba(0, 20, 40, 0.6);
+            --border-color: #003366;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            /* 육각형 분자 구조 느낌의 배경 */
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.05) 0%, transparent 70%),
+                linear-gradient(rgba(0, 210, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 210, 255, 0.05) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px;
+        }
+
+        /* 상단 디지털 스캔라인 효과 */
+        .scanline {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--research-cyan), transparent);
+            opacity: 0.3;
+            animation: scanning 4s linear infinite;
+            z-index: 100;
+            pointer-events: none;
+        }
+        @keyframes scanning {
+            0% { top: -10px; }
+            100% { top: 100vh; }
+        }
+
+        .header {
+            text-align: center;
+            margin: 60px 0 40px 0;
+            width: 80%;
+            max-width: 850px;
+            position: relative;
+        }
+
+        /* 연구부 로고 네온 효과 */
+        .sdg-logo {
+            width: 140px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.6));
+            animation: logo-glow 3s infinite alternate;
+        }
+        @keyframes logo-glow {
+            from { filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.4)); }
+            to { filter: drop-shadow(0 0 25px rgba(0, 210, 255, 0.8)); }
+        }
+
+        .header h1 {
+            font-size: 3.2rem;
+            margin: 0;
+            letter-spacing: 6px;
+            color: #fff;
+            font-weight: 200;
+            text-shadow: 0 0 15px var(--research-cyan);
+        }
+
+        .header p {
+            color: var(--research-cyan);
+            font-size: 1.1rem;
+            margin-top: 15px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* 데이터 불일치 공지 (경고창) */
+        .experiment-notice {
+            background: var(--panel-bg);
+            border: 1px solid var(--research-cyan);
+            backdrop-filter: blur(5px);
+            width: 80%;
+            max-width: 850px;
+            padding: 30px;
+            margin-bottom: 50px;
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.1);
+        }
+
+        .experiment-notice::before {
+            content: "DATA INTEGRITY REPORT";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--research-cyan);
+            color: #000;
+            padding: 2px 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .experiment-notice h2 {
+            color: var(--research-cyan);
+            font-size: 1.4rem;
+            margin-top: 0;
+        }
+
+        .experiment-notice p {
+            color: #a5d8ff;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 10px 0;
+        }
+
+        .experiment-notice .anomaly-alert {
+            color: var(--alert-purple);
+            font-weight: bold;
+            border-left: 3px solid var(--alert-purple);
+            padding-left: 15px;
+            margin-top: 15px;
+        }
+
+        /* 데이터 모듈 스타일 메뉴 */
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            width: 80%;
+            max-width: 850px;
+        }
+
+        .menu-item {
+            background: rgba(0, 50, 100, 0.2);
+            border: 1px solid var(--border-color);
+            padding: 35px 25px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--research-cyan);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 210, 255, 0.1);
+            border-color: var(--research-cyan);
+            color: #fff;
+            transform: translateY(-5px);
+        }
+
+        .menu-item:hover::after {
+            transform: scaleX(1);
+        }
+
+        .menu-item .module-id {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--research-cyan);
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+
+        .menu-item .title {
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        /* 정보재해(SCP) 메뉴 특수 효과 */
+        .info-hazard {
+            border-color: var(--alert-purple) !important;
+        }
+        .info-hazard .module-id { color: var(--alert-purple); }
+        .info-hazard:hover {
+            box-shadow: 0 0 20px rgba(161, 0, 255, 0.3);
+        }
+        .info-hazard .title {
+            animation: text-shake 5s infinite;
+        }
+
+        @keyframes text-shake {
+            0%, 90% { transform: translate(0,0); }
+            91% { transform: translate(2px, -1px); }
+            92% { transform: translate(-2px, 1px); }
+            93% { transform: translate(1px, 2px); }
+            94% { transform: translate(-1px, -2px); }
+            95% { transform: translate(0,0); }
+        }
+
+        .footer {
+            margin-top: 80px;
+            margin-bottom: 30px;
+            font-size: 0.8rem;
+            color: #004466;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+
+    <div class="header">
+        <img src="images/sdgicon.png" alt="SDG Foundation Logo" class="sdg-logo">
+        <h1>연구부</h1>
+        <p>"모든것을 연구합니다."</p>
+    </div>
+
+    <div class="experiment-notice">
+        <h2>실험 데이터 정합성 보고 (Ref: 2024-RD-09)</h2>
+        <p>현재 연구부 산하 제05연구기지 및 제416격리연구기지의 메인프레임에서 비정상적인 데이터 중첩 현상이 관측되었습니다.</p>
+        <div class="anomaly-alert">
+            분석 결과: <strong>"SCP 재단"</strong>으로 식별되는 평행 세계 연구 아카이브가 당 부서의 밈적 데이터 라이브러리와 동기화되고 있습니다. 해당 섹션의 가설을 인가 없이 열람할 경우 인식재해 오염의 위험이 있으니 주의하십시오.
+        </div>
+        <p style="text-align: right; font-size: 0.8rem; color: var(--research-cyan); margin-top: 15px;">- 연구 이사관 Dr. Aris</p>
+    </div>
+
+    <div class="menu-container">
+        <a href="list.html" class="menu-item">
+            <span class="module-id">MODULE_ALPHA_01</span>
+            <span class="title">[일반 데이터베이스]</span>
+        </a>
+
+        <a href="scp.html" class="menu-item info-hazard">
+            <span class="module-id">MODULE_UNKNOWN_ERR</span>
+            <span class="title">[??9 S &nbsp;C? &nbsp;P?]</span>
+        </a>
+
+        <a href="cmd.html" class="menu-item">
+            <span class="module-id">MODULE_ADMIN_09</span>
+            <span class="title">[보안 인가 터미널]</span>
+        </a>
+    </div>
+
+    <div class="footer">
+        SDP FOUNDATION // RESEARCH & DEVELOPMENT DIVISION // ENCRYPTED ACCESS ONLY
+    </div>
+</body>
+</html>
