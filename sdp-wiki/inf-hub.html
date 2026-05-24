@@ -7,153 +7,286 @@
     <title>SDP 재단 - 메인 데이터베이스</title>
     <style>
         :root {
-            --bg-color: #050505;
-            --text-color: #d4d4d4;
             --accent-color: #b30000;
-            --border-color: #333;
+            --text-glow: #ff3333;
         }
+
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #050505;
+            color: #d4d4d4;
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            
-            /* 배경 이미지 적용 */
             background-image: 
                 url('images/inf-background.png'),
-                radial-gradient(circle at center, #111 0%, #000 100%);
+                radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-blend-mode: multiply; /* 이미지와 그라데이션 자연스럽게 블렌딩 */
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 20px;
-            width: 80%;
-            max-width: 800px;
-        }
-        .warning-box {
-            border: 4px solid #8b0000;
-            background-color: rgba(18, 0, 0, 0.85);
-            padding: 40px 30px;
-            text-align: center;
-            margin-bottom: 50px;
-            box-shadow: 0 0 30px rgba(139, 0, 0, 0.6);
-            border-radius: 2px;
-        }
-        .warning-box h1 {
-            color: #ff3333;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 2.8rem;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-        .warning-box p {
-            color: #ff8888;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin: 10px 0;
-        }
-        .sdg-logo {
-            width: 180px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(153, 255, 0, 0.4));
-        }
-        .header h1 {
-            font-size: 3.5rem;
-            margin: 0;
-            letter-spacing: 8px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(179, 0, 0, 0.5);
-        }
-        .header p {
-            color: var(--accent-color);
-            font-size: 1.2rem;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        .menu-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            width: 80%;
-            max-width: 800px;
-        }
-        .menu-item {
-            background-color: rgba(15, 15, 15, 0.85);
-            border: 1px solid var(--border-color);
-            padding: 30px 20px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-color);
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
+            background-blend-mode: multiply;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
         }
-        .menu-item::before {
+
+        /* CRT + 노이즈 효과 */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                transparent 0px,
+                transparent 2px,
+                rgba(255,255,255,0.035) 2px,
+                rgba(255,255,255,0.035) 4px
+            );
+            animation: scanline 5s linear infinite;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url('https://assets.codepen.io/13471/noise.png');
+            opacity: 0.07;
+            animation: noise 0.6s steps(4) infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes noise {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(3px, 3px); }
+        }
+
+        /* 로딩 화면 */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 1.8s ease;
+        }
+
+        .loader-text {
+            font-size: 2.4rem;
+            color: #ff3333;
+            letter-spacing: 8px;
+            margin-bottom: 30px;
+            animation: flicker 0.8s infinite alternate;
+        }
+
+        .loading-bar {
+            width: 380px;
+            height: 6px;
+            background: #111;
+            border: 1px solid #b30000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-bar::after {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
+            left: 0;
+            width: 0;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(179, 0, 0, 0.3), transparent);
-            transition: left 0.4s ease;
+            background: linear-gradient(90deg, transparent, #ff3333, transparent);
+            animation: loading 2.8s linear infinite;
         }
-        .menu-item:hover {
-            border-color: var(--accent-color);
+
+        @keyframes flicker {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 30px;
+            width: 88%;
+            max-width: 850px;
+        }
+
+        .warning-box {
+            border: 5px solid #8b0000;
+            background-color: rgba(20, 0, 0, 0.93);
+            padding: 50px 40px;
+            text-align: center;
+            margin-bottom: 60px;
+            box-shadow: 0 0 40px rgba(139, 0, 0, 0.8);
+            border-radius: 4px;
+        }
+
+        .warning-box h1 {
+            color: #ff3333;
+            font-size: 3rem;
+            margin: 0 0 25px 0;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: glitch 1.5s infinite;
+        }
+
+        .sdg-logo {
+            width: 210px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 25px rgba(153, 255, 0, 0.6));
+            transition: all 0.5s ease;
+        }
+
+        .sdg-logo:hover {
+            transform: scale(1.12) rotate(3deg);
+            filter: drop-shadow(0 0 35px rgba(153, 255, 0, 0.9));
+        }
+
+        .header h1 {
+            font-size: 3.8rem;
+            margin: 10px 0 12px 0;
+            letter-spacing: 12px;
             color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(179, 0, 0, 0.4), inset 0 0 10px rgba(179, 0, 0, 0.2);
+            text-shadow: 0 0 15px #b30000;
         }
-        .menu-item:hover::before {
-            left: 100%;
+
+        .header p {
+            color: #ff7777;
+            font-size: 1.35rem;
+            font-weight: bold;
         }
+
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 30px;
+            width: 88%;
+            max-width: 850px;
+        }
+
+        .menu-item {
+            background-color: rgba(12, 12, 12, 0.92);
+            border: 2px solid #444;
+            padding: 38px 25px;
+            text-align: center;
+            text-decoration: none;
+            color: #ddd;
+            font-size: 1.28rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item:hover {
+            border-color: #ff3333;
+            color: white;
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 15px 30px rgba(179, 0, 0, 0.6);
+        }
+
         .footer {
-            margin-top: 60px;
-            font-size: 0.9rem;
+            margin-top: 80px;
+            font-size: 1rem;
             color: #555;
-            letter-spacing: 1px;
+            letter-spacing: 2.5px;
         }
     </style>
 </head>
 <body>
+
+    <!-- 로딩 화면 -->
+    <div id="loader">
+        <div class="loader-text glitch">SDP FOUNDATION</div>
+        <p style="color:#ff6666; margin-bottom: 20px;">무한연구부 메인 데이터베이스 접속 중...</p>
+        <div class="loading-bar"></div>
+        <p style="margin-top: 25px; color:#660000; font-size: 1.1rem;">REALITY STABILITY : UNSTABLE</p>
+    </div>
+
     <div class="warning-box">
-        <h1>공지: 시스템 오류 공지</h1>
-        <p>현재 SDP 재단 데이터베이스에 특정한 변칙 현상이 발생하여 "SCP 재단"이라 불리는 평행세계의 SDP 재단의 데이터 베이스와 정보가 섞였습니다.</p>
-        <p>인가되지 않은 자가 이 문서에 접근할 경우 즉각적인 처분이 이루어집니다.</p>
-        <p>- 관리자</p>
+        <h1>긴급 공지</h1>
+        <p>현재 SDP 재단 데이터베이스에 심각한 변칙 현상이 발생했습니다.</p>
+        <p>"SCP 재단"으로 불리는 평행세계의 정보가 대량 유입되어 있습니다.</p>
+        <p>인가되지 않은 접근자는 즉시 추적 및 처분됩니다.</p>
+        <p style="margin-top:20px; color:#ffaaaa;">— O5-█ 관리자</p>
     </div>
 
     <div class="header">
-        <img src="images/inficon.png" alt="SDG Foundation Logo" class="sdg-logo">
+        <img src="images/inficon.png" alt="SDP Foundation Logo" class="sdg-logo">
         <h1>무한연구부</h1>
-        <p>무한은 거짓이며 동시에 참이다.</p>
+        <p>무한은 거짓이며 동시에 참이다. 우리는 그 경계를 연구한다.</p>
     </div>
 
     <div class="menu-container">
-        <a href="list.html" class="menu-item">[일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스] [일반 데이터베이스]</a>
+        <a href="list.html" class="menu-item">
+            [일반 데이터베이스]<br>
+            <span style="font-size:0.95rem; color:#888;">기록 열람 · 변칙 개체 목록</span>
+        </a>
         
-        <a href="siteinf.html" class="menu-item">[무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한 무한]</a>
+        <a href="siteinf.html" class="menu-item">
+            [무한]<br>
+            <span style="font-size:0.95rem; color:#888;">제inf기지</span>
+        </a>
+
+        <a href="scp.html" class="menu-item">
+            [SCP 재단]<br>
+            <span style="font-size:0.95rem; color:#888;">평행세계의 SDP 재단 · 바로 가기</span>
+        </a>
         
-        <a href="cmd.html" class="menu-item">[보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널] [보안 인가 터미널]</a>
+        <a href="cmd.html" class="menu-item">
+            [보안 인가 터미널]<br>
+            <span style="font-size:0.95rem; color:#888;">관리자 권한 · 명령 실행</span>
+        </a>
     </div>
 
     <div class="footer">
-        경고: 인가되지 않은 접근은 즉각적인 추적 및 처분의 대상이 됩니다.
+        SDP FOUNDATION • ALL RIGHTS RESERVED • UNAUTHORIZED ACCESS WILL BE TERMINATED
     </div>
+
+    <script>
+        // 로딩 화면 제거
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 1800);
+            }, 2400);
+        });
+
+        // 헤더 글리치 효과
+        function headerGlitch() {
+            const h1 = document.querySelector('.header h1');
+            if (Math.random() > 0.8) {
+                h1.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*3-1}px)`;
+                setTimeout(() => h1.style.transform = 'translate(0,0)', 120);
+            }
+        }
+
+        setInterval(headerGlitch, 1800);
+
+        // 콘솔 로그 (분위기용)
+        console.log("%cSDP FOUNDATION DATABASE ACCESSED", "color:#ff3333; font-size:14px; font-family:Courier New");
+        console.log("%cWARNING: REALITY INTEGRITY COMPROMISED", "color:#ff6666; font-size:13px;");
+    </script>
 </body>
 </html>
