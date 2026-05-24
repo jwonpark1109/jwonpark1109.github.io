@@ -4,144 +4,180 @@
     <meta charset="UTF-8">
     <script src="error-handler.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDP 재단 - 메인 데이터베이스</title>
+    <title>SDP 재단 - 물류부 중앙 데이터베이스</title>
     <style>
         :root {
-            --bg-color: #050505;
+            --bg-color: #090a0c;
             --text-color: #d4d4d4;
-            --accent-color: #b30000;
-            --border-color: #333;
+            --logistics-orange: #ff9900; /* 물류/산업용 경고등 색상 */
+            --panel-bg: #111418;
+            --border-color: #2a3036;
         }
+        
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
-            padding: 0;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            background-image: radial-gradient(circle at center, #111 0%, #000 100%);
+            /* 물류 창고 바닥 느낌의 미세한 그리드 */
+            background-image: 
+                linear-gradient(rgba(255, 153, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 153, 0, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
-        .header {
-            text-align: center;
+
+        /* 물류부 터미널 헤더 */
+        .logistics-header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 3px solid var(--logistics-orange);
+            padding-bottom: 10px;
             margin-bottom: 60px;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 20px;
-            width: 80%;
-            max-width: 800px;
         }
-        .warning-box {
-            border: 4px solid #8b0000;
-            background-color: #120000;
-            padding: 40px 30px;
-            text-align: center;
-            margin-bottom: 50px;
-            box-shadow: 0 0 30px rgba(139, 0, 0, 0.6);
-            border-radius: 2px;
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
-        .warning-box h1 {
-            color: #ff3333;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 2.8rem;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+
+        .sdg-logo {
+            width: 70px;
+            filter: drop-shadow(0 0 8px rgba(255, 153, 0, 0.5));
+        }
+
+        .title-group h1 {
+            color: var(--logistics-orange);
+            margin: 0;
+            font-size: 2.2rem;
             letter-spacing: 3px;
+            text-transform: uppercase;
         }
-        .warning-box p {
-            color: #ff8888;
+
+        .title-group p {
+            color: #888;
+            margin: 5px 0 0 0;
             font-weight: bold;
             font-size: 1.1rem;
-            margin: 10px 0;
         }
-        /* 로고 스타일 추가 */
-        .sdg-logo {
-            width: 180px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(153, 255, 0, 0.4)); /* 연두색 네온 효과 */
+
+        .system-id {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #555;
         }
-        .header h1 {
-            font-size: 3.5rem;
-            margin: 0;
-            letter-spacing: 8px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(179, 0, 0, 0.5);
+        .barcode {
+            font-family: 'Libre Barcode 39', 'Courier New', monospace;
+            font-size: 2rem;
+            color: var(--logistics-orange);
+            opacity: 0.7;
+            margin-top: 5px;
+            letter-spacing: -2px;
         }
-        .header p {
-            color: var(--accent-color);
-            font-size: 1.2rem;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+
+        /* 물류 메뉴 (컨테이너 박스 스타일) */
         .menu-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            width: 80%;
-            max-width: 800px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
         }
+
         .menu-item {
-            background-color: rgba(15, 15, 15, 0.8);
+            background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
-            padding: 30px 20px;
-            text-align: center;
+            border-left: 5px solid #555;
+            padding: 25px 20px;
             text-decoration: none;
             color: var(--text-color);
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
         }
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(179, 0, 0, 0.3), transparent);
-            transition: left 0.4s ease;
+
+        .menu-item .label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
-        .menu-item:hover {
-            border-color: var(--accent-color);
+
+        .menu-item .title {
+            font-size: 1.3rem;
+            font-weight: bold;
             color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(179, 0, 0, 0.4), inset 0 0 10px rgba(179, 0, 0, 0.2);
         }
-        .menu-item:hover::before {
-            left: 100%;
+
+        .menu-item:hover {
+            border-color: var(--logistics-orange);
+            border-left-color: var(--logistics-orange);
+            background-color: #1a1e24;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 153, 0, 0.1);
         }
+
+        .menu-item:hover .title {
+            color: var(--logistics-orange);
+        }
+
         .footer {
             margin-top: 60px;
-            font-size: 0.9rem;
-            color: #555;
-            letter-spacing: 1px;
+            font-size: 0.85rem;
+            color: #444;
+            border-top: 1px solid #222;
+            padding-top: 20px;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-        <div class="warning-box">
-            <h1>공지: 시스템 오류 공지</h1>
-            <p>현재 SDP 재단 데이터베이스에 특정한 변칙 현상이 발생하여 "SCP 재단"이라 불리는 평행세계의 SDP 재단의 데이터 베이스와 정보가 섞였습니다.</p>
-            <p>인가되지 않은 자가 이 문서에 접근할 경우 즉각적인 처분이 이루어집니다.</p>
-            <p>- 관리자</p>
+
+    <div class="logistics-header">
+        <div class="logo-section">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="sdg-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSIzMCIgeT0iMzAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY5OTAwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4='">
+            <div class="title-group">
+                <h1>물류부</h1>
+                <p>"물건이 있어야 연구를 하죠!"</p>
+            </div>
         </div>
-    <div class="header">
-        <img src="images/sdgicon.png" alt="SDG Foundation Logo" class="sdg-logo">
-        <h1>a물류부</h1>
-        <p>물건이 있어야 연구를 하죠!</p>
+        <div class="system-id">
+            TERMINAL ID: LOG-09-KR<br>
+            <div class="barcode">||| | ||||| | || ||</div>
+        </div>
     </div>
+
     <div class="menu-container">
-        <a href="list.html" class="menu-item">[일반 데이터베이스]</a>
-        <a href="scp.html" class="menu-item">[??9 S   C?  P?]</a>
-        <a href="cmd.html" class="menu-item">[보안 인가 터미널]</a>
+        <a href="list.html" class="menu-item">
+            <span class="label">SECURE CARGO DB</span>
+            <span class="title">일반 데이터베이스</span>
+        </a>
+
+        <a href="cargo.html" class="menu-item">
+            <span class="label">CARGO MANIFEST</span>
+            <span class="title">화물 목록 보기</span>
+        </a>
+
+        <a href="cmd.html" class="menu-item">
+            <span class="label">AUTHORIZATION REQ</span>
+            <span class="title">보안 인가 터미널</span>
+        </a>
     </div>
+
     <div class="footer">
-        경고: 인가되지 않은 접근은 즉각적인 추적 및 처분의 대상이 됩니다.
+        [물류부 행동 강령] 취급 주의. 파손 시 급여에서 차감. 인가되지 않은 열람 시 즉각적인 추적 및 처분.
     </div>
+
 </body>
 </html>
