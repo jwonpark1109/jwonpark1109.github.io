@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP DATABASE: BIOLOGICAL AREA-99</title>
+    <style>
+        /* 맹독성/멸균실 테마 배경 */
+        body {
+            background-color: #051005; /* 아주 어두운 늪지대/독성 녹색 */
+            color: #b3ffb3;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+            /* 떠다니는 포자/독가스 느낌의 배경 애니메이션 */
+            background-image: radial-gradient(circle at 50% 50%, rgba(20, 50, 20, 0.5) 0%, transparent 60%);
+            animation: breathe 6s infinite alternate ease-in-out;
+        }
+        @keyframes breathe {
+            0% { background-size: 100% 100%; }
+            100% { background-size: 120% 120%; }
+        }
+
+        /* 메인 컨테이너 (의료 모니터 느낌) */
+        .terminal-box {
+            width: 85%; max-width: 900px;
+            background: rgba(0, 20, 5, 0.85);
+            border: 2px solid #33cc33;
+            box-shadow: 0 0 20px rgba(51, 204, 51, 0.2), inset 0 0 30px rgba(0, 50, 0, 0.8);
+            padding: 40px; border-radius: 10px;
+            position: relative; overflow: hidden;
+        }
+
+        /* 맥박/심박수 라인 효과 (상단) */
+        .ekg-line {
+            position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent 0%, #33cc33 50%, transparent 100%);
+            opacity: 0.7; animation: scanline 3s linear infinite;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        /* 빙글빙글 도는 바이오해저드 로고 */
+        .bio-logo {
+            font-size: 3rem; color: #33cc33; text-shadow: 0 0 15px #33cc33;
+            display: inline-block; animation: spin 5s linear infinite;
+            vertical-align: middle; margin-right: 15px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        h1 { color: #fff; text-shadow: 0 0 10px #33cc33; border-bottom: 1px solid #33cc33; padding-bottom: 15px; margin-top: 0; }
+        h2 { color: #66ff66; margin-top: 30px; font-weight: normal; }
+        
+        /* 살육/오염된 텍스트 효과 */
+        .infected-text {
+            color: #ff3366; /* 징그러운 핏빛/고기색 */
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 51, 102, 0.6);
+            animation: fleshy-pulse 2s infinite alternate;
+        }
+        @keyframes fleshy-pulse {
+            0% { opacity: 0.8; text-shadow: 0 0 5px red; }
+            100% { opacity: 1; text-shadow: 0 0 15px darkred; }
+        }
+
+        /* 멸균 프로토콜 경고창 */
+        .quarantine-box {
+            border: 2px dashed #ff9900; background: rgba(255, 153, 0, 0.1);
+            padding: 15px; margin: 20px 0; color: #ffcc66;
+            border-left: 10px solid #ff9900;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; color: #ccffcc; }
+        th, td { border: 1px solid #2d862d; padding: 12px; text-align: left; }
+        th { background-color: rgba(51, 204, 51, 0.15); }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-box">
+        <div class="ekg-line"></div>
+        
+        <h1><span class="bio-logo">☣️</span>보안 시설 기록: AREA-99</h1>
+        <p><strong>[SYSTEM]</strong> 생물학적 오염도 스캔 중... <span style="color:#33cc33;">[안전: 0.02%]</span></p>
+        
+        <p><strong>인가 등급:</strong> 4등급 (기밀)<br>
+        <strong>공식 명칭:</strong> 제99생물학격리구역<br>
+        <strong>위치:</strong> [데이터 말소] 해발 -850m 천연 석회암 동굴 내부<br>
+        <strong>주요 기능:</strong> 극도의 전염성 병원균, 자가 증식형 유기체(살점 덩어리) 격리 및 소각, 생화학 병기 연구<br>
+        <strong>구역 이사관:</strong> V. 박사 (면역학 수석 연구원)</p>
+
+        <div class="quarantine-box">
+            <strong>[절대 수칙] 멸균 프로토콜 (Protocol De-Con)</strong><br>
+            제99구역의 모든 구획을 이동할 때는 예외 없이 3단계 화학 세척과 고온 자외선(UV) 샤워를 거쳐야 합니다. 
+            피부에 원인 모를 발진, 궤양, 혹은 <span class="infected-text">살점의 융합</span>이 관찰되는 인원은 즉시 현장에서 사살 및 소각됩니다.
+        </div>
+
+        <h2>:: 부지 및 구역 구조</h2>
+        <p>기지 전체가 외부 생태계와의 접촉을 원천 차단하기 위해 지하 깊은 곳에 건설되었으며, 환기구는 12중 헤파(HEPA) 필터와 플라즈마 소각로를 거쳐 배출됩니다.</p>
+        <ul>
+            <li><strong>화이트 존 (행정/거주):</strong> 구역 내 유일하게 방호복 없이 활동 가능한 구역.</li>
+            <li><strong>블루 존 (극저온 동면실):</strong> 세포 분열과 바이러스 증식을 억제하기 위해 영하 80도로 유지되는 격리실.</li>
+            <li><strong><span class="infected-text">블랙 존 (배양 및 소각장)</span>:</strong> 현재 Keter 등급의 융합 유기체들이 억류된 구역. <em>(주 3회 화염방사기를 통한 물리적 크기 통제 작전 수행)</em></li>
+        </ul>
+
+        <h2>:: 주요 수용 개체</h2>
+        <table>
+            <tr><th>일련번호</th><th>개체명</th><th>상태</th><th>수용 구역</th></tr>
+            <tr>
+                <td>SDP-016</td>
+                <td>살아있는 바이러스</td>
+                <td>[안정됨]</td>
+                <td>블루 존 - 016 격리 구역 바이러스 배양관 04</td>
+            </tr>
+            <tr>
+                <td>SDP-???</td>
+                <td>Loading...</td>
+                <td>[로딩중]</td>
+                <td>?? 존 - ???</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
