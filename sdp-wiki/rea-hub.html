@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SDP 재단 - 현실부 허브</title>
+    <style>
+        body {
+            background-color: #050011; color: #fff;
+            font-family: 'Courier New', monospace;
+            margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh;
+            overflow: hidden;
+            /* 현실 왜곡 그라데이션 */
+            background-image: radial-gradient(circle, #2b0054 0%, #000 70%);
+        }
+        .container { text-align: center; position: relative; }
+        
+        .glitch-text {
+            font-size: 4rem; font-weight: bold; margin: 0;
+            text-shadow: 3px 0 magenta, -3px 0 cyan;
+            animation: glitch-anim 0.2s infinite;
+        }
+        @keyframes glitch-anim {
+            0% { transform: translate(0, 0) skew(0deg); }
+            20% { transform: translate(-2px, 2px) skew(-5deg); }
+            40% { transform: translate(2px, -2px) skew(5deg); }
+            60% { transform: translate(-2px, 0) skew(0deg); }
+            80% { transform: translate(2px, 2px) skew(2deg); }
+            100% { transform: translate(0, 0) skew(0deg); }
+        }
+
+        .subtitle {
+            font-size: 1.5rem; color: #ccc; margin-top: 15px;
+            letter-spacing: 5px; position: relative;
+            animation: float 3s ease-in-out infinite alternate;
+        }
+        @keyframes float { from { transform: translateY(-5px); } to { transform: translateY(5px); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="glitch-text">현실부 (Reality Dept.)</h1>
+        <div class="subtitle">현실조작을 연구합니다.</div>
+    </div>
+</body>
+</html>
