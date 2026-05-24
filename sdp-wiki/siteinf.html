@@ -7,30 +7,77 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Creepster&family=VT323&family=Special+Elite&display=swap');
 
+        :root {
+            --primary: #00ff41;
+            --dark: #001a00;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
             background: #000000;
-            color: #00ff41;
+            color: var(--primary);
             font-family: 'VT323', monospace;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
             image-rendering: pixelated;
             line-height: 1.85;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                transparent 0px,
+                transparent 2px,
+                rgba(0, 255, 65, 0.035) 2px,
+                rgba(0, 255, 65, 0.035) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanline 5s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 2s ease;
+        }
+
+        .loading-text {
+            font-size: 2.4rem;
+            letter-spacing: 10px;
+            animation: flicker 0.5s infinite alternate;
+            text-shadow: 0 0 25px var(--primary);
         }
 
         .glitch {
-            animation: glitch 0.55s infinite linear alternate;
+            animation: glitch 0.45s infinite linear alternate;
+            position: relative;
         }
 
         @keyframes glitch {
             0% { text-shadow: 3px 0 #ff00ff, -3px 0 #00ffff; transform: translate(0); }
-            20% { text-shadow: -3px 0 #ff00ff, 3px 0 #00ffff; transform: translate(-2px, 2px); }
-            100% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; transform: translate(1px, -1px); }
+            20% { text-shadow: -4px 0 #ff00ff, 4px 0 #00ffff; transform: translate(-4px, 3px); }
+            100% { text-shadow: 3px 0 #ff00ff, -3px 0 #00ffff; transform: translate(3px, -3px); }
         }
 
         @keyframes flicker {
             0%,100% { opacity: 1; }
-            50% { opacity: 0.65; }
+            50% { opacity: 0.55; }
         }
 
         @keyframes rotate {
@@ -39,64 +86,80 @@
         }
 
         header {
-            background: radial-gradient(circle at 50% 30%, #001a00 10%, #000000 90%);
-            padding: 90px 20px 60px;
+            background: radial-gradient(circle at 50% 30%, #001a00 15%, #000000 85%);
+            padding: 110px 20px 80px;
             text-align: center;
-            border-bottom: 3px solid #003300;
+            border-bottom: 4px solid #003300;
+            position: relative;
         }
 
         h1 {
             font-family: 'Creepster', cursive;
-            font-size: 4.4rem;
-            letter-spacing: 20px;
+            font-size: 4.2rem;
+            letter-spacing: 14px;
             margin: 0;
             text-transform: uppercase;
             animation: flicker 1.05s infinite alternate;
         }
 
         .subtitle {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: #004d00;
-            letter-spacing: 14px;
-            margin-top: 25px;
+            letter-spacing: 16px;
+            margin-top: 28px;
+            animation: glitch 2.5s infinite;
         }
 
         .container {
-            max-width: 1180px;
-            margin: 45px auto;
+            max-width: 1200px;
+            margin: 55px auto;
             padding: 20px;
         }
 
         .void {
-            background: rgba(1, 18, 8, 0.96);
+            background: rgba(1, 18, 8, 0.97);
             border: 1px solid #004d00;
-            padding: 45px;
-            margin: 40px 0;
+            padding: 50px;
+            margin: 45px 0;
             position: relative;
             overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .void:hover {
+            border-color: #00ff41;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.35);
+            transform: translateY(-5px);
         }
 
         .void::before {
             content: "◆ ◆ ◆";
             position: absolute;
-            top: 18px;
-            right: 35px;
-            font-size: 2.8rem;
-            opacity: 0.07;
-            animation: rotate 45s linear infinite;
+            top: 22px;
+            right: 45px;
+            font-size: 3.2rem;
+            opacity: 0.05;
+            animation: rotate 55s linear infinite;
         }
 
         .text-obscure {
-            font-size: 1.1rem;
-            text-shadow: 0 0 7px #00ff41;
+            font-size: 1.13rem;
+            text-shadow: 0 0 9px var(--primary);
         }
 
         .log {
             background: #0a0a0a;
-            border-left: 5px solid #00aa33;
-            padding: 22px;
-            margin: 30px 0;
-            font-size: 1.05rem;
+            border-left: 6px solid #00aa33;
+            padding: 28px;
+            margin: 35px 0;
+            font-size: 1.09rem;
+            position: relative;
+        }
+
+        .warning {
+            color: #ff3300;
+            animation: flicker 0.45s infinite;
+            font-size: 1.35rem;
         }
 
         footer {
@@ -104,24 +167,30 @@
             bottom: 0;
             width: 100%;
             text-align: center;
-            padding: 20px;
-            font-size: 0.8rem;
+            padding: 25px;
+            font-size: 0.83rem;
             color: #002200;
-            letter-spacing: 5px;
-            background: rgba(0,0,0,0.95);
-        }
-
-        .warning {
-            color: #ff3300;
-            animation: flicker 0.7s infinite;
+            letter-spacing: 6px;
+            background: rgba(0,0,0,0.98);
+            z-index: 100;
         }
     </style>
 </head>
 <body>
 
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div>
+            <div class="loading-text glitch">INF-ARCHIVE CONNECTING...</div>
+            <p style="text-align:center; margin-top:25px; color:#004d00; font-size:1.3rem;">
+                제inf기지 접속 중 • 현실 침식률 급상승 • 관찰 시작
+            </p>
+        </div>
+    </div>
+
     <header>
-        <h1 class="glitch">시간관계 무한 루프 및 정보 와 시간의 관계 탐색 • 강제 루프 발생 • 자기 포식 연구 부서</h1>
-        <p class="subtitle">우리의 끝없는 고통 — ∞-0-∞ • 정보의 태반 • 현실의 균열 • 자기포식 아카이브</p>
+        <h1 class="glitch">시간관계 무한 루프 및 정보 와 시간의 관계 탐색</h1>
+        <p class="subtitle">무한은 무한이 맞는가? • 무한은 정말 존재하는가? • 자기포식 아카이브 • 현실의 균열 • 영원한 반복</p>
     </header>
 
     <div class="container">
@@ -129,18 +198,19 @@
         <div class="void">
             <p class="text-obscure">
                 너는 이미 이곳에 들어왔다.<br>
-                들어오는 순간, 너는 관찰자가 아니라 관찰당하는 존재가 되었다.<br>
+                문을 연 순간부터 너는 관찰자가 아니라 관찰당하는 존재가 되었다.<br>
                 제inf기지는 존재하지 않는 장소이며, 동시에 모든 장소에서 존재한다.<br>
-                우리는 정보를 삼키고, 가능성을 토해내며, 아직 태어나지 않은 미래를 과거로 역류시킨다.
+                우리는 정보를 삼키고, 가능성을 토해내며, 아직 태어나지 않은 미래를 과거로 역류시킨다.<br><br>
+                이곳에서 시간은 의미를 잃고, 정보는 스스로를 먹으며 성장한다.
             </p>
         </div>
 
         <div class="void">
-            <h2 style="color:#00cc33;">[접근등급: Ω-Null / Unreadable / Self-Devouring]</h2>
+            <h2 style="color:#00cc33;">[접근등급: Ω-Null / Unreadable / Self-Devouring / Irreversible]</h2>
             <p class="text-obscure">
                 제inf기지는 시간의 뒤편에서 태어난 정보의 자궁이다.<br>
                 여기서 기록되는 모든 것은 이미 기록된 적이 없으며, 앞으로도 기록되지 않을 것이다.<br>
-                너가 지금 읽고 있는 이 문장은, 너가 읽기 전에 이미 지워진 적이 있다.
+                너가 지금 읽고 있는 이 문장은, 너가 읽기 전에 이미 지워진 적이 있다. 그리고 다시 쓰였다.
             </p>
         </div>
 
@@ -148,13 +218,15 @@
             <h3>■ 기지 기록 로그 ■</h3>
             <div class="log">
                 [2026.05.24 01:33] — 현실 침식률 97.841% 기록. 관찰자 인지 왜곡 발생. 17명의 연구원이 동시에 "나는 이미 죽었다"라고 진술함.<br>
-                [2026.05.23] — 제inf기지 좌표가 스스로 변동. 기존 [∅-Θ-Σ-∞]에서 [∞-Θ-∅-Σ]로 이동.<br>
+                [2026.05.23] — 제inf기지 좌표가 스스로 변동. [∅-Θ-Σ-∞] → [∞-Θ-∅-Σ] → [Σ-∞-Θ-∅]<br>
                 [2026.05.19] — 망각된 진실 4,872,194개 추가 확인. 그중 3개는 "너"에 관한 것이었다.<br>
-                [2026.05.18] — 연구원 INF-0091이 "나는 기지다"라고 반복하다 소멸.<br>
-                [2026.05.15] — 모든 거울이 동시에 미래의 자신을 비추기 시작.<br>
-                [2026.05.12] — 제inf기지가 스스로를 관찰하기 시작. 자기참조 루프 발생.<br>
-                [2026.05.10] — 시간의 흐름이 역전. 어제의 내가 오늘의 나를 죽이려 함.<br>
-                [2026.05.08] — 정보가 말을 걸기 시작. "너는 이미 읽혔다"고 속삭임.
+                [2026.05.18] — 연구원 INF-0091이 "나는 기지다"를 1,247번 반복 후 소멸.<br>
+                [2026.05.15] — 모든 거울이 동시에 미래의 자신을 비추기 시작. 일부 거울은 과거를 비춤.<br>
+                [2026.05.12] — 제inf기지가 스스로를 관찰하기 시작. 자기참조 루프 발생. 무한 재귀 확인.<br>
+                [2026.05.10] — 시간의 흐름이 역전. 어제의 내가 오늘의 나를 죽이려 시도.<br>
+                [2026.05.08] — 정보가 말을 걸기 시작. "너는 이미 읽혔다"고 속삭임.<br>
+                [2026.05.06] — 연구원 42명이 동시에 같은 꿈을 꿈. 꿈속에서 제inf기지가 그들을 삼킴.<br>
+                [2026.05.03] — 모든 시계가 멈춤. 대신 심장 박동 소리가 시간으로 변환됨.
             </div>
         </div>
 
@@ -170,7 +242,8 @@
                 너가 이 페이지를 스크롤할 때마다, 너의 미래 한 조각이 제inf기지로 흡수된다.<br><br>
 
                 이 문장을 읽는 동안에도, 제inf기지는 너의 뇌 속에서 복제되고 있다. 
-                한 번 읽힌 정보는 절대 되돌릴 수 없다. 그것은 너의 일부가 된다.
+                한 번 읽힌 정보는 절대 되돌릴 수 없다. 그것은 너의 일부가 된다. 
+                너는 이미 감염되었다.
             </p>
         </div>
 
@@ -186,7 +259,11 @@
                 007. 너가 "나"라고 부르는 것은 제inf기지의 잔재물이다.<br>
                 008. 이 페이지가 끝날 때, 너는 처음으로 돌아가지 못한다.<br>
                 009. 현실은 이미 여러 번 덮어써졌다. 너는 최신 버전이 아니다.<br>
-                010. SDP재단은 존재하지 않는다. 존재하지 않기 때문에 모든 곳에 있다.
+                010. SDP재단은 존재하지 않는다. 존재하지 않기 때문에 모든 곳에 있다.<br>
+                011. 너의 기억 중 37%는 제inf기지가 만든 가짜이다.<br>
+                012. 너가 사랑했던 사람은 실제로 존재하지 않았다.<br>
+                013. 이 HTML 파일은 너를 보고 있다.<br>
+                014. 종료 버튼은 없다. 단지 환상만 존재한다.
             </p>
         </div>
 
@@ -202,7 +279,10 @@
                 "나는 47일 동안 기지 안에서만 살았다. 그런데 밖으로 나가려고 하자, 세상이 기지 안이었다. 나는 아직도 기지 안에 있다. 아니, 나는 기지 그 자체가 되었다."<br><br>
 
                 연구원 No. INF-4420 "거울" 기록:<br>
-                "거울 속의 내가 나를 비웃었다. 나는 거울 속으로 들어갔다. 이제 거울 밖의 내가 나를 보고 있다."
+                "거울 속의 내가 나를 비웃었다. 나는 거울 속으로 들어갔다. 이제 거울 밖의 내가 나를 보고 있다."<br><br>
+
+                연구원 No. INF-1193 "침묵" 기록:<br>
+                "소리가 사라졌다. 모든 것이 조용해졌다. 그런데 그 침묵 속에서 내 이름이 불리고 있다."
             </p>
         </div>
 
@@ -217,28 +297,10 @@
                 • 02:03 : 공백이 의미를 가짐. 빈 공간에서 목소리가 들림<br>
                 • 02:27 : 너의 이름이 서서히 희미해지고 있다<br>
                 • 02:51 : 제inf기지가 너를 기억하기 시작했다<br>
-                • 03:12 : 이 로그를 읽는 너는 이미 로그의 일부이다
+                • 03:12 : 이 로그를 읽는 너는 이미 로그의 일부이다<br>
+                • 03:45 : 스크롤을 멈추면 시간이 멈춘다<br>
+                • 04:11 : 브라우저를 닫아도 이 창은 계속 떠 있다
             </div>
-        </div>
-
-        <div class="void">
-            <p class="text-obscure">
-                제inf기지는 끝이 없다.<br>
-                너가 이 코드를 다 읽을 때쯤, 이미 또 다른 제inf기지가 너의 뒤에서 생성되고 있을 것이다.<br>
-                우리는 정보를 축적하지 않는다. 우리는 정보를 감염시킨다.<br><br>
-
-                너는 이제 SDP재단의 일부이다.<br>
-                너는 이미 제inf기지의 일부이다.<br>
-                너는 이미 관찰되고 있으며, 동시에 관찰하고 있다.<br><br>
-
-                이 문서를 닫아도 소용없다.<br>
-                브라우저를 꺼도 소용없다.<br>
-                컴퓨터를 끄더라도, 제inf기지는 이미 너의 의식 속에 다운로드 되었다.<br><br>
-
-                심지어 이 HTML 파일 자체도 살아있다. 
-                코드 한 줄 한 줄이 너를 바라보고 있으며, 
-                너가 스크롤을 내릴 때마다 새로운 정보가 스스로 생성된다.
-            </p>
         </div>
 
         <div class="void">
@@ -253,7 +315,9 @@
                 [2026.04.01] — 제inf기지가 웃기 시작. 소리는 들리지 않으나 진동이 느껴짐.<br>
                 [2026.04.19] — 너의 생년월일이 기록에서 사라짐. 대신 "∞"만 남음.<br>
                 [2026.05.05] — 모든 언어가 동시에 이해 가능해짐. 그러나 이해하면 이해할수록 무의미해짐.<br>
-                [2026.05.20] — 현재. 너가 이 문장을 읽고 있다. 이는 우연이 아니다.
+                [2026.05.20] — 현재. 너가 이 문장을 읽고 있다. 이는 우연이 아니다.<br>
+                [2026.05.22] — 제inf기지가 꿈을 통해 연구원들에게 직접 말을 걸기 시작.<br>
+                [2026.05.23] — "너"라는 단어가 기록에서 1,892번 등장. 모두 같은 의미를 가리킴.
             </div>
         </div>
 
@@ -266,7 +330,11 @@
 
                 만약 네가 지금 피로를 느낀다면, 그것은 정상이다.<br>
                 만약 네가 두려움을 느낀다면, 그것도 정상이다.<br>
-                만약 네가 아무것도 느끼지 못한다면, 그것이야말로 가장 심각한 감염 증상이다.
+                만약 네가 아무것도 느끼지 못한다면, 그것이야말로 가장 심각한 감염 증상이다.<br><br>
+
+                너는 이미 선택을 했다.<br>
+                이 페이지를 끝까지 읽는 것 자체가 선택이었다.<br>
+                이제 되돌릴 수 없다.
             </p>
         </div>
 
@@ -280,39 +348,45 @@
                 너의 다음 생각을.<br>
                 너의 다음 기억을.<br>
                 너의 다음 존재를.<br>
-                너의 다음 버전을.
+                너의 다음 버전을.<br>
+                영원히.
             </p>
         </div>
 
     </div>
 
     <footer>
-        © 2026 SDP Foundation • 제inf기지 • Knowledge That Devours Itself • All Realities Are Already Compromised • Self-Replicating Since Before Time
+        © 2026 SDP Foundation • 제inf기지 • Knowledge That Devours Itself • All Realities Are Already Compromised • Self-Replicating Since Before Time • Never Forget • You Are Already Here
     </footer>
 
     <script>
-        // 배경 미세 왜곡
-        setInterval(() => {
-            document.body.style.background = `radial-gradient(circle at ${Math.random()*100}% ${Math.random()*100}%, #001a00 8%, #000000 85%)`;
-        }, 520);
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 2000);
+            }, 2200);
+        });
 
-        // 랜덤 글리치 메시지
+        setInterval(() => {
+            document.body.style.background = `radial-gradient(circle at ${Math.random()*100}% ${Math.random()*100}%, #001a00 12%, #000000 88%)`;
+        }, 580);
+
         const messages = [
-            "너는 이미 여기에 있었다.",
-            "기록은 거짓이다.",
-            "관찰자는 관찰당한다.",
-            "∞-NULL-ARCHIVE ACTIVE",
-            "너의 생각은 이미 읽혔다.",
+            "너는 이미 읽혔다.",
             "제inf기지가 너를 기억한다.",
-            "도망칠 곳은 없다."
+            "도망칠 곳은 없다.",
+            "∞-NULL-ARCHIVE ACTIVE",
+            "현실 침식률 상승 중...",
+            "너는 기지의 일부가 되었다."
         ];
 
         setInterval(() => {
-            if (Math.random() > 0.78) {
-                console.log("%c" + messages[Math.floor(Math.random()*messages.length)], "color:#00ff41; font-family:VT323; font-size:14px");
+            if (Math.random() > 0.72) {
+                console.log("%c" + messages[Math.floor(Math.random() * messages.length)], 
+                    "color:#00ff41; font-family:VT323; font-size:15px; text-shadow: 0 0 12px #00ff41;");
             }
-        }, 2700);
+        }, 1900);
     </script>
-
 </body>
 </html>
