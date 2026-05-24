@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SDP-∞ - 반복 문서</title>
+
+<style>
+    body{
+        margin:0;
+        padding:0;
+        background:#0a0b0c;
+        color:#d4d4d4;
+        font-family:Verdana,sans-serif;
+        overflow-x:hidden;
+    }
+
+    .container{
+        max-width:850px;
+        margin:0 auto;
+        padding:40px 20px;
+    }
+
+    .doc{
+        margin-bottom:120px;
+        animation: fadeIn 1s ease;
+    }
+
+    .doc-header{
+        display:flex;
+        align-items:center;
+        gap:20px;
+        border-bottom:2px solid #99ff00;
+        padding-bottom:15px;
+        margin-bottom:30px;
+    }
+
+    .doc-logo{
+        width:80px;
+        filter:drop-shadow(0 0 8px rgba(153,255,0,0.5));
+    }
+
+    .doc-header h2{
+        margin:0;
+        color:white;
+        font-family:'Courier New', monospace;
+        font-size:2rem;
+    }
+
+    .content-block{
+        background:#111315;
+        border-left:5px solid #555;
+        padding:25px;
+        margin-bottom:30px;
+        box-shadow:2px 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .content-block.warning{
+        border-left-color:#ffcc00;
+    }
+
+    .content-block.red{
+        border-left-color:#ff3333;
+    }
+
+    .content-block strong{
+        color:white;
+    }
+
+    .highlight{
+        color:#ffcc00;
+        font-weight:bold;
+    }
+
+    .danger{
+        color:#ff4444;
+        font-weight:bold;
+    }
+
+    .repeat{
+        text-align:center;
+        color:#666;
+        margin-top:50px;
+        font-style:italic;
+        letter-spacing:2px;
+    }
+
+    @keyframes fadeIn{
+        from{
+            opacity:0;
+            transform:translateY(20px);
+        }
+        to{
+            opacity:1;
+            transform:translateY(0);
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container" id="container">
+
+    <!-- 첫 문서 -->
+    <div class="doc">
+
+        <div class="doc-header">
+            <img src="images/sdgicon.png" class="doc-logo">
+            <h2>SDP-∞ 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-∞</p>
+            <p><strong>별칭:</strong> 반복 문서</p>
+            <p><strong>등급:</strong> 케테르 (Keter)</p>
+        </div>
+
+        <div class="content-block warning">
+            <p><strong>특수 격리 절차:</strong></p>
+            <p>
+                SDP-∞ 문서는 절대 디지털 저장 장치에 업로드되어서는 안 된다.
+            </p>
+
+            <p>
+                해당 문서를 열람한 인원은 반드시 30분 이내에 종료해야 한다.
+            </p>
+
+            <p class="danger">
+                현재 모든 격리 절차는 실패한 것으로 추정됨.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+
+            <p>
+                SDP-∞는 스스로를 반복하는 문서형 변칙 개체이다.
+            </p>
+
+            <p>
+                사용자가 문서를 끝까지 읽으려 시도할 경우,
+                문서는 동일한 내용을 아래에 다시 생성한다.
+            </p>
+
+            <p>
+                스크롤을 내릴수록 문서 내용은 점점 미세하게 변형된다.
+            </p>
+
+            <p class="highlight">
+                "이 문서는 무한히 반복됩니다."
+            </p>
+        </div>
+
+        <div class="content-block red">
+            <p><strong>실험 기록 ∞-A</strong></p>
+
+            <p>
+                연구원 김██은 문서의 끝을 확인하기 위해 9시간 동안 스크롤을 지속했다.
+            </p>
+
+            <p>
+                이후 연구원은 다음과 같은 말을 반복하기 시작했다.
+            </p>
+
+            <p class="danger">
+                "거의 다 왔어."
+            </p>
+
+            <p>
+                연구원은 탈수 상태로 발견되었으며,
+                손가락은 여전히 아래 방향으로 움직이고 있었다.
+            </p>
+        </div>
+
+        <div class="repeat">
+            ▼ 이 문서는 무한히 반복됩니다 ▼
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const container = document.getElementById("container");
+
+function createDocument(index){
+
+    const doc = document.createElement("div");
+    doc.className = "doc";
+
+    let warningText = "";
+    
+    if(index % 3 === 0){
+        warningText = `
+        <p class="danger">
+        문서 종료 지점 확인 실패.
+        </p>
+        `;
+    } else if(index % 5 === 0){
+        warningText = `
+        <p class="danger">
+        당신은 이미 이 문서를 읽은 적이 있습니다.
+        </p>
+        `;
+    } else {
+        warningText = `
+        <p class="highlight">
+        이 문서는 무한히 반복됩니다.
+        </p>
+        `;
+    }
+
+    doc.innerHTML = `
+        <div class="doc-header">
+            <img src="images/sdgicon.png" class="doc-logo">
+            <h2>SDP-∞ 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-∞</p>
+            <p><strong>등급:</strong> 케테르 (Keter)</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>특수격리절차:</strong></p>
+
+            <p>
+                제416기지(제19기지)의 물리적으로 격리된 컴퓨터에 격리한다.
+            </p>
+
+        </div>
+
+        <div class="content-block red">
+            <p><strong>자동 생성 로그</strong></p>
+
+            <p>
+                추가 문서 생성됨.
+            </p>
+
+            <p>
+                끝 없음 확인됨.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+
+            <p>
+                문서는 계속해서 자기 자신을 생성하고 있다.
+            </p>
+
+            <p>
+                현재 반복 횟수: ${index}
+            </p>
+
+            ${warningText}
+        </div>
+
+        <div class="content-block red">
+            <p><strong>자동 생성 로그</strong></p>
+
+            <p>
+                추가 문서 생성됨.
+            </p>
+
+            <p>
+                끝 없음 확인됨.
+            </p>
+        </div>
+
+        <div class="repeat">
+            ▼ 계속 스크롤 하십시오 ▼
+        </div>
+    `;
+
+    container.appendChild(doc);
+}
+
+let count = 1;
+
+window.addEventListener("scroll", () => {
+
+    if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 300){
+
+        for(let i=0; i<3; i++){
+            count++;
+            createDocument(count);
+        }
+
+    }
+
+});
+</script>
+
+</body>
+</html>
