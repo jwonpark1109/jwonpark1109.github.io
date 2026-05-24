@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SDP DATABASE: RESEARCH SITE-05</title>
+    <style>
+        body {
+            background-color: #000b18; /* 심해/우주 같은 깊은 남색 */
+            color: #4da6ff;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0; padding: 40px;
+            /* 디지털 홀로그램 그리드 배경 */
+            background-image: 
+                linear-gradient(rgba(77, 166, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77, 166, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            min-height: 100vh; box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 900px; margin: 0 auto;
+            background: rgba(0, 11, 24, 0.85);
+            border: 1px solid #4da6ff;
+            box-shadow: 0 0 15px rgba(77, 166, 255, 0.2);
+            padding: 40px; border-radius: 5px;
+            position: relative; overflow: hidden;
+        }
+
+        /* 홀로그램 스캐닝 라인 */
+        .scanline {
+            position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: #4da6ff; opacity: 0.5; box-shadow: 0 0 10px #4da6ff;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan { 0% { top: -10%; } 100% { top: 110%; } }
+
+        /* 타이핑 애니메이션 효과를 위한 클래스 */
+        .typing {
+            overflow: hidden; white-space: nowrap; border-right: 2px solid #4da6ff;
+            animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #4da6ff; } }
+
+        h1 { color: #ccf2ff; text-shadow: 0 0 5px #4da6ff; font-weight: normal; border-bottom: 1px solid #4da6ff; padding-bottom: 10px; margin-top: 0; }
+        h2 { color: #80ccff; font-size: 1.2rem; }
+        p, li { line-height: 1.6; }
+        
+        .data-block { background: rgba(77, 166, 255, 0.1); border-left: 4px solid #4da6ff; padding: 15px; margin: 20px 0; }
+        .highlight { color: #ffffff; background: rgba(77, 166, 255, 0.3); padding: 0 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="scanline"></div>
+        <h1 class="typing">🧠 RESEARCH SITE-05 // DATA ARCHIVE</h1>
+        
+        <p><strong>인가 등급:</strong> 3등급 (보통)<br>
+        <strong>공식 명칭:</strong> 제05연구기지<br>
+        <strong>위치:</strong> [데이터 말소] 국립 연구소 지하 벙커<br>
+        <strong>주요 기능:</strong> 변칙 개체 특성 연구, 밈적/정보재해 데이터 분석, 재단 메인프레임 백업</p>
+
+        <h2>> 시설 개요</h2>
+        <p>제05연구기지는 무력이 아닌 <span class="highlight">'지식'</span>을 무기로 삼는 시설입니다. 물리적 위협이 없는 Safe 등급 개체나, 격리가 완료된 개체에서 파생된 데이터, 파편, 정보재해 물질들을 안전한 환경에서 역공학합니다. 재단의 모든 논문과 실험 일지가 이곳의 메인프레임에 보관됩니다.</p>
+
+        <div class="data-block">
+            <strong>[시스템 알림] 현재 진행 중인 프로젝트:</strong><br>
+            - 프로젝트 '아카식': SDP-008 돌연변이 단백질 구조 시뮬레이션 (진행률 89%)<br>
+            - 프로젝트 '에어록': 제416기지(마인크래프트) 맵 파일 구조 디버깅 및 백업 (진행률 42%)
+        </div>
+
+        <h2>> 구역 구조</h2>
+        <ul>
+            <li><strong>알파 랩실:</strong> 일반 비변칙성 물질 및 데이터 연구.</li>
+            <li><strong>베타 랩실 (정보재해 격리구역):</strong> 읽거나 보는 것만으로도 오염되는 시각적/언어적 변칙성 데이터를 연구. (※ 입장 시 인식재해 차단 고글 착용 필수)</li>
+            <li><strong>지하 서버실:</strong> 냉각수가 흐르는 200평 규모의 양자 컴퓨터 클러스터.</li>
+        </ul>
+    </div>
+</body>
+</html>
