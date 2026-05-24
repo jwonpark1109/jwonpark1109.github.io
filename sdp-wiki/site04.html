@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SDP DATABASE: PROVISIONAL SITE-04</title>
+    <style>
+        body {
+            background-color: #1a0000;
+            color: #ffcc00;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            margin: 0; padding: 20px;
+            /* 배경 경고 띠 테두리 */
+            border: 20px solid transparent;
+            border-image: repeating-linear-gradient(
+                45deg,
+                #ffcc00,
+                #ffcc00 20px,
+                #000 20px,
+                #000 40px
+            ) 20;
+            min-height: 90vh;
+        }
+        /* 붉은 경고등 애니메이션 */
+        .emergency-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle, transparent 50%, rgba(255, 0, 0, 0.4) 100%);
+            animation: redAlert 2s infinite alternate;
+            pointer-events: none; z-index: 99;
+        }
+        @keyframes redAlert { 0% { opacity: 0; } 100% { opacity: 1; } }
+        
+        .content { max-width: 800px; margin: 0 auto; background: rgba(0,0,0,0.8); padding: 30px; }
+        h1 { font-size: 3rem; color: #ff3333; text-transform: uppercase; border-bottom: 5px solid #ff3333; }
+        h2 { font-size: 2rem; border-left: 10px solid #ffcc00; padding-left: 10px; }
+        p, li { font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; line-height: 1.6; font-weight: bold; }
+        .blinker { animation: blinkText 1s infinite step-end; color: #ff3333; }
+        @keyframes blinkText { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="emergency-overlay"></div>
+    <div class="content">
+        <h1><span class="blinker">☣️ BIOHAZARD</span> SITE-04</h1>
+        <p><strong>인가 등급:</strong> 3등급 (보통)<br>
+        <strong>공식 명칭:</strong> 제04임시008격리연구기지<br>
+        <strong>위치:</strong> [데이터 말소] 시 외곽 감염 통제 구역<br>
+        <strong>주요 기능:</strong> SDP-008(좀비 바이러스) 확산 방지 및 감염자 소각</p>
+
+        <h2>시설 개요</h2>
+        <p>제04임시기지는 SDP-008의 대규모 유출 사태를 수습하기 위해 감염 진원지 주변에 급조된 전초기지입니다. 모든 외벽은 5중 콘크리트 바리케이드로 구성되어 있으며, 매일 밤 감염체들의 산발적인 접근이 보고되고 있습니다.</p>
+        <p>제 04 임시 기지는 SDP-008이 19기지로 이동됨과 동시에 주요 기능 및 공식 명칭 변경 작업에 착수했다. 곧 개요 및 기타 등등이 변경될 예정이다.</p>
+
+        <h2>위험 구역 (SECTORS)</h2>
+        <ul>
+            <li><strong>그린 존:</strong> 인원 숙소 및 상황실. 무장 경비 상시 대기.</li>
+            <li><strong>옐로우 존:</strong> 감염 의심자 자가격리 병동. (물림 흉터 발견 시 즉각 사살)</li>
+            <li><strong>레드 존:</strong> <span class="blinker">대형 소각로.</span> 무력화된 감염체 처리 구역.</li>
+        </ul>
+        <p style="color: #ff3333; border: 2px dashed red; padding: 10px; text-align: center;">
+            [경고] 외곽 방어선 돌파 시, O5 승인 하에 네이팜 융단 폭격이 실시됩니다.
+        </p>
+    </div>
+</body>
+</html>
