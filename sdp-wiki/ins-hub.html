@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 내부보안부 통제 시스템</title>
+    <style>
+        :root {
+            --bg-color: #030708;
+            --sec-cyan: #00f0ff; /* 내부보안부 상징: 차가운 감시 모니터 블루 */
+            --sec-glow: rgba(0, 240, 255, 0.15);
+            --panel-bg: rgba(7, 14, 16, 0.9);
+            --border-color: #102a30;
+            --alert-red: #ff2a2a;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #d1f4ff;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            /* CCTV 모니터 및 노이즈 필터 패턴 */
+            background-image: 
+                radial-gradient(circle at center, transparent 30%, #000 95%),
+                linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        /* 화면 전체 스캔라인 레이어 (CCTV 감시 필터) */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 99;
+            opacity: 0.8;
+            pointer-events: none;
+            background-size: 100% 3px, 6px 100%;
+        }
+
+        .monitor-box {
+            width: 100%;
+            max-width: 850px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 30px var(--sec-glow);
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* CCTV 녹화 마크 연출 */
+        .rec-indicator {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            color: var(--alert-red);
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            letter-spacing: 2px;
+        }
+
+        .rec-indicator::before {
+            content: "";
+            display: inline-block;
+            width: 10px; height: 10px;
+            background-color: var(--alert-red);
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: rec-blink 1s infinite;
+            box-shadow: 0 0 8px var(--alert-red);
+        }
+
+        @keyframes rec-blink { 50% { opacity: 0; } }
+
+        .header {
+            border-bottom: 1px solid var(--sec-cyan);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: 2.6rem;
+            margin: 0;
+            color: #fff;
+            letter-spacing: 8px;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .header .sub-text {
+            font-size: 0.8rem;
+            color: var(--sec-cyan);
+            letter-spacing: 3px;
+            margin-top: 8px;
+        }
+
+        /* 감시 및 규정 안내창 */
+        .log-display {
+            background: #020d10;
+            border-left: 4px solid var(--sec-cyan);
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .log-display h2 {
+            font-size: 1.1rem;
+            margin-top: 0;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .log-display p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #a3c7cf;
+            margin: 10px 0 0 0;
+        }
+
+        /* 3대 핵심 허브 버튼 통합 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: #061214;
+            border: 1px solid var(--border-color);
+            color: #a8e3f0;
+            padding: 20px 10px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--sec-cyan);
+            border-color: var(--sec-cyan);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* 변칙 오염 데이터베이스용 버튼 (SCP) */
+        .corrupted-tab {
+            border-color: rgba(255, 42, 42, 0.3);
+            color: #ffa3a3;
+        }
+
+        .corrupted-tab:hover {
+            background: rgba(255, 42, 42, 0.15);
+            color: var(--alert-red);
+            border-color: var(--alert-red);
+            box-shadow: 0 0 12px rgba(255, 42, 42, 0.4);
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #1f3f47;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="monitor-box">
+        <div class="rec-indicator">LIVE // AUDIT_FEED</div>
+
+        <div class="header">
+            <h1>내부보안부</h1>
+            <div class="sub-text">FBI Open Up!</div>
+        </div>
+
+        <div class="log-display">
+            <h2>[ 내부 감사 및 감시 프로토콜 ]</h2>
+            <p>
+                본 터미널은 재단 내부의 모든 인적 자산, 통신망, 그리고 잠재적 배신 행위를 실시간 추적합니다.
+                당신이 보고 있는 모든 화면과 입력하는 모든 명령어는 내부보안부의 감사 아카이브에 실시간 전송·기록됩니다. 
+                인가된 보안 노선에 따라 아래 데이터베이스 시스템을 이용하십시오.
+            </p>
+        </div>
+
+        <div class="nav-grid">
+            <a href="list.html" class="nav-btn">
+                [일반 데이터베이스]
+            </a>
+            
+            <a href="scp.html" class="nav-btn corrupted-tab">
+                [??9 S &nbsp;C? &nbsp;P?]
+            </a>
+            
+            <a href="cmd.html" class="nav-btn">
+                [보안 인가 터미널]
+            </a>
+        </div>
+
+        <div class="footer">
+            INTERNAL MONITORING SYSTEM v3.82 // ALL ACTIONS ARE BEING RECORDED // DETECT_LOG_TRUE
+        </div>
+    </div>
+
+</body>
+</html>
