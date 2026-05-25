@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 연금술부 비서고</title>
+    <style>
+        :root {
+            --bg-color: #0b0907;
+            --alc-gold: #e5a93c; /* 연금술 황금 비율 */
+            --alc-dark: #2a1a08;
+            --panel-bg: #15110c;
+            --border-color: #42301c;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #ebd9c4;
+            font-family: 'Garamond', 'Malgun Gothic', serif;
+            margin: 0; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box;
+            /* 원소 기하학 마법진 느낌의 그리드 */
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(229, 169, 60, 0.05) 0%, transparent 65%),
+                linear-gradient(rgba(229, 169, 60, 0.01) 2px, transparent 2px);
+            background-size: 100% 100%, 100% 4px;
+        }
+
+        .laboratory-box {
+            width: 100%; max-width: 850px;
+            background: var(--panel-bg);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(229, 169, 60, 0.05);
+            padding: 50px; box-sizing: border-box;
+            position: relative;
+        }
+
+        /* 고대 현자의 돌 연성 마크 데코 */
+        .magnum-opus {
+            position: absolute; top: 40px; right: 50px;
+            color: var(--alc-gold); font-size: 1.8rem;
+            opacity: 0.25; font-weight: bold; font-family: serif;
+            user-select: none;
+        }
+
+        .header { border-bottom: 2px double var(--alc-gold); padding-bottom: 20px; margin-bottom: 35px; text-align: left; }
+        .header h1 { font-size: 3.2rem; margin: 0; color: #fff; font-weight: normal; letter-spacing: 10px; }
+        .header .sub { font-size: 0.85rem; color: var(--alc-gold); letter-spacing: 3px; margin-top: 10px; font-family: monospace; }
+
+        .scroll-panel {
+            background: #0f0c08; border-left: 3px solid var(--alc-gold);
+            padding: 25px 30px; margin-bottom: 45px;
+        }
+        .scroll-panel p { font-size: 1.1rem; line-height: 1.8; color: #c4b4a2; margin: 0; font-style: italic; }
+
+        /* 연금술 양식 버튼 세트 */
+        .nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .nav-btn {
+            background: var(--alc-dark); border: 1px solid var(--border-color); color: #d1bd9e;
+            padding: 20px 10px; text-decoration: none; text-align: center;
+            font-size: 1rem; font-weight: bold; transition: all 0.3s ease;
+            font-family: monospace;
+        }
+        .nav-btn:hover {
+            background: var(--alc-gold); color: #000; border-color: var(--alc-gold);
+            box-shadow: 0 0 20px rgba(229, 169, 60, 0.3);
+            transform: translateY(-2px);
+        }
+        .nav-btn.corrupted { border-color: #a83232; color: #e07474; }
+        .nav-btn.corrupted:hover { background: #a83232; color: #fff; border-color: #a83232; box-shadow: 0 0 20px rgba(168, 50, 50, 0.4); }
+
+        .footer { margin-top: 50px; text-align: center; font-size: 0.75rem; color: #52402e; letter-spacing: 3px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <div class="laboratory-box">
+        <div class="magnum-opus">🜚 🜛 🜔</div>
+
+        <div class="header">
+            <h1>연금술부</h1>
+            <div class="sub">와 금이다!</div>
+        </div>
+
+        <div class="scroll-panel">
+            <p>
+                "원소의 재배열, 물질의 고차원 변형, 그리고 등가교환의 법칙을 초월하는 변칙 연성 기술을 연구합니다. 
+                아카이브의 마법적 오염 및 기하학적 붕괴를 막기 위해 비인가 원소 결합을 삼가고 정해진 인덱스를 이용하십시오."
+            </p>
+        </div>
+
+        <div class="nav-grid">
+            <a href="list.html" class="nav-btn">[일반 데이터베이스]</a>
+            <a href="scp.html" class="nav-btn corrupted">[??9 S &nbsp;C? &nbsp;P?]</a>
+            <a href="cmd.html" class="nav-btn">[보안 인가 터미널]</a>
+        </div>
+
+        <div class="footer">
+            HERMETIC ARCHIVE SYSTEM v1.0.7 // EQUIVALENT EXCHANGE PROTOCOL ACTIVE
+        </div>
+    </div>
+
+</body>
+</html>
