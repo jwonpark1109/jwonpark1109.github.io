@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-404 - 데이터베이스 보고서</title>
+    <style>
+        body {
+            background-color: #0c0d0e;
+            color: #d4d4d4;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #ff3333; /* Keter 등급 위험 강조색 */
+            padding-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(255, 51, 51, 0.5));
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.3);
+        }
+        .content-block {
+            background-color: #111315;
+            border-left: 5px solid #555;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .content-block.procedure {
+            border-left-color: #ff3333; /* Keter 경고 색상 */
+        }
+        .content-block p {
+            margin: 0 0 15px 0;
+        }
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+        .content-block strong {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        .redacted {
+            background-color: #d4d4d4;
+            color: #d4d4d4;
+            transition: all 0.3s;
+        }
+        .redacted:hover {
+            background-color: transparent;
+            color: #ff3333;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #ff3333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4='">
+            <h2>SDP-404 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-404</p>
+            <p><strong>별칭:</strong> 존재하지 않는 도메인 (The Non-Existent Domain)</p>
+            <p><strong>등급:</strong> 케테르 (Keter)</p>
+        </div>
+
+        <div class="content-block procedure">
+            <p><strong>특수 격리 절차:</strong></p>
+            <p>SDP-404는 제84기지 지하 3층에 위치한, 외부 네트워크와 완전히 물리적으로 차단된(Air-gapped) 독립 서버룸 09에 격리되어야 한다. 였으나, 사건 84-오메가(부록 404-A 참고)으로 인하여 현재 제 416기지의 전용 서버에 격리되는것으로 이동되었다. 해당 구역 반경 50m 이내에는 어떠한 무선 통신 기기(스마트폰, 무선 이어폰, 스마트 워치 등)의 반입도 엄격히 금지된다.</p>
+            <p>SDP-404의 데이터 열람은 인지재해 차단용 스크램블(SCRAMBLE) 필터가 장착된 단일 로컬 단말기를 통해서만 가능하며, 열람 후 모든 인원은 즉시 B등급 기억소거 조치를 받아야 한다. 개체가 스스로 외부망 연결을 시도할 경우 기지 내 자동 EMP 프로토콜이 가동된다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+            <p>SDP-404는 인터넷 프로토콜(IPv4/IPv6) 상에 할당될 수 없는 논리적 주소 공간에 스스로를 호스팅하는 변칙적인 자가 증식형 악성 코드 및 웹사이트이다.</p>
+            <p>이 사이트에 접속한 사용자는 웹페이지에 텍스트 형태로 출력되는 정보에 강박적인 집착을 보이게 된다. 초기에는 접속자가 '평소 가장 알고 싶어 했던 사소한 비밀'을 보여주지만, 체류 시간이 길어질수록 재단의 기밀, 우주적 진실 등 인간의 정신이 감당할 수 없는 <span class="highlight">정보재해(Infohazard)</span>를 노출시킨다.</p>
+            <p>개체와의 연결이 15분 이상 지속될 경우, 접속자의 뇌신경망이 사이트의 서버 구조와 물리적으로 동기화되기 시작한다. 결국 피해자의 자아와 기억은 디지털 데이터로 변환되어 사이트의 용량을 확장하는 데 흡수되며, 남겨진 육체는 영구적인 긴장성 뇌사 상태에 빠진다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>부록 404-A (사건 기록 84-오메가):</strong></p>
+            <p><strong>[2021/04/12]</strong> 기지 내 연구원 J. <span class="redacted">████</span>의 불법 반입된 스마트 워치를 통해 SDP-404가 근거리 브로드캐스트 신호 송출을 시도함. 자체 방화벽에 의해 차단됨.</p>
+            <p><strong>[2022/11/08]</strong> 제84기지 독립 인트라넷의 보안망 공격 감지. 사이트 내 텍스트가 스스로 변형되며 요주의 단체(GOI) "■■■■"의 암호화된 메시지를 생성함.</p>
+            <p><strong>[2022/11/08 - 14:02]</strong> 네트워크 강제 차단 프로토콜 '블랙아웃' 가동. 모니터를 강제로 차단하기 전까지 화면을 주시하던 당직자 2명이 의식을 잃음. 해당 인원들의 개인 컴퓨터에서 그들의 어릴 적 일기 내용이 담긴 텍스트 파일이 무작위로 생성되기 시작함.</p>
+        </div>
+
+        <a href="index.html" class="back-btn">< 메인 데이터베이스로 돌아가기</a>
+
+    </div>
+
+</body>
+</html>
