@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 제02기지 시설 기록</title>
+    <style>
+        :root {
+            --bg-color: #050608;
+            --text-color: #d1d5db;
+            --sdg-green: #99ff00;
+            --sdg-red: #ff3333;
+            --border-color: #333;
+            --panel-bg: #0f1115;
+            --crt-line: rgba(255, 255, 255, 0.03);
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* CRT 모니터 깜빡임 효과 */
+            animation: crt-flicker 0.15s infinite alternate;
+        }
+
+        /* CRT 스캔라인 오버레이 */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, var(--crt-line) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        @keyframes crt-flicker {
+            0% { text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.1); }
+            100% { text-shadow: -0.5px -0.5px 1px rgba(255,255,255,0.1); }
+        }
+
+        /* 전체 콘텐츠 등장 애니메이션 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: bootUp 2s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes bootUp { 
+            0% { opacity: 0; transform: scale(0.98) translateY(20px); filter: blur(5px); } 
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--sdg-red);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header-title { display: flex; align-items: center; gap: 15px; }
+        .logo { width: 50px; filter: drop-shadow(0 0 8px rgba(255, 51, 51, 0.8)); animation: pulse 2s infinite; }
+        @keyframes pulse { 50% { filter: drop-shadow(0 0 2px rgba(255, 51, 51, 0.4)); } }
+
+        /* 글리치 텍스트 효과 */
+        .glitch {
+            font-size: 2rem; color: #fff; letter-spacing: 2px;
+            position: relative; margin: 0;
+            text-shadow: 2px 0 var(--sdg-red), -2px 0 #00ffff;
+        }
+
+        .back-link { color: #888; text-decoration: none; font-size: 1rem; transition: all 0.3s; z-index: 10; position: relative; }
+        .back-link:hover { color: var(--sdg-green); text-shadow: 0 0 8px var(--sdg-green); }
+
+        /* 보안 등급 헤더 깜빡임 */
+        .dossier-header {
+            background-color: var(--sdg-red); color: #000;
+            padding: 10px 20px; font-weight: bold; font-size: 1.2rem;
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 20px; display: inline-block;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+            animation: alert-blink 3s infinite step-end;
+        }
+        @keyframes alert-blink { 0%, 100% { opacity: 1; } 95% { opacity: 0.5; } }
+        
+        .info-panel {
+            background-color: var(--panel-bg); border: 1px solid var(--border-color);
+            padding: 20px; margin-bottom: 30px;
+            border-left: 5px solid var(--sdg-red);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        
+        .info-panel::after {
+            content: "[LEVEL 4 CLEARANCE ACCEPTED]";
+            position: absolute; top: 10px; right: 15px;
+            font-size: 0.8rem; color: var(--sdg-green); opacity: 0.6;
+        }
+
+        .info-grid { display: grid; grid-template-columns: 150px 1fr; gap: 10px 20px; }
+        .info-grid strong { color: #fff; text-shadow: 0 0 2px rgba(255,255,255,0.3); }
+
+        h2 { color: #fff; border-bottom: 1px dashed var(--border-color); padding-bottom: 5px; margin-top: 40px; font-size: 1.4rem; text-transform: uppercase; }
+        h2::before { content: "> "; color: var(--sdg-red); }
+
+        /* 테이블 효과 추가 */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; background-color: var(--panel-bg); }
+        th, td { border: 1px solid var(--border-color); padding: 12px; text-align: left; transition: background 0.2s; }
+        th { background-color: #1a1d24; color: #fff; border-bottom: 2px solid var(--sdg-red); }
+        tbody tr:hover { background-color: rgba(255, 51, 51, 0.1); cursor: crosshair; }
+        
+        .badge { padding: 3px 8px; font-size: 0.85rem; background-color: #000; text-transform: uppercase; font-weight: bold; display: inline-block; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        .keter { color: var(--sdg-red); border: 1px solid var(--sdg-red); text-shadow: 0 0 5px var(--sdg-red); animation: keter-pulse 1s infinite alternate; }
+        .euclid { color: #ffcc00; border: 1px solid #ffcc00; }
+        @keyframes keter-pulse { to { box-shadow: 0 0 8px var(--sdg-red); } }
+        
+        /* 인터랙티브 편집됨(Redacted) 효과 */
+        .redacted {
+            background-color: #fff; color: #fff;
+            user-select: none; padding: 0 5px; cursor: pointer;
+            transition: all 0.5s ease;
+        }
+        .redacted:hover { background-color: transparent; color: var(--sdg-red); text-shadow: 0 0 5px var(--sdg-red); }
+        .redacted:active { color: var(--sdg-green); text-shadow: 0 0 5px var(--sdg-green); }
+        
+        a { color: var(--sdg-green); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s; }
+        a:hover { color: #fff; border-bottom: 1px solid var(--sdg-green); text-shadow: 0 0 5px var(--sdg-green); }
+
+        ul li { margin-bottom: 8px; position: relative; }
+        ul li::marker { content: "[+] "; color: var(--sdg-green); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <img src="images/sdgicon.png" alt="SDG Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4='"> <h1 class="glitch">보안 시설 기록</h1>
+            </div>
+            <a href="site-list.html" class="back-link">&lt; 시설 목록으로</a>
+        </div>
+
+        <div class="dossier-header">인가 등급: 4등급 (기밀)</div>
+
+        <div class="info-panel">
+            <div class="info-grid">
+                <strong>공식 명칭:</strong> <span>제02행정기지 (Site-02)</span>
+                <strong>위치:</strong> <span>미국, [편집됨]</span>
+                <strong>설립 연도:</strong> <span>1960년</span>
+                <strong>소속 부서:</strong> <span>행정부, 전투부</span>
+                <strong>주요 기능:</strong> <span>재단 행정</span>
+                <strong>기지 이사관:</strong> <span>T. <span class="redacted">██████</span> 제19기지 및 제02기지 이사관</span>
+            </div>
+        </div>
+
+        <p>제02기지는 현존하는 SDP 재단 시설 모두를 관리하는 재단 최대 사령부입니다.</p>
+
+        <h2>부지 및 구역 구조 (Facility Layout)</h2>
+        <p>제02기지는 지상 5층, 지하 10층 구조로 이루어져 있으며, 격리 실패를 대비해 각 구역 간 완전 폐쇄 시스템이 갖춰져 있습니다.</p>
+        <ul>
+            <li><strong>지상 구역 (Sector 1):</strong> 행정 시설, 일반 직원 숙소, 외부 물자 수송 터미널, 정보부 사무실, 종합 제어실.</li>
+            <li><strong>지하 1층 (Sector 2):</strong> 전투부, 의료 부서, 섹터 2 제어실</li>
+            <li><strong>지하 2~4층 (Sector 3):</strong> 알파 핵탄두 제어실, 섹터 3 제어실 및 유지보수</li>
+            <li><strong>지하 4~10층 (Sector 3):</strong> 알파 핵탄두 대피소 전용 엘리베이터 및 계단, 알파 핵탄두 대피소</li>
+        </ul>
+
+        <h2>인력 현황 (Staffing Information)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>직군</th>
+                    <th>인원 수</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>관리 및 행정직</td>
+                    <td>761명</td>
+                    <td>기지 감독관 및 부서장 포함</td>
+                </tr>
+                <tr>
+                    <td>의료진</td>
+                    <td>689명</td>
+                    <td>해당 사항 없음</td>
+                </tr>
+                <tr>
+                    <td>보안 및 전술 대응 인원</td>
+                    <td>471명</td>
+                    <td>기동특무부대 Epsilon-11 ("구미호") 주둔지 포함, 사령관 다수 포진</td>
+                </tr>
+                <tr>
+                    <td>D계급 인원</td>
+                    <td>0명</td>
+                    <td>해당 사항 없음</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>주요 수용 개체 (Currently Contained Anomalies)</h2>
+        <p>해당 사항 없음</p>
+
+        <h2>추가 기록 (Addenda)</h2>
+        <p>해당 사항 없음</p>
+        
+    </div>
+
+</body>
+</html>
