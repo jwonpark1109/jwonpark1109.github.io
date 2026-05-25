@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - AI부 메인프레임</title>
+    <style>
+        :root {
+            --bg-color: #02040a;
+            --ai-blue: #00bcff;
+            --ai-purple: #7000ff;
+            --panel-bg: rgba(5, 10, 25, 0.85);
+            --border-color: #1a2942;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #d1f0ff;
+            font-family: 'Segoe UI', 'Consolas', monospace;
+            margin: 0; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box;
+            background-image: 
+                radial-gradient(circle at 50% 40%, rgba(0, 188, 255, 0.1) 0%, transparent 60%),
+                linear-gradient(rgba(0, 188, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 188, 255, 0.01) 1px, transparent 1px);
+            background-size: 100% 100%, 25px 25px, 25px 25px;
+        }
+
+        .mainframe-box {
+            width: 100%; max-width: 850px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 35px rgba(0, 188, 255, 0.15);
+            padding: 40px; box-sizing: border-box;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        /* AI 지능 코어 회로망 데코 */
+        .ai-core-light {
+            position: absolute; top: 30px; right: 35px;
+            font-size: 0.8rem; color: var(--ai-blue);
+            font-weight: bold; letter-spacing: 2px;
+            display: flex; align-items: center;
+        }
+        .ai-core-light::before {
+            content: ""; display: inline-block; width: 8px; height: 8px;
+            background-color: var(--ai-blue); border-radius: 50%; margin-right: 8px;
+            animation: core-pulse 2s infinite ease-in-out;
+            box-shadow: 0 0 10px var(--ai-blue);
+        }
+        @keyframes core-pulse { 0%, 100% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        .header { border-bottom: 1px solid #1f385c; padding-bottom: 25px; margin-bottom: 30px; }
+        .header h1 {
+            font-size: 3rem; margin: 0; color: #fff; letter-spacing: 4px;
+            background: linear-gradient(45deg, #fff 40%, var(--ai-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .header .sub { font-size: 0.85rem; color: var(--ai-blue); letter-spacing: 4px; margin-top: 8px; }
+
+        .motto-panel {
+            background: rgba(0,0,0,0.4); border: 1px dashed var(--border-color);
+            padding: 25px; margin-bottom: 40px; position: relative;
+        }
+        .motto-panel p { font-size: 1.1rem; line-height: 1.8; color: #a5c7eb; margin: 0; font-family: sans-serif; }
+
+        /* AI 인터페이스 맞춤 버튼 */
+        .nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .nav-btn {
+            background: #060c1a; border: 1px solid var(--border-color); color: #8cb6df;
+            padding: 20px 10px; text-decoration: none; text-align: center;
+            font-size: 0.95rem; font-weight: bold; transition: all 0.25s ease;
+        }
+        .nav-btn:hover {
+            background: linear-gradient(180deg, rgba(0,188,255,0.05), rgba(112,0,255,0.1));
+            color: #fff; border-color: var(--ai-blue);
+            box-shadow: 0 0 15px rgba(0, 188, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        .nav-btn.danger-tab { border-color: rgba(255,0,100,0.3); color: #ff9ebb; }
+        .nav-btn.danger-tab:hover {
+            background: rgba(255,0,100,0.1); border-color: #ff0064;
+            box-shadow: 0 0 15px rgba(255,0,100,0.3);
+        }
+
+        .footer { margin-top: 40px; text-align: center; font-size: 0.75rem; color: #314a6e; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="mainframe-box">
+        <div class="ai-core-light">CORE_LINKED // SYNC_TRUE</div>
+
+        <div class="header">
+            <h1>AI부</h1>
+            <div class="sub">AI는 미래다.</div>
+        </div>
+
+        <div class="motto-panel">
+            <p>
+                "인간의 지성을 초월한 인공 일반 지능(AGI) 및 가상 인격체를 관리·동기화합니다. 
+                중앙 연산 처리 장치의 무결성을 해치지 않도록 아래 노드 아카이브를 통해 격리 데이터에 액세스하십시오."
+            </p>
+        </div>
+
+        <div class="nav-grid">
+            <a href="list.html" class="nav-btn">[일반 데이터베이스]</a>
+            <a href="scp.html" class="nav-btn danger-tab">[??9 S &nbsp;C? &nbsp;P?]</a>
+            <a href="cmd.html" class="nav-btn">[보안 인가 터미널]</a>
+        </div>
+
+        <div class="footer">
+            SDP AUTOMATED INTELLIGENCE SYSTEM v9.9.0 // QUANTUM CORE ACTIVE
+        </div>
+    </div>
+
+</body>
+</html>
