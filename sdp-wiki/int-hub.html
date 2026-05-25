@@ -2,35 +2,206 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>SDP 재단 - 정보국 허브</title>
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 정보국 기밀 아카이브</title>
     <style>
+        :root {
+            --bg-color: #121315;
+            --text-color: #e2e8f0;
+            --intel-gold: #c5a880; /* 정보국 상징: 기밀문서의 은은한 금색/황동색 */
+            --intel-dark-gold: #8c7355;
+            --panel-bg: #1a1c20;
+            --border-color: #2d3139;
+            --secret-red: #da3636;
+        }
+
         body {
-            background-color: #111; color: #ddd;
-            font-family: 'Arial', sans-serif;
-            margin: 0; padding: 50px; display: flex; justify-content: center;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Georgia', 'Malgun Gothic', serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            /* 보안 그리드 필터 패턴 */
+            background-image: 
+                linear-gradient(rgba(197, 168, 128, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(197, 168, 128, 0.02) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
-        .dossier {
-            background: #f4f4f4; color: #111; padding: 40px; max-width: 700px; width: 100%;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8); position: relative; border-radius: 2px;
+
+        .dossier-wrapper {
+            width: 100%;
+            max-width: 850px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            padding: 50px;
+            box-sizing: border-box;
+            position: relative;
         }
-        .top-secret {
-            position: absolute; top: 20px; right: 20px; color: red;
-            border: 3px solid red; padding: 5px 15px; font-weight: bold;
-            font-size: 1.5rem; transform: rotate(15deg); opacity: 0.8;
+
+        /* TOP SECRET 기밀 스탬프 효과 */
+        .stamp-top-secret {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            color: var(--secret-red);
+            border: 4px double var(--secret-red);
+            padding: 8px 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            letter-spacing: 3px;
+            transform: rotate(12deg);
+            opacity: 0.85;
+            user-select: none;
+            border-radius: 4px;
+            text-shadow: 0 0 2px rgba(218, 54, 54, 0.3);
         }
-        h1 { font-size: 3rem; margin-top: 0; border-bottom: 4px solid #111; }
-        .quote {
-            font-size: 1.8rem; font-style: italic; font-weight: bold; background: #000;
-            color: #fff; display: inline-block; padding: 10px 20px; margin-top: 20px;
+
+        .header {
+            border-bottom: 2px solid var(--intel-gold);
+            padding-bottom: 20px;
+            margin-bottom: 35px;
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            color: #fff;
+            letter-spacing: 12px;
+            font-weight: normal;
+            font-family: 'Malgun Gothic', sans-serif;
+        }
+
+        .header .sub {
+            font-size: 0.85rem;
+            color: var(--intel-gold);
+            letter-spacing: 3px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+
+        /* 정보국 메인 슬로건 블록 */
+        .motto-block {
+            background: #0d0e10;
+            border-left: 4px solid var(--intel-gold);
+            padding: 25px 30px;
+            margin-bottom: 40px;
+        }
+
+        .motto-block .quote {
+            font-size: 1.8rem;
+            font-style: italic;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .motto-block .desc {
+            font-size: 0.95rem;
+            color: #8a94a6;
+            margin-top: 10px;
+            line-height: 1.6;
+            font-family: 'Malgun Gothic', sans-serif;
+        }
+
+        /* 3대 내비게이션 버튼 (기밀 인덱스 스타일) */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .nav-link {
+            background: #22252a;
+            border: 1px solid #333842;
+            color: #b2bdce;
+            padding: 20px 15px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1rem;
+            font-family: monospace;
+            font-weight: bold;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .nav-link:hover {
+            background: var(--intel-gold);
+            color: #121315;
+            border-color: var(--intel-gold);
+            box-shadow: 0 0 15px rgba(197, 168, 128, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* 변칙 오염 징후 버튼 (SCP) */
+        .corrupted-tab {
+            border-color: rgba(218, 54, 54, 0.4);
+        }
+        .corrupted-tab:hover {
+            background: var(--secret-red);
+            color: #fff;
+            border-color: var(--secret-red);
+            box-shadow: 0 0 15px rgba(218, 54, 54, 0.5);
+        }
+
+        .footer {
+            margin-top: 50px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            font-size: 0.75rem;
+            color: #525b6a;
+            text-align: center;
+            letter-spacing: 2px;
+            font-family: monospace;
         }
     </style>
 </head>
 <body>
-    <div class="dossier">
-        <div class="top-secret">TOP SECRET</div>
-        <h1>정 보 국</h1>
-        <p><strong>인가 등급:</strong> 4등급<br><strong>목적:</strong> 내/외부 감시 및 기밀 수집</p>
-        <div class="quote">"모든 정보를 얻는다."</div>
+
+    <div class="dossier-wrapper">
+        <div class="stamp-top-secret">TOP SECRET</div>
+
+        <div class="header">
+            <h1>정 보 국</h1>
+            <div class="sub">INTELLIGENCE AGENCY // RECORD ARCHIVE</div>
+        </div>
+
+        <div class="motto-block">
+            <p class="quote">"모든 정보를 얻는다."</p>
+            <p class="desc">
+                본 문서는 정보국 소관 하에 실시간으로 갱신되는 내부 및 외부 자산 감시 아카이브입니다. 
+                중앙 관리 지침에 의거하여, 획득한 모든 가공·원시 데이터는 아래의 인덱스를 통해 분류 및 파기 절차를 밟습니다.
+            </p>
+        </div>
+
+        <div class="nav-grid">
+            <a href="list.html" class="nav-link">
+                [일반 데이터베이스]
+            </a>
+            
+            <a href="scp.html" class="nav-link corrupted-tab">
+                [??9 S &nbsp;C? &nbsp;P?]
+            </a>
+            
+            <a href="cmd.html" class="nav-link">
+                [보안 인가 터미널]
+            </a>
+        </div>
+
+        <div class="footer">
+            PROPERTY OF SDP FOUNDATION // INTEL DEPT // UNAUTHORIZED COPYING IS STRICTLY PROHIBITED
+        </div>
     </div>
+
 </body>
 </html>
