@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 제84기지 (정보부) 시설 기록</title>
+    <style>
+        :root {
+            --bg-color: #050608;
+            --text-color: #d1d5db;
+            --sdg-green: #99ff00;
+            --sdg-red: #ff3333;
+            --border-color: #333;
+            --panel-bg: #0f1115;
+            --crt-line: rgba(255, 255, 255, 0.03);
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* CRT 모니터 깜빡임 효과 */
+            animation: crt-flicker 0.15s infinite alternate;
+        }
+
+        /* CRT 스캔라인 오버레이 */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, var(--crt-line) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        @keyframes crt-flicker {
+            0% { text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.1); }
+            100% { text-shadow: -0.5px -0.5px 1px rgba(255,255,255,0.1); }
+        }
+
+        /* 전체 콘텐츠 등장 애니메이션 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: bootUp 2s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes bootUp { 
+            0% { opacity: 0; transform: scale(0.98) translateY(20px); filter: blur(5px); } 
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--sdg-red);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header-title { display: flex; align-items: center; gap: 15px; }
+        .logo { width: 50px; filter: drop-shadow(0 0 8px rgba(255, 51, 51, 0.8)); animation: pulse 2s infinite; }
+        @keyframes pulse { 50% { filter: drop-shadow(0 0 2px rgba(255, 51, 51, 0.4)); } }
+
+        /* 글리치 텍스트 효과 */
+        .glitch {
+            font-size: 2rem; color: #fff; letter-spacing: 2px;
+            position: relative; margin: 0;
+            text-shadow: 2px 0 var(--sdg-red), -2px 0 #00ffff;
+        }
+
+        .back-link { color: #888; text-decoration: none; font-size: 1rem; transition: all 0.3s; z-index: 10; position: relative; }
+        .back-link:hover { color: var(--sdg-green); text-shadow: 0 0 8px var(--sdg-green); }
+
+        /* 보안 등급 헤더 깜빡임 */
+        .dossier-header {
+            background-color: var(--sdg-red); color: #000;
+            padding: 10px 20px; font-weight: bold; font-size: 1.2rem;
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 20px; display: inline-block;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+            animation: alert-blink 3s infinite step-end;
+        }
+        @keyframes alert-blink { 0%, 100% { opacity: 1; } 95% { opacity: 0.5; } }
+        
+        .info-panel {
+            background-color: var(--panel-bg); border: 1px solid var(--border-color);
+            padding: 20px; margin-bottom: 30px;
+            border-left: 5px solid var(--sdg-red);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        
+        .info-panel::after {
+            content: "[LEVEL 4 CLEARANCE ACCEPTED]";
+            position: absolute; top: 10px; right: 15px;
+            font-size: 0.8rem; color: var(--sdg-green); opacity: 0.6;
+        }
+
+        .info-grid { display: grid; grid-template-columns: 150px 1fr; gap: 10px 20px; }
+        .info-grid strong { color: #fff; text-shadow: 0 0 2px rgba(255,255,255,0.3); }
+
+        h2 { color: #fff; border-bottom: 1px dashed var(--border-color); padding-bottom: 5px; margin-top: 40px; font-size: 1.4rem; text-transform: uppercase; }
+        h2::before { content: "> "; color: var(--sdg-red); }
+
+        /* 테이블 효과 추가 */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; background-color: var(--panel-bg); }
+        th, td { border: 1px solid var(--border-color); padding: 12px; text-align: left; transition: background 0.2s; }
+        th { background-color: #1a1d24; color: #fff; border-bottom: 2px solid var(--sdg-red); }
+        tbody tr:hover { background-color: rgba(255, 51, 51, 0.1); cursor: crosshair; }
+        
+        .badge { padding: 3px 8px; font-size: 0.85rem; background-color: #000; text-transform: uppercase; font-weight: bold; display: inline-block; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        .keter { color: var(--sdg-red); border: 1px solid var(--sdg-red); text-shadow: 0 0 5px var(--sdg-red); animation: keter-pulse 1s infinite alternate; }
+        .euclid { color: #ffcc00; border: 1px solid #ffcc00; }
+        .safe { color: #00ccff; border: 1px solid #00ccff; }
+        @keyframes keter-pulse { to { box-shadow: 0 0 8px var(--sdg-red); } }
+        
+        /* 인터랙티브 편집됨(Redacted) 효과 */
+        .redacted {
+            background-color: #fff; color: #fff;
+            user-select: none; padding: 0 5px; cursor: pointer;
+            transition: all 0.5s ease;
+        }
+        .redacted:hover { background-color: transparent; color: var(--sdg-red); text-shadow: 0 0 5px var(--sdg-red); }
+        .redacted:active { color: var(--sdg-green); text-shadow: 0 0 5px var(--sdg-green); }
+        
+        a { color: var(--sdg-green); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s; }
+        a:hover { color: #fff; border-bottom: 1px solid var(--sdg-green); text-shadow: 0 0 5px var(--sdg-green); }
+
+        ul li { margin-bottom: 8px; position: relative; }
+        ul li::marker { content: "[+] "; color: var(--sdg-green); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <img src="images/sdgicon.png" alt="SDG Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4='"> <h1 class="glitch">보안 시설 기록</h1>
+            </div>
+            <a href="site-list.html" class="back-link">&lt; 시설 목록으로</a>
+        </div>
+
+        <div class="dossier-header">인가 등급: 4등급 (기밀)</div>
+
+        <div class="info-panel">
+            <div class="info-grid">
+                <strong>공식 명칭:</strong> <span>제84정보격리연구기지 (Site-84)</span>
+                <strong>위치:</strong> <span>[데이터 말소], 북유럽 산맥 지하 복합단지</span>
+                <strong>설립 연도:</strong> <span>1962년 (냉전기 재건축)</span>
+                <strong>소속 부서:</strong> <span>정보부</span>
+                <strong>주요 기능:</strong> <span>요주의 단체(GoI) 감시, 인지/정보재해 개체 격리, 디지털 정보 조작, 심문 및 첩보</span>
+                <strong>기지 이사관:</strong> <span>H. <span class="redacted">███████</span> 요원</span>
+            </div>
+        </div>
+
+        <p>제84기지는 재단의 눈과 귀 역할을 수행하는 정보부 최상위 시설입니다. 전 세계의 감청망을 통제하고 인터넷 및 대중 매체를 통한 정보 유출을 차단하며, 형태가 없는 정보재해 및 디지털 변칙 개체를 격리하는 데 특화되어 있습니다.</p>
+
+        <h2>부지 및 구역 구조 (Facility Layout)</h2>
+        <p>제84기지는 철저한 위장을 위해 지상에는 소규모 기상 관측소만이 존재하며, 본 시설은 지하 깊숙한 곳에 독립적인 네트워크 망과 함께 구축되어 있습니다.</p>
+        <ul>
+            <li><strong>지상 위장 시설 (Sector 1):</strong> 기상 관측소 및 위성 통신 중계 안테나. 일반인 출입 통제선.</li>
+            <li><strong>지하 1~2층 (Sector 2):</strong> 글로벌 통신 감청 센터, 오픈소스 정보 분석실, 위장작전부 사무실.</li>
+            <li><strong>지하 3~5층 (Sector 3):</strong> 데이터 뱅크 및 슈퍼컴퓨터 구역. 외부와 물리적으로 차단된 인트라넷(에어갭)을 통해 사이버 변칙 개체 격리.</li>
+            <li><strong>지하 6층 (Sector 4):</strong> 기억 소거제 대량 생산 및 배포 제어실, 심층 심문실, 구금 구역.</li>
+            <li><strong>특수 구역 (블랙박스):</strong> 고위험 인지재해/밈적(Memetic) 개체 보관실. 출입 시 시각 및 청각 차단 장비 필수 착용.</li>
+        </ul>
+
+        <h2>인력 현황 (Staffing Information)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>직군</th>
+                    <th>인원 수</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>정보 분석가 및 암호 해독가</td>
+                    <td>420명</td>
+                    <td>전 세계 언어 및 고대어 해독 전문가 포함</td>
+                </tr>
+                <tr>
+                    <td>사이버전 및 인공지능 연구원</td>
+                    <td>185명</td>
+                    <td>딥웹 및 다크웹 감시팀 포함</td>
+                </tr>
+                <tr>
+                    <td>현장 잠입 요원 (대기조)</td>
+                    <td>310명</td>
+                    <td>요주의 단체 잠입 및 정보 회수 임무 수행</td>
+                </tr>
+                <tr>
+                    <td>기억소거 및 심문 전문가</td>
+                    <td>65명</td>
+                    <td>심리학자 및 신경과학자 다수 포진</td>
+                </tr>
+                <tr>
+                    <td>D계급 인원</td>
+                    <td>약 30명</td>
+                    <td>인지재해 실험 및 위험 정보 열람용으로만 소수 운용</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>주요 수용 개체 (Currently Contained Anomalies)</h2>
+        <p>정보부 주관으로 격리 중인 데이터, 지식, 소프트웨어 기반 변칙 개체들입니다.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>일련번호</th>
+                    <th>개체명</th>
+                    <th>등급</th>
+                    <th>수용 구역</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="sdp033.html">SDP-033</a></td>
+                    <td>잊혀진 수식</td>
+                    <td><span class="badge safe">Safe</span></td>
+                    <td>블랙박스 구역 - 종이 문서 형태 보관고</td>
+                </tr>
+                <tr>
+                    <td><a href="sdp106.html">SDP-106</a></td>
+                    <td>모든 것을 아는 전화기</td>
+                    <td><span class="badge euclid">Euclid</span></td>
+                    <td>Sector 4 - 통신 감청 센터 특수 연결망</td>
+                </tr>
+                <tr>
+                    <td><a href="sdp404.html">SDP-404</a></td>
+                    <td>존재하지 않는 도메인</td>
+                    <td><span class="badge keter">Keter</span></td>
+                    <td>Sector 3 - 에어갭 처리된 독립 서버룸 09</td>
+                </tr>
+                <tr>
+                    <td><a href="sdp882.html">SDP-882</a></td>
+                    <td>진실을 강요하는 심문 의자</td>
+                    <td><span class="badge euclid">Euclid</span></td>
+                    <td>Sector 4 - 고위험 심문실 3</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>추가 기록 (Addenda)</h2>
+        <p><strong>사건 기록 84-오메가 (2018년):</strong> 요주의 단체 소속 해커 그룹에 의해 기지 외부 네트워크 방화벽이 공격받는 사건이 발생했습니다. 공격에 사용된 코드는 인지재해를 포함하고 있었으며, 모니터를 주시하던 당직자 3명이 일시적인 뇌사 상태에 빠졌습니다. 이후 기지 내 모든 단말기에는 시각적 재해를 무효화하는 스크램블(SCRAMBLE) 필터가 의무적으로 강제 설치되었습니다.</p>
+        
+    </div>
+
+</body>
+</html>
