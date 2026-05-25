@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 전투부 전술 통제 시스템</title>
+    <style>
+        :root {
+            --bg-color: #050805;
+            --tactical-green: #39ff14; /* 야간 투시경 그린 */
+            --mtf-red: #ff0000;
+            --hud-border: rgba(57, 255, 20, 0.3);
+            --panel-bg: rgba(10, 15, 10, 0.9);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--tactical-green);
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            /* 전술 그리드 및 스캔라인 효과 */
+            background-image: 
+                radial-gradient(circle at center, transparent 0%, #000 90%),
+                linear-gradient(var(--hud-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--hud-border) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px;
+        }
+
+        /* 화면 가장자리 비네팅 및 노이즈 효과 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .hud-container {
+            width: 90%;
+            max-width: 900px;
+            border: 2px solid var(--tactical-green);
+            padding: 40px;
+            position: relative;
+            background: var(--panel-bg);
+            box-shadow: inset 0 0 30px rgba(57, 255, 20, 0.2), 0 0 20px rgba(57, 255, 20, 0.1);
+        }
+
+        /* 모서리 조준점 디자인 */
+        .corner {
+            position: absolute; width: 40px; height: 40px; border: 4px solid var(--tactical-green);
+        }
+        .top-left { top: -10px; left: -10px; border-right: none; border-bottom: none; }
+        .top-right { top: -10px; right: -10px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: -10px; left: -10px; border-right: none; border-top: none; }
+        .bottom-right { bottom: -10px; right: -10px; border-left: none; border-top: none; }
+
+        .header {
+            text-align: left;
+            border-bottom: 2px solid var(--tactical-green);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-style: italic;
+        }
+
+        .status-blink {
+            display: inline-block;
+            width: 15px; height: 15px;
+            background-color: var(--mtf-red);
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+        .motto-box {
+            font-family: 'Malgun Gothic', sans-serif;
+            font-size: 1.4rem;
+            font-weight: bold;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(57, 255, 20, 0.1);
+            border-left: 5px solid var(--tactical-green);
+        }
+
+        /* 전술 내비게이션 버튼 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .nav-btn {
+            border: 1px solid var(--tactical-green);
+            background: transparent;
+            color: var(--tactical-green);
+            padding: 20px 10px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-btn::before {
+            content: "TARGET_LOCK";
+            position: absolute;
+            top: -10px; left: 5px;
+            font-size: 0.6rem;
+            background: var(--bg-color);
+            padding: 0 5px;
+            opacity: 0;
+        }
+
+        .nav-btn:hover {
+            background: var(--tactical-green);
+            color: #000;
+            box-shadow: 0 0 15px var(--tactical-green);
+            transform: scale(1.05);
+        }
+
+        .nav-btn:hover::before { opacity: 1; }
+
+        .nav-btn.alert {
+            color: var(--mtf-red);
+            border-color: var(--mtf-red);
+        }
+        .nav-btn.alert:hover {
+            background: var(--mtf-red);
+            color: #000;
+            box-shadow: 0 0 15px var(--mtf-red);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hud-container">
+        <div class="corner top-left"></div>
+        <div class="corner top-right"></div>
+        <div class="corner bottom-left"></div>
+        <div class="corner bottom-right"></div>
+
+        <div class="header">
+            <h1>전투부 <span style="font-size: 1.2rem; font-style: normal;">[COMBAT_DIV]</span></h1>
+            <p style="font-family: monospace; font-size: 1rem; margin: 5px 0 0 0;">
+                <span class="status-blink"></span> SYSTEM_ACTIVE // MTF_DEPLOYMENT_READY
+            </p>
+        </div>
+
+        <div class="motto-box">
+            "재단 경비, 기동특무부대는 모두 우리 부서 일원이지."
+        </div>
+
+        <div class="nav-grid">
+            <a href="list.html" class="nav-btn">
+                [일반 데이터베이스]
+            </a>
+            
+            <a href="scp.html" class="nav-btn alert">
+                [??9 S &nbsp;C? &nbsp;P?]
+            </a>
+            
+            <a href="cmd.html" class="nav-btn">
+                [보안 인가 터미널]
+            </a>
+        </div>
+
+        <div class="footer" style="text-align: center;">
+            CONTACT RE-ESTABLISHED // AUTH_TOKEN_VALIDATED // SDP_SECURE_HUD_v1.09
+        </div>
+    </div>
+
+</body>
+</html>
