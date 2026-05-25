@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-003 - 데이터베이스 보고서</title>
+    <style>
+        body {
+            background-color: #0c0d0e;
+            color: #d4d4d4;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #ffcc00; /* Euclid 등급 주의 강조색 */
+            padding-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.5));
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(255, 204, 0, 0.3);
+        }
+        .content-block {
+            background-color: #111315;
+            border-left: 5px solid #555;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .content-block.procedure {
+            border-left-color: #ffcc00; /* Euclid 경고 색상 */
+        }
+        .content-block p {
+            margin: 0 0 15px 0;
+        }
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+        .content-block strong {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .highlight {
+            color: #99ff00;
+            font-weight: bold;
+        }
+        .redacted {
+            background-color: #d4d4d4;
+            color: #d4d4d4;
+            transition: all 0.3s;
+        }
+        .redacted:hover {
+            background-color: transparent;
+            color: #ffcc00;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4='">
+            <h2>SDP-003 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-003</p>
+            <p><strong>별칭:</strong> 모든 것을 아는 전화기 (The Omniscient Telephone)</p>
+            <p><strong>등급:</strong> 유클리드 (Euclid)</p>
+        </div>
+
+        <div class="content-block procedure">
+            <p><strong>특수 격리 절차:</strong></p>
+            <p>SDP-106은 제84기지 지하 6층(Sector 4)의 통신 감청 센터 내 특수 방음실에 격리된다. 개체는 물리적인 전화선이나 외부 전원과 절대 연결되어서는 안 된다.</p>
+            <p>실험을 목적으로 SDP-106을 사용할 경우, 3등급 이상의 정보부 인가자 2명의 서면 승인이 필요하다. 수화기를 통해 들려오는 모든 대화 내용은 녹음되어 텍스트로 변환 및 저장되어야 한다. 통화 중 "교환원"을 자칭하는 독립체(SDP-106-1)와 연결될 경우, 면담자는 절대 자신의 핵심 기억이나 재단의 기밀을 <span class="highlight">'거래'</span>에 사용해서는 안 된다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+            <p>SDP-106은 1970년대 대한민국에서 생산된 것으로 추정되는 검은색 다이얼식 전화기이다. 기계적인 동력원이나 통신망 연결이 없음에도 불구하고 다이얼을 돌리면 신호음이 발생한다.</p>
+            <p>사용자가 임의의 번호를 돌릴 경우, SDP-106은 과거, 현재, 미래를 불문하고 지구상에서 발생한 특정 통화 내용에 무작위로 도청을 시도한다. (예: 1989년 베를린 장벽 붕괴 당시 서독 관리의 통화, 2041년 신원 미상자의 일상 대화 등).</p>
+            <p>특정 번호 조합(현재까지 확인된 번호: [데이터 말소])을 입력하면, 자신을 "교환원(SDP-106-1)"이라 칭하는 중성적인 목소리가 전화를 받는다. SDP-106-1은 우주 내의 어떠한 정보든 제공할 수 있다고 주장하며, 실제로 재단이 요구한 적대 세력의 기지 위치나 암호 해독키를 정확히 제공했다. 그러나 정보를 제공하는 대가로 면담자의 '가장 소중한 개인적 비밀'이나 '핵심 기억'을 요구한다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>부록 106-A (심문/면담 기록 발췌):</strong></p>
+            <p><strong>면담자:</strong> 요원 K. <span class="redacted">████</span></p>
+            <p><strong>대상:</strong> SDP-106-1 ("교환원")</p>
+            <hr style="border-color: #333; margin: 15px 0;">
+            <p><strong>요원 K:</strong> "요주의 단체 '닭의 손'의 유럽 지부장 현재 위치를 알고 싶다."</p>
+            <p><strong>SDP-106-1:</strong> "조회되었습니다. 그 정보의 가치는 귀하가 7살 때 강아지 '토비'를 잃어버렸던 날의 기억과 동일합니다. 지불하시겠습니까?"</p>
+            <p><strong>요원 K:</strong> "...지불하겠다."</p>
+            <p><strong>SDP-106-1:</strong> "거래가 성립되었습니다. 목표는 현재 프랑스 마르세유의 [데이터 말소]에 은신 중입니다. 이용해 주셔서 감사합니다."</p>
+            <hr style="border-color: #333; margin: 15px 0;">
+            <p><strong>결과:</strong> 정보는 정확했으며 타격대가 출동해 목표를 성공적으로 확보함. 면담 종료 직후 요원 K는 유년 시절 반려견에 대한 기억을 영구적으로 상실했으며, 어떠한 시각적/청각적 자극이나 기억소거제 해독 요법으로도 복구되지 않았음.</p>
+        </div>
+
+        <a href="index.html" class="back-btn">< 메인 데이터베이스로 돌아가기</a>
+
+    </div>
+
+</body>
+</html>
