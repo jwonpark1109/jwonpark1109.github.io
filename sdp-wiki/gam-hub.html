@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 게임부 가상 격리 아카이브</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --menu-select: #ffff00; /* 언더테일 메뉴 선택 노랑 */
+            --danger-red: #ff0000;
+            --border-style: 6px solid #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            /* 게임부 전용 픽셀 폰트 */
+            font-family: 'Press Start 2P', 'Consolas', monospace;
+            margin: 0;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            line-height: 1.5;
+            /* 은은한 CRT 모니터 스캔라인 효과 */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 3px;
+        }
+
+        /* 언더테일 대화창/전투창 스타일 박스 */
+        .battle-box {
+            width: 100%;
+            max-width: 800px;
+            border: var(--border-style);
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+            background: #000;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin: 0;
+            letter-spacing: 2px;
+            /* 글리치 애니메이션 효과 */
+            animation: glitch 1.5s infinite;
+        }
+        
+        .header h1 span {
+            color: var(--menu-select);
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 red, -2px 0 blue; transform: translate(0); }
+            20% { text-shadow: -2px 0 red, 2px 0 blue; transform: translate(-2px, 2px); }
+            40% { text-shadow: 2px 0 blue, -2px 0 red; transform: translate(2px, -2px); }
+            60% { text-shadow: -2px 0 red, 2px 0 blue; transform: translate(0); }
+            80% { text-shadow: 2px 0 red, -2px 0 blue; transform: translate(2px, 2px); }
+            100% { text-shadow: -2px 0 red, 2px 0 blue; transform: translate(0); }
+        }
+
+        /* 입력 이미지의 특정 문구 반영 */
+        .slogan-box {
+            font-size: 1.1rem;
+            margin: 20px 0 40px 0;
+            padding-left: 20px;
+            border-left: 6px solid var(--text-color);
+            animation: typeIn 2s steps(20);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        @keyframes typeIn {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* 요청하신 3대장 핵심 내비게이션 버튼 통합 (언더테일 전투 메뉴 스타일) */
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 40px;
+            border-top: 6px solid #fff;
+            padding-top: 30px;
+        }
+
+        .nav-btn {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 버튼 호버 시 '♥' 포인트 표시 연출 */
+        .nav-btn::before {
+            content: "*";
+            margin-right: 15px;
+            color: transparent;
+        }
+
+        .nav-btn:hover {
+            color: var(--menu-select);
+            transform: translateX(10px);
+        }
+        
+        .nav-btn:hover::before {
+            content: "♥"; /* 언더테일 영혼 선택 아이콘 */
+            color: var(--menu-select);
+        }
+
+        /* 손상된 격리 DB 버튼 (SCP) 특수 효과 */
+        .corrupted-tab {
+            color: var(--danger-red);
+        }
+        .corrupted-tab:hover {
+            color: #ffcccc;
+            border-color: #ffcccc;
+            animation: pulse-red 0.5s infinite alternate;
+        }
+        .corrupted-tab:hover::before {
+            color: #ffcccc;
+        }
+
+        @keyframes pulse-red {
+            from { text-shadow: 0 0 5px var(--danger-red); }
+            to { text-shadow: 0 0 15px var(--danger-red), 0 0 5px #fff; }
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #444;
+            letter-spacing: 1px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="battle-box">
+        <div class="header">
+            <h1>* 게임부_<span>[GAME_DIV]</span></h1>
+            <p style="font-size: 0.9rem; color: #888; margin: 10px 0 0 0;">SYSTEM_STATUS: IS_THIS_A_GAME?</p>
+        </div>
+
+        <div class="slogan-box">
+            * 와 샌즈! 와 파피루스!
+        </div>
+
+        <div class="nav-menu">
+            <a href="list.html" class="nav-btn">
+                [일반 데이터베이스]
+            </a>
+            
+            <a href="scp.html" class="nav-btn corrupted-tab">
+                [??9 S &nbsp;C? &nbsp;P?]
+            </a>
+            
+            <a href="cmd.html" class="nav-btn">
+                [보안 인가 터미널]
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        SDP FOUNDATION // GAME DEPT // ENCRYPTED SAVE FILE v1.99 <br>
+        WARNING: DETERMINATION IS REQUIRED TO ACCESS THESE FILES.
+    </div>
+
+</body>
+</html>
