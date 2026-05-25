@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP-033 - 데이터베이스 보고서</title>
+    <style>
+        body {
+            background-color: #0c0d0e;
+            color: #d4d4d4;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #00ccff; /* Safe 등급 강조색 */
+            padding-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .doc-logo {
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(0, 204, 255, 0.5));
+        }
+        .doc-header h2 {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 204, 255, 0.3);
+        }
+        .content-block {
+            background-color: #111315;
+            border-left: 5px solid #555;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .content-block.procedure {
+            border-left-color: #00ccff; /* Safe 경고 색상 */
+        }
+        .content-block p {
+            margin: 0 0 15px 0;
+        }
+        .content-block p:last-child {
+            margin-bottom: 0;
+        }
+        .content-block strong {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .highlight {
+            color: #00ccff;
+            font-weight: bold;
+        }
+        .redacted {
+            background-color: #d4d4d4;
+            color: #d4d4d4;
+            transition: all 0.3s;
+        }
+        .redacted:hover {
+            background-color: transparent;
+            color: #00ccff;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #00ccff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <!-- 오류 발생 시 대체 이미지 로드 -->
+            <img src="images/sdgicon.png" alt="SDG Logo" class="doc-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYzMzMzIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4='">
+            <h2>SDP-033 기밀 문서</h2>
+        </div>
+
+        <div class="content-block">
+            <p><strong>일련번호:</strong> SDP-033</p>
+            <p><strong>별칭:</strong> 잊혀진 수식 (The Forgotten Formula)</p>
+            <p><strong>등급:</strong> 안전 (Safe)</p>
+        </div>
+
+        <div class="content-block procedure">
+            <p><strong>특수 격리 절차:</strong></p>
+            <p>SDP-033은 제84기지 블랙박스 구역 내 3등급 비밀 금고에 보관된 한 장의 A4 용지 원본 형태로만 존재해야 한다. 어떠한 경우에도 카메라를 통한 사진 촬영이나 스캐너를 이용한 디지털 변환이 허가되지 않는다.</p>
+            <p>개체를 연구하기 위해 복사본이 필요할 경우, 지정된 맹인 D계급 인원이 점자로 필사하는 방식만이 허용된다. 실험에 동원된 모든 전자기기 및 컴퓨터 시스템은 실험 종료 직후 물리적으로 파기되어야 한다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>설명:</strong></p>
+            <p>SDP-033은 1998년 [데이터 말소] 대학교 수학과 교수의 유품에서 회수된 일련의 복잡한 수학 공식이다. 겉보기에는 일반적인 대수학 및 위상수학 기호들의 나열로 보이나, 이 수식은 현대 수학 체계의 <span class="highlight">근본적인 모순</span>을 논리적으로 완벽하게 증명하고 있다.</p>
+            <p>이 수식은 인지재해(Infohazard)적 특성을 지닌다. 인간이 공식을 끝까지 읽고 그 의미를 '이해'하는 순간, 뇌의 논리 및 연산 처리 영역이 영구적으로 손상된다. 피해자는 1+1과 같은 기초적인 덧셈조차 불가능해지며, 점진적으로 원, 사각형 등의 기본적인 기하학적 형태를 인식하지 못하게 되어 극심한 인지 부조화와 공황 상태에 빠진다.</p>
+            <p>더욱 심각한 것은 SDP-033을 컴퓨터나 인공지능(AI) 시스템에 입력했을 때 발생한다. 공식을 연산하려는 모든 컴퓨팅 시스템은 논리 회로가 붕괴되어 과부하를 일으키며 영구적으로 파괴된다. 이 특성으로 인해 정보부는 이 공식을 적대적 AI 무력화 프로토콜로 무기화하려는 연구를 진행 중이다.</p>
+        </div>
+
+        <div class="content-block">
+            <p><strong>부록 033-A (실험 기록 033-01):</strong></p>
+            <p><strong>실험 대상:</strong> 독립된 격리망에 연결된 슈퍼컴퓨터 '오라클-7'</p>
+            <p><strong>실험 내용:</strong> SDP-033의 수식을 오라클-7의 연산 큐에 입력함.</p>
+            <p><strong>결과:</strong> 입력 후 0.4초 만에 CPU 점유율이 비정상적으로 치솟음. 1.2초 후, 오라클-7이 <span class="redacted">"존재할 수 없는 결과값"</span>을 무한히 출력하기 시작하며 냉각 시스템이 마비됨. 3초 후 메인보드가 용융되며 연산 정지. 출력된 로그 기록을 분석하려던 연구원 1명이 편두통과 숫자 인식 장애를 호소하여 즉각 B등급 기억소거 조치됨.</p>
+        </div>
+
+        <a href="index.html" class="back-btn">< 메인 데이터베이스로 돌아가기</a>
+
+    </div>
+
+</body>
+</html>
