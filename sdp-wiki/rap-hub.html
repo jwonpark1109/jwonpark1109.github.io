@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 신속대응팀 비상 지휘 터미널</title>
+    <style>
+        :root {
+            --bg-color: #0c0702;
+            --amber-alert: #ff7700; /* 신속대응팀 상징: 비상 오렌지 */
+            --amber-glow: rgba(255, 119, 0, 0.2);
+            --panel-bg: rgba(20, 12, 5, 0.9);
+            --border-color: #4a2300;
+            --danger-red: #ff3333;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--amber-alert);
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            /* 위기 감시 레이더 그리드 패턴 */
+            background-image: 
+                radial-gradient(circle at 50% 30%, var(--amber-glow) 0%, transparent 60%),
+                linear-gradient(rgba(255, 119, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 119, 0, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
+        }
+
+        .terminal-box {
+            width: 100%;
+            max-width: 850px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 30px rgba(255, 119, 0, 0.15);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            border-bottom: 2px double var(--amber-alert);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            font-weight: bold;
+            letter-spacing: 6px;
+            text-shadow: 0 0 10px var(--amber-glow);
+        }
+
+        .response-code {
+            font-size: 0.9rem;
+            background: var(--amber-alert);
+            color: #000;
+            padding: 3px 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
+        }
+
+        /* 부서 미션 설명 및 실시간 로그 창 */
+        .status-display {
+            background: #000;
+            border: 1px solid #2a1500;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+        }
+
+        .status-display h2 {
+            font-size: 1.2rem;
+            margin-top: 0;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .status-display p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #d4aba4;
+            margin: 10px 0 0 0;
+        }
+
+        /* 3대 핵심 허브 버튼 통합 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: #1a0d02;
+            border: 1px solid var(--border-color);
+            color: var(--amber-alert);
+            padding: 20px 10px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: var(--amber-alert);
+            color: #000;
+            border-color: var(--amber-alert);
+            box-shadow: 0 0 15px var(--amber-alert);
+            transform: translateY(-2px);
+        }
+
+        /* 오염 위험 구역 버튼 (SCP) */
+        .danger-tab {
+            border-color: rgba(255, 51, 51, 0.4);
+            color: var(--danger-red);
+        }
+
+        .danger-tab:hover {
+            background: var(--danger-red);
+            color: #000;
+            border-color: var(--danger-red);
+            box-shadow: 0 0 15px var(--danger-red);
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #542b07;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-box">
+        <div class="header">
+            <h1>신속대응팀</h1>
+            <div class="response-code">CODE: RAPID_DEPLOY_READY</div>
+        </div>
+
+        <div class="status-display">
+            <h2>[ 실시간 비상 대기 상태 ]</h2>
+            <p>
+                "상황 발생 시 가장 먼저 출동한다."<br>
+                본 터미널은 재단 전 구역의 등급 외 변칙 개체 탈주 및 보안 붕괴 상황을 실시간 모니터링합니다. 
+                위기 인자 감지 시 즉각 대응 자산을 전개하기 위해 아래 시스템과의 동기화를 상시 유지하십시오.
+            </p>
+        </div>
+
+        <div class="nav-grid">
+            <a href="list.html" class="nav-btn">
+                [일반 데이터베이스]
+            </a>
+            
+            <a href="scp.html" class="nav-btn danger-tab">
+                [??9 S &nbsp;C? &nbsp;P?]
+            </a>
+            
+            <a href="cmd.html" class="nav-btn">
+                [보안 인가 터미널]
+            </a>
+        </div>
+
+        <div class="footer">
+            SDP FOUNDATION // RAPID RESPONSE TEAM // INTERCEPT PROTOCOL v9.33
+        </div>
+    </div>
+
+</body>
+</html>
