@@ -4,33 +4,45 @@
     <meta charset="UTF-8">
     <script src="error-handler.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDP 재단 - 부서 목록 (department)</title>
+    <title>SDP 재단 - 부서 목록</title>
     <style>
-        /* CSS는 첫 번째 파일과 동일하게 유지됩니다 */
         :root {
-            --bg-color: #0a0b0d;
-            --text-color: #ccc;
+            --bg-color: #05080a;
+            --text-color: #bce5ed;
             --sdg-green: #99ff00;
-            --border-color: #222;
+            --border-color: #1a2f3b;
+            --cyan-glow: #00f0ff;
         }
+
+        @keyframes terminalBoot {
+            0% { opacity: 0; transform: translateY(10px); filter: brightness(0.5); }
+            100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Courier New', 'Malgun Gothic', monospace;
             margin: 0;
             padding: 40px 20px;
+            animation: terminalBoot 0.6s ease-out forwards;
         }
+
+        /* 물류부 추가로 인한 조직도 확장에 맞춰 컨테이너 가로폭을 1650px로 확대 */
         .container {
-            max-width: 900px;
+            max-width: 1650px;
             margin: 0 auto;
         }
+
+        /* 헤더 디자인 통일 및 강화 */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid var(--sdg-green);
+            border-bottom: 2px solid var(--cyan-glow);
             padding-bottom: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
         }
         .header-title {
             display: flex;
@@ -39,193 +51,470 @@
         }
         .logo {
             width: 50px;
-            filter: drop-shadow(0 0 5px rgba(153, 255, 0, 0.5));
+            filter: drop-shadow(0 0 8px var(--cyan-glow));
         }
         .header h1 {
             margin: 0;
             font-size: 1.8rem;
             color: #fff;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
         .back-home {
-            color: #888;
+            color: #52899c;
             text-decoration: none;
             font-size: 1rem;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            padding: 5px 10px;
         }
         .back-home:hover {
-            color: var(--sdg-green);
+            color: var(--cyan-glow);
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            background: rgba(0, 240, 255, 0.05);
         }
+
+        /* 섹션 구분 타이틀 */
+        .section-title {
+            font-size: 14px;
+            color: var(--cyan-glow);
+            letter-spacing: 2px;
+            margin: 30px 0 15px 5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: '■';
+            font-size: 10px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ==========================================================================
+           [상단 영역] 조직도(Canvas) CSS 스타일 
+           (7대 부서 수용을 위해 너비를 1610px로 확장)
+           ========================================================================== */
+        .canvas {
+            width: 1610px; 
+            height: 560px;
+            position: relative;
+            background: #070d14;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 40px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            overflow: hidden;
+        }
+        .node {
+            position: absolute;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-sizing: border-box; padding: 12px; border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6); z-index: 10; text-align: center;
+            background: #0d1726; border: 1px solid #3b6694;
+            transition: all 0.3s;
+        }
+        .node:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+            filter: brightness(1.2);
+        }
+        .node-title { font-weight: bold; font-size: 14px; margin-bottom: 4px; color: #fff; }
+        .node-desc { font-size: 10px; color: #88a4b8; line-height: 1.3; word-break: keep-all; }
+        
+        .node-o5 { background: #1a0000; border: 2px solid #ff2a2a; box-shadow: 0 0 15px rgba(255,42,42,0.3); }
+        .node-o5 .node-title { font-size: 18px; color: #ff8888; letter-spacing: 3px; text-shadow: 0 0 6px #ff2a2a; margin: 0; }
+        .node-direct { background: #091a1e; border: 2px solid #00f0ff; }
+        .node-direct .node-title { color: #a6f5ff; }
+        .node-direct .node-desc { color: #50a3b5; }
+        .node-sub { background: #131b15; border: 1px solid #497a53; }
+        .node-sub .node-title { color: #ccebdf; }
+        .node-sub .node-desc { color: #6f9477; }
+        .node-special { background: #181124; border: 1px solid #8844dd; box-shadow: 0 0 10px rgba(136,68,221,0.2); }
+        .node-special .node-title { color: #e5d5fa; }
+        .node-special .node-desc { color: #9c82bd; }
+
+        .line-v { position: absolute; width: 2px; background: #243d4a; z-index: 1; }
+        .line-h { position: absolute; height: 2px; background: #243d4a; z-index: 1; }
+        .line-v-purple-dash { position: absolute; width: 0; border-left: 2px dashed #8844dd; z-index: 1; }
+        .line-h-purple-dash { position: absolute; height: 0; border-top: 2px dashed #8844dd; z-index: 1; }
+
+
+        /* ==========================================================================
+           [하단 영역] 부서 리스트 그리드 CSS 스타일
+           ========================================================================== */
         .db-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
             gap: 20px;
         }
+
         .db-card {
-            background-color: #111316;
+            background-color: #0b1117;
             border: 1px solid var(--border-color);
             padding: 20px;
             text-decoration: none;
             color: var(--text-color);
-            transition: transform 0.2s, border-color 0.3s;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 120px;
+            gap: 15px;
+            border-radius: 4px;
         }
+
         .db-card:hover {
-            border-color: var(--sdg-green);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(153, 255, 0, 0.1);
+            border-color: var(--cyan-glow);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 240, 255, 0.15);
+            background-color: #101a24;
         }
-        .db-card .item-number {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 5px;
-        }
-        .db-card:hover .item-number {
-            color: var(--sdg-green);
-        }
-        .db-card .item-name {
-            font-size: 1rem;
-            color: #aaa;
-            margin-bottom: 15px;
-        }
-        .db-card .item-class {
-            font-size: 0.85rem;
-            padding: 3px 8px;
-            background-color: #222;
-            align-self: flex-start;
-            text-transform: uppercase;
+
+        .db-card::after {
+            content: '[ SECURE ]';
+            position: absolute;
+            top: 8px; right: 10px;
+            font-size: 8px;
+            color: #436873;
             letter-spacing: 1px;
         }
-        /* 위협도별 색상 (기존 클래스 재활용) */
-        .threat-extreme { color: #ff3333; border: 1px solid #ff3333; font-weight: bold; } /* Keter style */
-        .threat-high { color: #ffcc00; border: 1px solid #ffcc00; } /* Euclid style */
-        .threat-neutral { color: #808080; border: 1px solid #808080; } /* Unknown style */
-        .threat-low { color: #7fff00; border: 1px solid #7fff00; } /* Safe style */
+        .db-card:hover::after {
+            content: '[ ACCESS ]';
+            color: var(--cyan-glow);
+        }
+
+        .card-icon {
+            width: 40px; height: 40px;
+            border: 1px dashed #243d4a;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            background: rgba(0,0,0,0.3);
+        }
+        .db-card:hover .card-icon {
+            border-color: var(--cyan-glow);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        /* 내부 아이콘 도형 기호들 */
+        .ico-shape { border-radius: 2px; }
+        .ico-adm { width: 14px; height: 14px; background: #00f0ff; box-shadow: 0 0 8px #00f0ff; } 
+        .ico-iso { border: 3px solid #ffcc00; border-radius: 50%; box-shadow: 0 0 8px #ffcc00; width:10px; height:10px;} 
+        .ico-res { width: 14px; height: 14px; background: #99ff00; transform: rotate(45deg); box-shadow: 0 0 8px #99ff00; } 
+        
+        .ico-med { 
+            position: relative;
+            width: 4px; height: 16px; 
+            background: #00ff66; 
+            box-shadow: 0 0 8px #00ff66; 
+        }
+        .ico-med::before { 
+            content:''; 
+            position: absolute; 
+            background: #00ff66; 
+            width: 16px; height: 4px; 
+            top: 6px; left: -6px; 
+            box-shadow: 0 0 8px #00ff66; 
+        }
+        
+        .ico-alc { border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 14px solid #ffaa00; box-shadow: 0 2px 5px #ffaa00; width:0; height:0; } 
+        .ico-ai  { border: 2px solid #00bfff; width:10px; height:10px; position:relative; } 
+        .ico-ai::before { content:''; position:absolute; width:4px; height:4px; background:#00bfff; top:3px; left:3px; }
+        .ico-rea { width: 14px; height: 14px; background: magenta; filter: hue-rotate(45deg); animation: glitch-box 2s infinite; } 
+        .ico-dis { border: 2px solid #808080; width:12px; height:12px; background: repeating-linear-gradient(45deg, #000, #000 2px, #808080 2px, #808080 4px); } 
+        
+        .ico-eli { 
+            width: 0; height: 0; 
+            border-left: 8px solid transparent; 
+            border-right: 8px solid transparent; 
+            border-top: 14px solid #ff3366; 
+            filter: drop-shadow(0 0 6px #ff3366);
+        }
+        
+        .ico-gam { width:16px; height:8px; background: #ffff00; border-radius: 4px; } 
+        .ico-net { border: 1px solid #8844dd; width:14px; height:14px; border-radius:50%; background: radial-gradient(circle, transparent 30%, #8844dd 80%); } 
+        .ico-int { background: #a6f5ff; width: 12px; height: 12px; border-radius: 50% 0; transform: rotate(-45deg); } 
+        
+        .ico-com { 
+            position: relative;
+            width: 16px; height: 16px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ico-com::before, .ico-com::after {
+            content: '';
+            position: absolute;
+            background: #ff3333;
+            width: 18px; height: 2px;
+            box-shadow: 0 0 8px #ff3333;
+        }
+        .ico-com::before { transform: rotate(45deg); }
+        .ico-com::after { transform: rotate(-45deg); }
+        
+        .ico-rap { background: #ffbcbc; width: 4px; height: 14px; animation: blink 0.5s infinite; } 
+        .ico-ins { background: transparent; border: 2px solid #00f0ff; width: 12px; height: 14px; border-radius: 0 0 6px 6px; } 
+        .ico-inf { border: 2px solid #ccebdf; width: 14px; height: 6px; border-radius: 50%; transform: rotate(-15deg); } 
+
+        @keyframes glitch-box { 0%, 100% { transform: skew(0deg); } 50% { transform: skew(15deg) scaleY(0.9); filter: contrast(1.5); } }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .db-card .item-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+        .db-card:hover .item-number {
+            color: var(--cyan-glow);
+        }
+        .db-card .item-name {
+            font-size: 0.85rem;
+            color: #7196a3;
+            line-height: 1.4;
+        }
+        .db-card:hover .item-name {
+            color: #a6d4e3;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
+        
         <div class="header">
             <div class="header-title">
                 <img src="images/sdgicon.png" alt="SDG Logo" class="logo">
-                <h1>재단 부서 (department) 색인</h1>
+                <h1>재단 부서 목록</h1>
             </div>
-            <a href="index.html" class="back-home">< 메인 터미널</a>
+            <a href="index.html" class="back-home">&lt; 메인 터미널 리턴</a>
         </div>
 
+
+        <div class="section-title">SYSTEM_MATRIX: SDP 재단 조직도</div>
+        <div class="canvas">
+            
+            <div class="node node-o5" style="left: 695px; top: 0px; width: 220px; height: 60px;">
+                <div class="node-title">O5 평의회</div>
+            </div>
+
+            <div class="node node-direct" style="left: 515px; top: 120px; width: 180px; height: 60px;">
+                <div class="node-title">행정부</div><div class="node-desc">재단의 행정은 우리가 맡는다!</div>
+            </div>
+            <div class="node node-direct" style="left: 915px; top: 120px; width: 180px; height: 60px;">
+                <div class="node-title">내부보안부</div><div class="node-desc">FBI Open Up!</div>
+            </div>
+
+            <div class="node" style="left: 40px; top: 250px; width: 150px; height: 60px;">
+                <div class="node-title">격리부</div><div class="node-desc">모든것을 완벽하게 격리한다.</div>
+            </div>
+            <div class="node" style="left: 270px; top: 250px; width: 150px; height: 60px; box-shadow: 0 0 15px rgba(59, 102, 148, 0.4);">
+                <div class="node-title">연구부</div><div class="node-desc">모든것을 연구합니다.</div>
+            </div>
+            <div class="node" style="left: 500px; top: 250px; width: 150px; height: 60px;">
+                <div class="node-title">전투부</div><div class="node-desc">재단 경비, 기동특무부대는 우리 부서 일원이지.</div>
+            </div>
+            <div class="node" style="left: 730px; top: 250px; width: 150px; height: 60px; box-shadow: 0 0 15px rgba(59, 102, 148, 0.4);">
+                <div class="node-title">정보부</div><div class="node-desc">모든 정보를 얻는다.</div>
+            </div>
+            <div class="node" style="left: 960px; top: 250px; width: 150px; height: 60px; border-color: #00ff66;">
+                <div class="node-title" style="color: #00ff66;">의료부</div><div class="node-desc" style="color: #82dfa2;">누구든지 무료로 치료해드립니다.</div>
+            </div>
+            
+            <div class="node" style="left: 1190px; top: 250px; width: 150px; height: 60px; border-color: #808080;">
+                <div class="node-title" style="color: #cccccc;">물류부</div><div class="node-desc" style="color: #999999;">물건이 있어야 연구도 하죠!</div>
+            </div>
+
+            <div class="node" style="left: 1420px; top: 250px; width: 150px; height: 60px; border-color: #ff3366;">
+                <div class="node-title" style="color: #ff3366;">제거부</div><div class="node-desc" style="color: #df8298;">너무 위험한건 '제거'한다.</div>
+            </div>
+
+            <div class="node node-sub" style="left: 205px; top: 360px; width: 130px; height: 50px;">
+                <div class="node-title">무한연구부</div><div class="node-desc">너는 너가 맞는가? 무한은 실존하는가?</div>
+            </div>
+            <div class="node node-sub" style="left: 355px; top: 360px; width: 130px; height: 50px;">
+                <div class="node-title">연금술부</div><div class="node-desc">와 금이다!</div>
+            </div>
+            <div class="node node-sub" style="left: 500px; top: 360px; width: 150px; height: 50px; border-color: #943b3b; background: #260d0d;">
+                <div class="node-title" style="color: #ffbcbc;">신속대응팀</div><div class="node-desc" style="color: #a87272;">모든것을 신속하게 대응합니다.</div>
+            </div>
+            <div class="node node-special" style="left: 715px; top: 360px; width: 180px; height: 60px;">
+                <div class="node-title">인터넷부</div><div class="node-desc">세상의 모든 정보는 인터넷에.</div>
+            </div>
+
+            <div class="node node-sub" style="left: 275px; top: 460px; width: 140px; height: 50px; border-color: #bfa343;">
+                <div class="node-title" style="color: #ffe699;">현실부</div><div class="node-desc" style="color: #bfa343;">현실 조작을 연구합니다.</div>
+            </div>
+            <div class="node node-special" style="left: 645px; top: 460px; width: 150px; height: 50px; border-color: #00bfff;">
+                <div class="node-title" style="color: #bfeeff;">AI부</div><div class="node-desc" style="color: #638a99;">AI는 미래다.</div>
+            </div>
+            <div class="node node-special" style="left: 815px; top: 460px; width: 150px; height: 50px; border-color: #ffff00;">
+                <div class="node-title" style="color: #ffffcc;">게임부</div><div class="node-desc" style="color: #999963;">와 샌즈! 와 파피루스!</div>
+            </div>
+
+
+            <div class="line-v" style="left: 804px; top: 60px; height: 30px;"></div>
+            <div class="line-h" style="left: 605px; top: 90px; width: 400px;"></div>
+            <div class="line-v" style="left: 604px; top: 90px; height: 30px;"></div>
+            <div class="line-v" style="left: 1004px; top: 90px; height: 30px;"></div>
+
+            <div class="line-v" style="left: 604px; top: 180px; height: 40px;"></div>
+            <div class="line-h" style="left: 115px; top: 220px; width: 1380px;"></div>
+            
+            <div class="line-v" style="left: 114px; top: 220px; height: 30px;"></div>
+            <div class="line-v" style="left: 344px; top: 220px; height: 30px;"></div>
+            <div class="line-v" style="left: 574px; top: 220px; height: 30px;"></div>
+            <div class="line-v" style="left: 804px; top: 220px; height: 30px;"></div>
+            <div class="line-v" style="left: 1034px; top: 220px; height: 30px;"></div>
+            <div class="line-v" style="left: 1264px; top: 220px; height: 30px;"></div>
+            <div class="line-v" style="left: 1494px; top: 220px; height: 30px;"></div>
+
+            <div class="line-v" style="left: 344px; top: 310px; height: 150px;"></div> 
+            <div class="line-h" style="left: 270px; top: 335px; width: 150px;"></div> 
+            <div class="line-v" style="left: 269px; top: 335px; height: 25px;"></div>
+            <div class="line-v" style="left: 419px; top: 335px; height: 25px;"></div>
+
+            <div class="line-v" style="left: 574px; top: 310px; height: 50px;"></div>
+            
+            <div class="line-v" style="left: 804px; top: 310px; height: 50px;"></div>
+
+            <div class="line-v-purple-dash" style="left: 804px; top: 420px; height: 20px;"></div>
+            <div class="line-h-purple-dash" style="left: 720px; top: 440px; width: 170px;"></div>
+            <div class="line-v-purple-dash" style="left: 719px; top: 440px; height: 20px;"></div>
+            <div class="line-v-purple-dash" style="left: 889px; top: 440px; height: 20px;"></div>
+        </div>
+
+
+        <div class="section-title">DATABASE_INDEX: 부서 목록</div>
+        
         <div class="db-grid">
             <a href="exe-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-adm"></div></div>
+                <div class="card-content">
                     <div class="item-number">행정부</div>
                     <div class="item-name">재단의 행정은 우리가 맡는다!</div>
                 </div>
             </a>
 
             <a href="iso-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-iso"></div></div>
+                <div class="card-content">
                     <div class="item-number">격리부</div>
                     <div class="item-name">모든것을 완벽하게 격리한다.</div>
                 </div>
             </a>
 
             <a href="res-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-res"></div></div>
+                <div class="card-content">
                     <div class="item-number">연구부</div>
                     <div class="item-name">모든것을 연구합니다.</div>
                 </div>
             </a>
 
             <a href="med-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-med"></div></div>
+                <div class="card-content">
                     <div class="item-number">의료부</div>
                     <div class="item-name">누구든지 무료로 치료해드립니다.</div>
                 </div>
             </a>
 
             <a href="alc-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-alc"></div></div>
+                <div class="card-content">
                     <div class="item-number">연금술부</div>
                     <div class="item-name">와 금이다!</div>
                 </div>
             </a>
 
             <a href="ai-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-ai"></div></div>
+                <div class="card-content">
                     <div class="item-number">AI부</div>
                     <div class="item-name">AI는 미래다.</div>
                 </div>
             </a>
 
             <a href="rea-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-rea"></div></div>
+                <div class="card-content">
                     <div class="item-number">현실부</div>
                     <div class="item-name">현실조작을 연구합니다.</div>
                 </div>
             </a>
 
             <a href="dis-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-dis"></div></div>
+                <div class="card-content">
                     <div class="item-number">물류부</div>
                     <div class="item-name">물건이 있어야 연구도 하죠!</div>
                 </div>
             </a>
 
             <a href="eli-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-eli"></div></div>
+                <div class="card-content">
                     <div class="item-number">제거부</div>
                     <div class="item-name">너무 위험한건 '제거'한다.</div>
                 </div>
             </a>
 
             <a href="gam-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-gam"></div></div>
+                <div class="card-content">
                     <div class="item-number">게임부</div>
                     <div class="item-name">와 샌즈! 와 파피루스!</div>
                 </div>
             </a>
 
             <a href="net-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-net"></div></div>
+                <div class="card-content">
                     <div class="item-number">인터넷부</div>
                     <div class="item-name">세상의 모든 정보는 인터넷에.</div>
                 </div>
             </a>
 
             <a href="int-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-int"></div></div>
+                <div class="card-content">
                     <div class="item-number">정보부</div>
                     <div class="item-name">모든 정보를 얻는다.</div>
                 </div>
             </a>
 
             <a href="com-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-com"></div></div>
+                <div class="card-content">
                     <div class="item-number">전투부</div>
-                    <div class="item-name">재단 경비, 기동특무부대는 모두 우리 부서 일원이지</div>
+                    <div class="item-name">재단 경비, 기동특무부대는 우리 부서 일원이지</div>
                 </div>
             </a>
 
             <a href="rap-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-rap"></div></div>
+                <div class="card-content">
                     <div class="item-number">신속대응팀</div>
                     <div class="item-name">모든것을 신속하게 대응합니다.</div>
                 </div>
             </a>
 
             <a href="ins-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-ins"></div></div>
+                <div class="card-content">
                     <div class="item-number">내부보안부</div>
                     <div class="item-name">FBI Open Up!</div>
                 </div>
             </a>
 
             <a href="inf-hub.html" class="db-card">
-                <div>
+                <div class="card-icon"><div class="ico-shape ico-inf"></div></div>
+                <div class="card-content">
                     <div class="item-number">무한연구부</div>
                     <div class="item-name">무한은 거짓이며 동시에 참이다.</div>
                 </div>
