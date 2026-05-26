@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 의료부 진료 예약</title>
+    <style>
+        :root {
+            --bg-color: #010a0e;
+            --med-cyan: #00e5ff;
+            --med-green: #00ff66;
+            --med-red: #ff3366;
+            --panel-bg: rgba(0, 20, 30, 0.85);
+            --border-color: #004455;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #b3e5fc;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 0; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box;
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .monitor-box {
+            width: 100%; max-width: 700px;
+            background: var(--panel-bg);
+            border: 2px solid var(--border-color);
+            border-top: 5px solid var(--med-cyan);
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.1);
+            padding: 40px; box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* 배경 심장 박동(ECG) 애니메이션 라인 */
+        .ecg-line {
+            position: absolute;
+            top: 20px; left: 0; width: 100%; height: 60px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 60"><path d="M0,30 L100,30 L120,0 L140,60 L160,30 L500,30" fill="none" stroke="%2300e5ff" stroke-width="2" opacity="0.2"/></svg>') repeat-x;
+            animation: heartbeat 3s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        @keyframes heartbeat { from { background-position: 0 0; } to { background-position: -500px 0; } }
+
+        .content-wrap {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #fff;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: var(--med-cyan);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        /* 입력 폼 스타일 */
+        .input-group {
+            margin: 30px 0;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--med-green);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            max-width: 400px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--med-cyan);
+            color: #fff;
+            font-size: 1.1rem;
+            font-family: monospace;
+            text-align: center;
+            border-radius: 4px;
+            outline: none;
+            transition: box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
+
+        .btn-scan {
+            background: #001a24;
+            color: var(--med-cyan);
+            border: 1px solid var(--med-cyan);
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: monospace;
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .btn-scan:hover {
+            background: var(--med-cyan);
+            color: #000;
+            box-shadow: 0 0 20px var(--med-cyan);
+        }
+
+        /* 스캔 로딩 화면 */
+        #loadingScreen {
+            display: none;
+            margin: 40px 0;
+            color: var(--med-cyan);
+            font-size: 1.2rem;
+        }
+        .spinner {
+            display: inline-block;
+            width: 30px; height: 30px;
+            border: 3px solid rgba(0, 229, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--med-cyan);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 결과 화면 */
+        #resultScreen {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid var(--med-green);
+            border-radius: 4px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #resultScreen h2 {
+            color: var(--med-green);
+            margin-top: 0;
+        }
+
+        .ticket-info {
+            font-size: 1.1rem;
+            color: #fff;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            color: var(--med-cyan);
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-bottom: 1px dashed var(--med-cyan);
+        }
+
+        .nav-links {
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .nav-links a {
+            color: #81b9cf;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: var(--med-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="monitor-box">
+        <div class="ecg-line"></div>
+
+        <div class="content-wrap">
+            <h1>진료 접수 터미널</h1>
+            <div class="subtitle">MEDICAL DEPT // EMERGENCY ROUTING SYSTEM</div>
+
+            <div id="step1">
+                <div class="input-group">
+                    <label class="input-label" for="baseInput">"현재 어느 기지에 근무 중이십니까?"</label>
+                    <input type="text" id="baseInput" placeholder="예: 제19기지, 제81기지" onkeypress="handleEnter(event)">
+                </div>
+                <button class="btn-scan" onclick="startScan()">[ 가장 가까운 의료 섹터 탐색 ]</button>
+            </div>
+
+            <div id="loadingScreen">
+                <div class="spinner"></div>
+                <p>재단 네트워크망 위치 추적 중...<br>의료 시설 가동 여부 확인 중...</p>
+            </div>
+
+            <div id="resultScreen">
+                <h2>[ 탐색 완료 ]</h2>
+                <p class="ticket-info">
+                    확인되었습니다.<br>
+                    <span class="highlight" id="resultBaseName">???</span> 내부의 <span style="color:var(--med-red);">의료 섹터 (Medical Wing-A)</span>로 안내를 시작합니다.<br><br>
+                    해당 구역의 의료진에게 긴급 진료 코드가 전송되었습니다.<br>
+                    보안 인가증을 지참하시고 지정된 경로로 이동해 주십시오.
+                </p>
+                <button class="btn-scan" style="background:var(--med-green); color:#000; border-color:var(--med-green);" onclick="location.href='med-hub.html'">[ 접수 완료 및 복귀 ]</button>
+            </div>
+
+            <div class="nav-links">
+                <a href="med-hub.html">◀ 의료부 메인으로 돌아가기</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleEnter(event) {
+            if (event.key === "Enter") {
+                startScan();
+            }
+        }
+
+        function startScan() {
+            const baseName = document.getElementById("baseInput").value.trim();
+            
+            if (baseName === "") {
+                alert("근무 중인 기지명이나 위치를 입력해주십시오.");
+                return;
+            }
+
+            // 1단계 숨기고 로딩 화면 표시
+            document.getElementById("step1").style.display = "none";
+            document.getElementById("loadingScreen").style.display = "block";
+
+            // 2초 후 로딩 화면 숨기고 결과 화면 표시 (스캔 연출)
+            setTimeout(() => {
+                document.getElementById("loadingScreen").style.display = "none";
+                document.getElementById("resultScreen").style.display = "block";
+                
+                // 입력한 기지 이름을 결과 화면에 반영
+                document.getElementById("resultBaseName").innerText = baseName;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
