@@ -10,7 +10,7 @@
             --bg-color: #010a0e;
             --med-cyan: #00e5ff; /* 생명 유지 장치 모니터 블루 */
             --med-green: #00ff66; /* 정상 상태 그린 */
-            --med-red: #ff3366; /* 출혈/위험 레드 */
+            --med-red: #ff3366; /* 긴급/응급 레드 */
             --panel-bg: rgba(0, 20, 30, 0.85);
             --border-color: #004455;
         }
@@ -82,7 +82,7 @@
 
         .motto-panel p { font-size: 1rem; line-height: 1.7; color: #81b9cf; margin: 0; }
 
-        /* 의료부 3대 내비게이션 버튼 (진료 차트 스타일) */
+        /* 의료부 내비게이션 버튼 */
         .nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; position: relative; z-index: 1; }
         .nav-btn {
             background: #001a24; border: 1px solid var(--border-color); color: var(--med-cyan);
@@ -94,10 +94,10 @@
             box-shadow: 0 0 15px var(--med-cyan); transform: translateY(-2px);
         }
 
-        /* 감염/격리 구역 버튼 (SCP) - 생물재해 경고 테마 */
-        .biohazard-tab { border-color: rgba(255, 51, 102, 0.4); color: var(--med-red); }
-        .biohazard-tab::before { content: "☣ "; font-size: 1.2rem; }
-        .biohazard-tab:hover {
+        /* 예약하기 버튼 (긴급 진료 테마) */
+        .reserve-tab { border-color: rgba(255, 51, 102, 0.4); color: var(--med-red); }
+        .reserve-tab::before { content: "⏱ "; font-size: 1.2rem; }
+        .reserve-tab:hover {
             background: var(--med-red); color: #fff; border-color: var(--med-red);
             box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
         }
@@ -135,8 +135,8 @@
                 [일반 데이터베이스]
             </a>
             
-            <a href="scp.html" class="nav-btn biohazard-tab">
-                [??9 S &nbsp;C? &nbsp;P?]
+            <a href="reserve.html" class="nav-btn reserve-tab">
+                [ 예약하기 ]
             </a>
             
             <a href="cmd.html" class="nav-btn">
