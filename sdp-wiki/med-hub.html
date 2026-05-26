@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 의료부 바이탈 모니터</title>
+    <style>
+        :root {
+            --bg-color: #010a0e;
+            --med-cyan: #00e5ff; /* 생명 유지 장치 모니터 블루 */
+            --med-green: #00ff66; /* 정상 상태 그린 */
+            --med-red: #ff3366; /* 출혈/위험 레드 */
+            --panel-bg: rgba(0, 20, 30, 0.85);
+            --border-color: #004455;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #b3e5fc;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 0; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box;
+            /* 병원 무균실 타일 & 모니터 그리드 느낌 */
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .monitor-box {
+            width: 100%; max-width: 850px;
+            background: var(--panel-bg);
+            border: 2px solid var(--border-color);
+            border-top: 5px solid var(--med-cyan);
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.1);
+            padding: 40px; box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 배경 심장 박동(ECG) 애니메이션 라인 */
+        .ecg-line {
+            position: absolute;
+            top: 20px; left: 0; width: 100%; height: 60px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 60"><path d="M0,30 L100,30 L120,0 L140,60 L160,30 L500,30" fill="none" stroke="%2300e5ff" stroke-width="2" opacity="0.3"/></svg>') repeat-x;
+            animation: heartbeat 3s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        @keyframes heartbeat { from { background-position: 0 0; } to { background-position: -500px 0; } }
+
+        .header {
+            position: relative; z-index: 1;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px; margin-bottom: 30px; display: flex; align-items: center;
+        }
+
+        .med-cross {
+            font-size: 3rem; color: var(--med-green); margin-right: 20px;
+            text-shadow: 0 0 15px var(--med-green);
+        }
+
+        .header h1 {
+            font-size: 2.8rem; margin: 0; color: #fff; letter-spacing: 5px;
+            font-weight: normal; font-family: 'Malgun Gothic', sans-serif;
+        }
+
+        .header .sub { font-size: 0.9rem; color: var(--med-cyan); letter-spacing: 2px; margin-top: 5px; }
+
+        .motto-panel {
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 4px solid var(--med-green);
+            padding: 25px; margin-bottom: 40px; position: relative; z-index: 1;
+        }
+        
+        .motto-panel .slogan {
+            font-size: 1.5rem; color: var(--med-green); font-weight: bold;
+            margin: 0 0 10px 0; letter-spacing: 1px;
+        }
+
+        .motto-panel p { font-size: 1rem; line-height: 1.7; color: #81b9cf; margin: 0; }
+
+        /* 의료부 3대 내비게이션 버튼 (진료 차트 스타일) */
+        .nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; position: relative; z-index: 1; }
+        .nav-btn {
+            background: #001a24; border: 1px solid var(--border-color); color: var(--med-cyan);
+            padding: 20px 10px; text-decoration: none; text-align: center;
+            font-size: 1rem; font-weight: bold; transition: all 0.2s ease; border-radius: 4px;
+        }
+        .nav-btn:hover {
+            background: var(--med-cyan); color: #000;
+            box-shadow: 0 0 15px var(--med-cyan); transform: translateY(-2px);
+        }
+
+        /* 감염/격리 구역 버튼 (SCP) - 생물재해 경고 테마 */
+        .biohazard-tab { border-color: rgba(255, 51, 102, 0.4); color: var(--med-red); }
+        .biohazard-tab::before { content: "☣ "; font-size: 1.2rem; }
+        .biohazard-tab:hover {
+            background: var(--med-red); color: #fff; border-color: var(--med-red);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+        }
+
+        .footer {
+            margin-top: 40px; text-align: center; font-size: 0.75rem; color: #004455;
+            letter-spacing: 2px; position: relative; z-index: 1;
+        }
+        .status-ok { color: var(--med-green); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="monitor-box">
+        <div class="ecg-line"></div>
+
+        <div class="header">
+            <div class="med-cross">✚</div>
+            <div>
+                <h1>의료부</h1>
+                <div class="sub">MEDICAL DEPARTMENT // VITAL SIGNS MONITOR</div>
+            </div>
+        </div>
+
+        <div class="motto-panel">
+            <h2 class="slogan">"누구든지 무료로 치료해드립니다."</h2>
+            <p>
+                본 병동은 재단 소속 인원 및 실험 인원의 신체적, 정신적 무결성을 유지하기 위해 상시 가동 중입니다. 
+                일반 부상부터 등급 외 변칙 개체에 의한 생물학적 오염, 밈적 감염까지 모든 진료 기록은 아래 차트를 통해 분류됩니다.
+            </p>
+        </div>
+
+        <div class="nav-grid">
+            <a href="list.html" class="nav-btn">
+                [일반 데이터베이스]
+            </a>
+            
+            <a href="scp.html" class="nav-btn biohazard-tab">
+                [??9 S &nbsp;C? &nbsp;P?]
+            </a>
+            
+            <a href="cmd.html" class="nav-btn">
+                [보안 인가 터미널]
+            </a>
+        </div>
+
+        <div class="footer">
+            PATIENT_STATUS: <span class="status-ok">STABLE</span> // CLINICAL DB v4.12
+        </div>
+    </div>
+
+</body>
+</html>
