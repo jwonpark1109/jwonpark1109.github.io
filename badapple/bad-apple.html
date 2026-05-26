@@ -9,7 +9,7 @@
             color: #fff;
             /* 고정폭 글꼴 지정 및 자모음 분리 방지를 위한 맑은 고딕 설정 */
             font-family: 'Courier New', 'Malgun Gothic', monospace;
-            font-size: 10px;        /* 글자 크기 (모니터 해상도에 따라 9px~11px 조절 가능) */
+            font-size: 10px;        /* 글자 크기 (모니터 해상도에 따라 조절 가능) */
             line-height: 0.85;      /* 줄간격을 줄여서 위아래 공백을 최소화 (비율 최적화) */
             text-align: center;
             margin: 0;
@@ -47,24 +47,34 @@
     <video id="video" loop muted playsinline style="display:none;">
         <source src="video.mp4" type="video/mp4">
     </video>
+
+    <audio id="audio" loop style="display:none;">
+        <source src="sound.mp3" type="audio/mpeg">
+    </audio>
     
     <canvas id="canvas" style="display:none;"></canvas>
 
     <script>
         const video = document.getElementById('video');
+        const audio = document.getElementById('audio');
         const canvas = document.getElementById('canvas');
         const container = document.getElementById('ascii-container');
         const btnStart = document.getElementById('btn-start');
 
-        // [성능 최적화] 코드가 픽셀 데이터를 매 프레임 빈번하게 읽으므로 옵션 적용하여 경고 해결
+        // 성능 최적화 옵션 적용
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-        // 해상도 세팅 (한글 글자 특성에 맞춰 가로세로 비율 조정)
+        // 해상도 세팅 (가로 글자 수, 세로 줄 수)
         const WIDTH = 100;
         const HEIGHT = 55;
         
-        // 밀도별 문자 배열 (왼쪽: 어두움/공백 -> 오른쪽: 밝음/ 가득 참)
-        const krChars = [" ", "ㆍ", "ㄱ", "ㄴ", "ㅅ", "ㅇ", "ㅈ", "ㅍ", "🎨", "훈", "민", "정", "음", "뷁", "뾿", "█"];
+        /* [변경사항] 공백을 제외하고 오직 '한글'로만 구성된 밀도 배열
+          왼쪽(어두움/공백) -> 오른쪽(밝음/획이 많아 가득 참)
+        */
+        const krChars = [
+            " ", "ㅡ", "ㄱ", "ㄴ", "ㅇ", "ㅅ", "ㅈ", "ㅂ", 
+            "ㅍ", "ㅎ", "가", "민", "정", "음", "뷁", "뾿"
+        ];
 
         canvas.width = WIDTH;
         canvas.height = HEIGHT;
@@ -72,50 +82,50 @@
         btnStart.addEventListener('click', () => {
             btnStart.style.display = 'none';
             
-            // 비디오가 정상적으로 재생 시작된 후 렌더링 프레임 루프 작동
-            video.play().then(() => {
+            // 영상과 오디오를 동시에 재생 시작
+            Promise.all([video.play(), audio.play()]).then(() => {
                 renderFrame();
             }).catch(err => {
-                container.textContent = "비디오 재생에 실패했습니다.\n" +
-                                        "1. 'video.mp4' 파일이 HTML과 같은 폴더에 있는지 확인하세요.\n" +
-                                        "2. 브라우저에서 파일 주소(file://) 대신 Live Server(http://) 환경으로 열었는지 확인하세요.";
+                container.textContent = "재생에 실패했습니다.\n" +
+                                        "1. 'video.mp4'와 'sound.mp3' 파일이 이 HTML과 같은 폴더에 있는지 확인하세요.\n" +
+                                        "2. Live Server(http://localhost:...) 환경에서 실행했는지 확인하세요.";
                 console.error(err);
             });
         });
 
         function renderFrame() {
-            // 비디오가 정지되거나 끝나면 루프 종료
             if (video.paused || video.ended) return;
 
-            // 현재 비디오 화면을 캔버스 크기에 맞춰 그리기
+            // 영상과 소리의 씽크(싱크로율)가 어긋나는 것을 방지하기 위해 
+            // 오디오 시간 기준으로 비디오 시간을 강제 동기화 (선택 사항, 부드러운 재생을 위해 적용)
+            if (Math.abs(video.currentTime - audio.currentTime) > 0.15) {
+                video.currentTime = audio.currentTime;
+            }
+
             ctx.drawImage(video, 0, 0, WIDTH, HEIGHT);
             
             try {
-                // 캔버스로부터 픽셀 RGBA 데이터 추출
                 const imgData = ctx.getImageData(0, 0, WIDTH, HEIGHT);
                 const pixels = imgData.data;
                 let asciiArt = "";
 
                 for (let y = 0; y < HEIGHT; y++) {
                     for (let x = 0; x < WIDTH; x++) {
-                        // 1개 픽셀은 R, G, B, A 총 4개 배열 칸을 차지함
                         const idx = (y * WIDTH + x) * 4;
                         const r = pixels[idx];
                         const g = pixels[idx + 1];
                         const b = pixels[idx + 2];
 
-                        // 평균값으로 밝기 계산 (0 ~ 255)
+                        // 평균값 밝기 계산
                         const brightness = (r + g + b) / 3;
 
-                        // 밝기 값을 한글 배열 인덱스(0~15)로 매핑
+                        // 밝기 값을 한글 배열 인덱스로 매핑
                         const charIdx = Math.floor((brightness / 255) * (krChars.length - 1));
                         asciiArt += krChars[charIdx];
                     }
-                    // 한 줄 끝날 때마다 줄바꿈
                     asciiArt += "\n";
                 }
 
-                // 텍스트 출력 적용
                 container.textContent = asciiArt;
                 
             } catch (e) {
@@ -124,7 +134,6 @@
                 return;
             }
 
-            // 다음 웹 프레임 주기에 맞춰 재생 반복
             requestAnimationFrame(renderFrame);
         }
     </script>
