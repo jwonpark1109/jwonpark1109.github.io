@@ -10,11 +10,10 @@
             margin: 0;
             padding: 0;
             background-color: #000;
-            overflow: hidden; /* 스크롤바 절대 방지 */
+            overflow: hidden;
         }
         body {
             color: #fff;
-            /* 영어 아스키 아트에 최적화된 고정폭 폰트 */
             font-family: 'Courier New', Consolas, monospace;
             display: flex;
             flex-direction: column;
@@ -41,7 +40,6 @@
             white-space: pre;       
             font-weight: bold;
             text-align: left;
-            /* 하드웨어 가속을 활용해 글자가 바뀔 때 밀리는 현상 방지 */
             transform: translateZ(0); 
         }
     </style>
@@ -73,32 +71,24 @@
         let WIDTH = 150;
         let HEIGHT = 50;
         
-        // [수정] 영어 표준 70단계 명암 배열 (어두운 곳 ' '부터 가장 밝은 곳 '$', '@'까지)
         const asciiChars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
-        // 배드애플은 원래 검은 배경에 흰 실루엣이므로, 이를 그대로 표현하기 위해 배열을 뒤집어서 매핑합니다.
         const revChars = asciiChars.split("").reverse().join("");
 
-        /* [핵심 수정] 영어 폰트 비율(약 1:2)을 계산하여 줄 밀림을 완전히 해결하는 함수 */
         function resizeResponsive() {
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
 
-            // 1. 창 크기에 따른 동적 폰트 사이즈 설정
             let fontSize = Math.max(5, Math.floor(windowWidth / 180)); 
-            if (fontSize > 12) fontSize = 12; // 너무 커지면 줄바꿈이 일어날 수 있으므로 제한
+            if (fontSize > 12) fontSize = 12;
 
             container.style.fontSize = `${fontSize}px`;
             
-            // 영어 고정폭 폰트(Courier New)의 완벽한 렌더링 비율 세팅
             container.style.lineHeight = "1.0"; 
             container.style.letterSpacing = "0px"; 
 
-            // 2. 가로세로 글자 수 비율 보정 (영어는 가로가 좁고 세로가 길기 때문에 가로 글자 수를 늘려야 안 찌그러집니다)
-            // 영어 폰트의 가로:세로 비율인 약 0.55~0.6을 반영하여 계산
             WIDTH = Math.floor(windowWidth / (fontSize * 0.55));
-            HEIGHT = Math.floor(windowHeight / fontSize) - 2; // 여유 공간 확보로 아래로 밀림 방지
+            HEIGHT = Math.floor(windowHeight / fontSize) - 2;
 
-            // 원본 영상의 4:3 비율이 깨지지 않도록 높이값 최종 조절
             const targetHeight = Math.floor(WIDTH * 0.38); 
             if (HEIGHT > targetHeight) {
                 HEIGHT = targetHeight;
@@ -106,7 +96,6 @@
                 WIDTH = Math.floor(HEIGHT / 0.38);
             }
 
-            // 과부하 방지를 위한 최대 해상도 제한
             if (WIDTH > 280) {
                 WIDTH = 280;
                 HEIGHT = Math.floor(WIDTH * 0.38);
@@ -116,7 +105,6 @@
             canvas.height = HEIGHT;
         }
 
-        // 초기 실행 및 리사이즈 감지
         resizeResponsive();
         window.addEventListener('resize', resizeResponsive);
 
@@ -134,7 +122,6 @@
         function renderFrame() {
             if (video.paused || video.ended) return;
 
-            // 싱크 밀림 방지
             if (Math.abs(video.currentTime - audio.currentTime) > 0.15) {
                 video.currentTime = audio.currentTime;
             }
@@ -153,10 +140,8 @@
                         const g = pixels[idx + 1];
                         const b = pixels[idx + 2];
 
-                        // 고정밀 루미넌스 밝기 계산
                         const brightness = (r * 0.299 + g * 0.587 + b * 0.114);
 
-                        // 영어 아스키 캐릭터 매핑
                         const charIdx = Math.floor((brightness / 255) * (revChars.length - 1));
                         asciiArt += revChars[charIdx];
                     }
