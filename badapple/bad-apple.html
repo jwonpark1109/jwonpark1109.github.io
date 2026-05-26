@@ -2,18 +2,24 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>한글 배드애플 플레이어</title>
+    <title>한글 배드애플 플레이어 (반응형)</title>
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            /* 고정폭 글꼴 지정 및 자모음 분리 방지를 위한 맑은 고딕 설정 */
-            font-family: 'Courier New', 'Malgun Gothic', monospace;
-            font-size: 10px;        /* 글자 크기 (모니터 해상도에 따라 조절 가능) */
-            line-height: 0.85;      /* 줄간격을 줄여서 위아래 공백을 최소화 (비율 최적화) */
-            text-align: center;
+        html, body {
+            width: 100%;
+            height: 100%;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden; /* 스크롤바 방지 */
+        }
+        body {
+            color: #fff;
+            font-family: 'GulimChe', 'DotumChe', 'Courier New', monospace;
+            /* line-height와 letter-spacing은 폰트 크기에 맞춰 자바스크립트로 동적 제어합니다 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         #btn-start {
             padding: 12px 24px;
@@ -23,25 +29,24 @@
             color: #000;
             border: none;
             font-weight: bold;
-            margin-bottom: 20px;
             border-radius: 5px;
             transition: background 0.2s;
+            z-index: 10; /* 텍스트 위에 오도록 설정 */
         }
         #btn-start:hover {
             background: #ccc;
         }
         #ascii-container {
             display: inline-block;
-            white-space: pre;       /* 공백과 줄바꿈(개행문자)을 그대로 유지 */
-            letter-spacing: -1px;   /* 글자 좌우 간격을 좁혀서 밀도감 향상 */
+            white-space: pre;       
             font-weight: bold;
+            text-align: left; /* 아스키 아트 정렬 */
         }
     </style>
 </head>
 <body>
 
     <button id="btn-start">🍎 배드애플 재생 🍎</button>
-    <br>
     <div id="ascii-container">버튼을 누르면 한글로 이루어진 배드애플이 시작됩니다!</div>
 
     <video id="video" loop muted playsinline style="display:none;">
@@ -61,34 +66,60 @@
         const container = document.getElementById('ascii-container');
         const btnStart = document.getElementById('btn-start');
 
-        // 성능 최적화 옵션 적용
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-        // 해상도 세팅 (가로 글자 수, 세로 줄 수)
-        const WIDTH = 100;
-        const HEIGHT = 55;
+        // 실시간으로 변할 해상도 변수 선언
+        let WIDTH = 150;
+        let HEIGHT = 68;
         
-        /* [변경사항] 공백을 제외하고 오직 '한글'로만 구성된 밀도 배열
-          왼쪽(어두움/공백) -> 오른쪽(밝음/획이 많아 가득 참)
-        */
+        // 한글 밀도 단계 배열
         const krChars = [
-            " ", "ㅡ", "ㄱ", "ㄴ", "ㅇ", "ㅅ", "ㅈ", "ㅂ", 
-            "ㅍ", "ㅎ", "가", "민", "정", "음", "뷁", "뾿"
+            " ", "ㅡ", "ㄱ", "ㄴ", "ㅅ", "ㅇ", "ㅈ", "ㅂ", "ㅋ", "ㅌ", 
+            "ㅍ", "ㅎ", "가", "거", "고", "구", "민", "정", "음", "뷁", "뾿"
         ];
 
-        canvas.width = WIDTH;
-        canvas.height = HEIGHT;
+        /* [핵심 기능] 창 크기에 맞춰 해상도와 폰트 스타일을 실시간으로 계산하는 함수 */
+        function resizeResponsive() {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // 1. 창 크기에 맞는 적절한 글자 크기(Font Size) 결정
+            // 화면이 작아지면 글자도 작아지고, 화면이 커지면 글자도 커집니다.
+            let fontSize = Math.max(7, Math.floor(windowWidth / 130)); 
+            if (fontSize > 14) fontSize = 14; // 너무 커지면 깨지므로 최대치 제한
+
+            // 2. 글자 크기에 따른 CSS 줄간격 및 자간 실시간 조정
+            container.style.fontSize = `${fontSize}px`;
+            container.style.lineHeight = "0.72"; 
+            container.style.letterSpacing = `-${fontSize * 0.18}px`; // 글자 크기에 비례한 자간 축소
+
+            // 3. 현재 창 크기에서 해당 글자 크기로 채울 수 있는 최적의 가로/세로 글자 수 계산
+            // 원본 배드애플의 4:3 비율과 한글 폰트 특성(가로세로 비율 약 2.2:1)을 고려하여 보정
+            WIDTH = Math.floor(windowWidth / (fontSize * 0.55));
+            HEIGHT = Math.floor(windowHeight / (fontSize * 0.72));
+
+            // 지나치게 해상도가 높아져 성능이 떨어지는 것을 방지하기 위한 최대치 제한
+            if (WIDTH > 240) {
+                WIDTH = 240;
+                HEIGHT = Math.floor(WIDTH * 0.45);
+            }
+
+            // 캔버스 크기도 변경된 해상도에 맞게 동적 업데이트
+            canvas.width = WIDTH;
+            canvas.height = HEIGHT;
+        }
+
+        // 초기 실행 및 창 크기 변경(resize) 이벤트 리스너 등록
+        resizeResponsive();
+        window.addEventListener('resize', resizeResponsive);
 
         btnStart.addEventListener('click', () => {
             btnStart.style.display = 'none';
             
-            // 영상과 오디오를 동시에 재생 시작
             Promise.all([video.play(), audio.play()]).then(() => {
                 renderFrame();
             }).catch(err => {
-                container.textContent = "재생에 실패했습니다.\n" +
-                                        "1. 'video.mp4'와 'sound.mp3' 파일이 이 HTML과 같은 폴더에 있는지 확인하세요.\n" +
-                                        "2. Live Server(http://localhost:...) 환경에서 실행했는지 확인하세요.";
+                container.textContent = "재생에 실패했습니다.\n파일 경로와 서버(Live Server) 환경을 확인해주세요.";
                 console.error(err);
             });
         });
@@ -96,12 +127,12 @@
         function renderFrame() {
             if (video.paused || video.ended) return;
 
-            // 영상과 소리의 씽크(싱크로율)가 어긋나는 것을 방지하기 위해 
-            // 오디오 시간 기준으로 비디오 시간을 강제 동기화 (선택 사항, 부드러운 재생을 위해 적용)
+            // 영상 오디오 싱크 맞춤
             if (Math.abs(video.currentTime - audio.currentTime) > 0.15) {
                 video.currentTime = audio.currentTime;
             }
 
+            // 실시간으로 변하는 WIDTH, HEIGHT 크기에 맞춰 그리기
             ctx.drawImage(video, 0, 0, WIDTH, HEIGHT);
             
             try {
@@ -116,10 +147,9 @@
                         const g = pixels[idx + 1];
                         const b = pixels[idx + 2];
 
-                        // 평균값 밝기 계산
-                        const brightness = (r + g + b) / 3;
+                        // 루미넌스 밝기 계산법
+                        const brightness = (r * 0.299 + g * 0.587 + b * 0.114);
 
-                        // 밝기 값을 한글 배열 인덱스로 매핑
                         const charIdx = Math.floor((brightness / 255) * (krChars.length - 1));
                         asciiArt += krChars[charIdx];
                     }
@@ -129,7 +159,7 @@
                 container.textContent = asciiArt;
                 
             } catch (e) {
-                container.textContent = "보안(CORS) 에러가 발생했습니다.\n서버(Live Server 등) 환경에서 실행해 주세요.";
+                container.textContent = "보안(CORS) 에러가 발생했습니다.";
                 console.error(e);
                 return;
             }
