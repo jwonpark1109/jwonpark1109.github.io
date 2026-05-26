@@ -7,9 +7,10 @@
         body {
             background-color: #000;
             color: #fff;
-            font-family: 'Courier New', 'Malgun Gothic', monospace; /* 고정폭 글꼴 */
-            font-size: 9px;         /* 글자 크기 */
-            line-height: 0.9;       /* 줄간격을 줄여서 위아래 공백 최소화 */
+            /* 고정폭 글꼴 지정 및 자모음 분리 방지를 위한 맑은 고딕 설정 */
+            font-family: 'Courier New', 'Malgun Gothic', monospace;
+            font-size: 10px;        /* 글자 크기 (모니터 해상도에 따라 9px~11px 조절 가능) */
+            line-height: 0.85;      /* 줄간격을 줄여서 위아래 공백을 최소화 (비율 최적화) */
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -24,15 +25,16 @@
             font-weight: bold;
             margin-bottom: 20px;
             border-radius: 5px;
+            transition: background 0.2s;
+        }
+        #btn-start:hover {
+            background: #ccc;
         }
         #ascii-container {
             display: inline-block;
-            white-space: pre;       /* 공백, 줄바꿈 유지 */
-            letter-spacing: 0px;    /* 한글 특성상 간격을 좁게 세팅 */
+            white-space: pre;       /* 공백과 줄바꿈(개행문자)을 그대로 유지 */
+            letter-spacing: -1px;   /* 글자 좌우 간격을 좁혀서 밀도감 향상 */
             font-weight: bold;
-        }
-        video {
-            display: none;
         }
     </style>
 </head>
@@ -42,9 +44,8 @@
     <br>
     <div id="ascii-container">버튼을 누르면 한글로 이루어진 배드애플이 시작됩니다!</div>
 
-    <!-- 실시간 변환용 원본 비디오 -->
-    <video id="video" crossorigin="anonymous" loop>
-        <source src="https://raw.githubusercontent.com/milkbottle0305/bad-apple-ascii/main/res/video.mp4" type="video/mp4">
+    <video id="video" loop muted playsinline style="display:none;">
+        <source src="video.mp4" type="video/mp4">
     </video>
     
     <canvas id="canvas" style="display:none;"></canvas>
@@ -52,15 +53,17 @@
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
         const container = document.getElementById('ascii-container');
         const btnStart = document.getElementById('btn-start');
 
-        // 해상도 세팅 (한글은 가로폭이 넓으므로 비율을 맞추기 위해 가로 글자 수를 약간 조절)
-        const WIDTH = 90;
-        const HEIGHT = 50;
+        // [성능 최적화] 코드가 픽셀 데이터를 매 프레임 빈번하게 읽으므로 옵션 적용하여 경고 해결
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+        // 해상도 세팅 (한글 글자 특성에 맞춰 가로세로 비율 조정)
+        const WIDTH = 100;
+        const HEIGHT = 55;
         
-        // [필독] 밀도별 한글 배열 (오른쪽으로 갈수록 화면을 가득 채우는 빽빽한 글자)
+        // 밀도별 문자 배열 (왼쪽: 어두움/공백 -> 오른쪽: 밝음/ 가득 참)
         const krChars = [" ", "ㆍ", "ㄱ", "ㄴ", "ㅅ", "ㅇ", "ㅈ", "ㅍ", "🎨", "훈", "민", "정", "음", "뷁", "뾿", "█"];
 
         canvas.width = WIDTH;
@@ -68,37 +71,60 @@
 
         btnStart.addEventListener('click', () => {
             btnStart.style.display = 'none';
-            video.play();
-            renderFrame();
+            
+            // 비디오가 정상적으로 재생 시작된 후 렌더링 프레임 루프 작동
+            video.play().then(() => {
+                renderFrame();
+            }).catch(err => {
+                container.textContent = "비디오 재생에 실패했습니다.\n" +
+                                        "1. 'video.mp4' 파일이 HTML과 같은 폴더에 있는지 확인하세요.\n" +
+                                        "2. 브라우저에서 파일 주소(file://) 대신 Live Server(http://) 환경으로 열었는지 확인하세요.";
+                console.error(err);
+            });
         });
 
         function renderFrame() {
+            // 비디오가 정지되거나 끝나면 루프 종료
             if (video.paused || video.ended) return;
 
+            // 현재 비디오 화면을 캔버스 크기에 맞춰 그리기
             ctx.drawImage(video, 0, 0, WIDTH, HEIGHT);
-            const imgData = ctx.getImageData(0, 0, WIDTH, HEIGHT);
-            const pixels = imgData.data;
+            
+            try {
+                // 캔버스로부터 픽셀 RGBA 데이터 추출
+                const imgData = ctx.getImageData(0, 0, WIDTH, HEIGHT);
+                const pixels = imgData.data;
+                let asciiArt = "";
 
-            let asciiArt = "";
+                for (let y = 0; y < HEIGHT; y++) {
+                    for (let x = 0; x < WIDTH; x++) {
+                        // 1개 픽셀은 R, G, B, A 총 4개 배열 칸을 차지함
+                        const idx = (y * WIDTH + x) * 4;
+                        const r = pixels[idx];
+                        const g = pixels[idx + 1];
+                        const b = pixels[idx + 2];
 
-            for (let y = 0; y < HEIGHT; y++) {
-                for (let x = 0; x < WIDTH; x++) {
-                    const idx = (y * WIDTH + x) * 4;
-                    const r = pixels[idx];
-                    const g = pixels[idx + 1];
-                    const b = pixels[idx + 2];
+                        // 평균값으로 밝기 계산 (0 ~ 255)
+                        const brightness = (r + g + b) / 3;
 
-                    // 밝기 계산 (0 ~ 255)
-                    const brightness = (r + g + b) / 3;
-
-                    // 밝기값을 한글 배열 인덱스로 변환
-                    const charIdx = Math.floor((brightness / 255) * (krChars.length - 1));
-                    asciiArt += krChars[charIdx];
+                        // 밝기 값을 한글 배열 인덱스(0~15)로 매핑
+                        const charIdx = Math.floor((brightness / 255) * (krChars.length - 1));
+                        asciiArt += krChars[charIdx];
+                    }
+                    // 한 줄 끝날 때마다 줄바꿈
+                    asciiArt += "\n";
                 }
-                asciiArt += "\n";
+
+                // 텍스트 출력 적용
+                container.textContent = asciiArt;
+                
+            } catch (e) {
+                container.textContent = "보안(CORS) 에러가 발생했습니다.\n서버(Live Server 등) 환경에서 실행해 주세요.";
+                console.error(e);
+                return;
             }
 
-            container.textContent = asciiArt;
+            // 다음 웹 프레임 주기에 맞춰 재생 반복
             requestAnimationFrame(renderFrame);
         }
     </script>
