@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초특급 바둑 교실 V2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0; font-family: 'Jua', sans-serif;
+            background-color: #ffeaa7; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; height: 100vh;
+        }
+
+        #slide-container {
+            width: 90vw; height: 80vh; background: white;
+            border-radius: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            position: relative; overflow: hidden;
+        }
+
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; transform: scale(0.8) translateY(50px);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 0; pointer-events: none; text-align: center;
+        }
+
+        .slide.active {
+            opacity: 1; transform: scale(1) translateY(0);
+            z-index: 10; pointer-events: auto;
+        }
+
+        h1 { font-size: 3.5rem; color: #2d3436; margin-bottom: 10px; text-shadow: 3px 3px 0px #fdcb6e; }
+        p { font-size: 2rem; color: #636e72; margin: 10px 20px; line-height: 1.4; }
+        .highlight { color: #d63031; font-size: 2.5rem; }
+
+        /* 바둑돌 공통 */
+        .stone-box { display: flex; gap: 40px; margin-top: 20px; align-items: center; justify-content: center; }
+        .stone { width: 100px; height: 100px; border-radius: 50%; box-shadow: 5px 10px 15px rgba(0,0,0,0.3); }
+        .black { background: radial-gradient(circle at 30% 30%, #555, #000); }
+        .white { background: radial-gradient(circle at 30% 30%, #fff, #ddd); }
+
+        /* 애니메이션 모음 */
+        .breathe { animation: breathe 1.5s infinite alternate; }
+        @keyframes breathe {
+            0% { transform: scale(1); box-shadow: 0 0 10px #74b9ff; }
+            100% { transform: scale(1.1); box-shadow: 0 0 40px #0984e3; }
+        }
+
+        .shake { animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        .fork { display: flex; flex-direction: column; gap: 10px; }
+
+        /* 미니 바둑판 이미지 대체용 CSS 아트 */
+        .mini-board {
+            width: 200px; height: 200px; background-color: #e1b15d;
+            border: 5px solid #a67c33; display: grid;
+            grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);
+            position: relative; margin-top: 20px;
+        }
+        .mini-board::before {
+            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            background-image: linear-gradient(to right, black 2px, transparent 2px), linear-gradient(to bottom, black 2px, transparent 2px);
+            background-size: 90px 90px;
+        }
+        .corner-highlight {
+            position: absolute; width: 60px; height: 60px;
+            background: rgba(46, 204, 113, 0.5); border-radius: 50%;
+            top: -10px; left: -10px; animation: breathe 1s infinite alternate;
+        }
+
+        /* 컨트롤 버튼 */
+        #controls { margin-top: 20px; display: flex; gap: 20px; z-index: 100; }
+        button {
+            padding: 15px 40px; font-size: 2rem; font-family: 'Jua', sans-serif;
+            background: #0984e3; color: white; border: none; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;
+        }
+        button:hover { background: #74b9ff; transform: translateY(-5px); box-shadow: 0 15px 20px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <div id="slide-container">
+        <div class="slide active">
+            <h1>😎 GOAT 선생님의 바둑 교실 😎</h1>
+            <p>1학년 친구들 안녕? 지금부터 바둑의 비밀을 알려줄게!</p>
+            <div class="stone-box">
+                <div class="stone black breathe"></div>
+                <div class="stone white breathe" style="animation-delay: 0.5s;"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>1. 돌의 숨구멍 <span class="highlight">'활로'</span> 💨</h1>
+            <p>바둑돌도 숨을 쉬어야 해! 십자가 모양의 선이 바로 숨구멍이야.<br>이게 다 막히면 꼬르륵 죽어버려요!</p>
+            <div class="stone-box">
+                <div class="stone black breathe" style="position:relative;">
+                    <div style="position:absolute; top:-30px; left:40px; font-size:2rem;">⬆️</div>
+                    <div style="position:absolute; bottom:-30px; left:40px; font-size:2rem;">⬇️</div>
+                    <div style="position:absolute; left:-30px; top:40px; font-size:2rem;">⬅️</div>
+                    <div style="position:absolute; right:-30px; top:40px; font-size:2rem;">➡️</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>2. 축축수? ❌ <span class="highlight">촉촉수!</span> ⭕</h1>
+            <p>돌이 물에 젖은 게 아니야! 😆<br>촉! 촉! 촉! 연속으로 공격해서 함정에 빠뜨리는 무시무시한 마술!</p>
+            <div class="stone-box">
+                <div class="stone black shake"></div>
+                <div style="font-size: 3rem;">⚡💥⚡</div>
+                <div class="stone black shake" style="animation-delay: 0.2s;"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>3. 일타쌍피! <span class="highlight">'양단수'</span> ✌️</h1>
+            <p>"왼쪽 살릴래? 오른쪽 살릴래?"<br>동시에 두 마리 토끼를 공격하는 완벽한 작전!</p>
+            <div class="stone-box">
+                <div class="stone black"></div>
+                <div style="font-size: 3rem;">👉</div>
+                <div class="fork">
+                    <div class="stone white shake" style="width:70px; height:70px;"></div>
+                    <div class="stone white shake" style="width:70px; height:70px;"></div>
+                </div>
+                <div style="font-size: 3rem;">😱</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>4. 방구석이 최고! <span class="highlight">'귀(모서리)'</span> 🏠</h1>
+            <p>바둑판 가운데에 집을 지으려면 벽이 4개나 필요해!<br>하지만 모서리(귀)에 지으면 벽이 2개만 있어도 돼. 가성비 갑👍</p>
+            <div class="mini-board">
+                <div class="corner-highlight"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button onclick="changeSlide(-1)">⬅️ 이전</button>
+        <button onclick="changeSlide(1)">다음 ➡️</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function changeSlide(direction) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide += direction;
+            if(currentSlide < 0) currentSlide = 0;
+            if(currentSlide >= slides.length) currentSlide = slides.length - 1;
+            slides[currentSlide].classList.add('active');
+        }
+    </script>
+</body>
+  </html><!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초특급 바둑 교실 V2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0; font-family: 'Jua', sans-serif;
+            background-color: #ffeaa7; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; height: 100vh;
+        }
+
+        #slide-container {
+            width: 90vw; height: 80vh; background: white;
+            border-radius: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            position: relative; overflow: hidden;
+        }
+
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; transform: scale(0.8) translateY(50px);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 0; pointer-events: none; text-align: center;
+        }
+
+        .slide.active {
+            opacity: 1; transform: scale(1) translateY(0);
+            z-index: 10; pointer-events: auto;
+        }
+
+        h1 { font-size: 3.5rem; color: #2d3436; margin-bottom: 10px; text-shadow: 3px 3px 0px #fdcb6e; }
+        p { font-size: 2rem; color: #636e72; margin: 10px 20px; line-height: 1.4; }
+        .highlight { color: #d63031; font-size: 2.5rem; }
+
+        /* 바둑돌 공통 */
+        .stone-box { display: flex; gap: 40px; margin-top: 20px; align-items: center; justify-content: center; }
+        .stone { width: 100px; height: 100px; border-radius: 50%; box-shadow: 5px 10px 15px rgba(0,0,0,0.3); }
+        .black { background: radial-gradient(circle at 30% 30%, #555, #000); }
+        .white { background: radial-gradient(circle at 30% 30%, #fff, #ddd); }
+
+        /* 애니메이션 모음 */
+        .breathe { animation: breathe 1.5s infinite alternate; }
+        @keyframes breathe {
+            0% { transform: scale(1); box-shadow: 0 0 10px #74b9ff; }
+            100% { transform: scale(1.1); box-shadow: 0 0 40px #0984e3; }
+        }
+
+        .shake { animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        .fork { display: flex; flex-direction: column; gap: 10px; }
+
+        /* 미니 바둑판 이미지 대체용 CSS 아트 */
+        .mini-board {
+            width: 200px; height: 200px; background-color: #e1b15d;
+            border: 5px solid #a67c33; display: grid;
+            grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);
+            position: relative; margin-top: 20px;
+        }
+        .mini-board::before {
+            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            background-image: linear-gradient(to right, black 2px, transparent 2px), linear-gradient(to bottom, black 2px, transparent 2px);
+            background-size: 90px 90px;
+        }
+        .corner-highlight {
+            position: absolute; width: 60px; height: 60px;
+            background: rgba(46, 204, 113, 0.5); border-radius: 50%;
+            top: -10px; left: -10px; animation: breathe 1s infinite alternate;
+        }
+
+        /* 컨트롤 버튼 */
+        #controls { margin-top: 20px; display: flex; gap: 20px; z-index: 100; }
+        button {
+            padding: 15px 40px; font-size: 2rem; font-family: 'Jua', sans-serif;
+            background: #0984e3; color: white; border: none; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;
+        }
+        button:hover { background: #74b9ff; transform: translateY(-5px); box-shadow: 0 15px 20px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <div id="slide-container">
+        <div class="slide active">
+            <h1>😎 GOAT 선생님의 바둑 교실 😎</h1>
+            <p>1학년 친구들 안녕? 지금부터 바둑의 비밀을 알려줄게!</p>
+            <div class="stone-box">
+                <div class="stone black breathe"></div>
+                <div class="stone white breathe" style="animation-delay: 0.5s;"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>1. 돌의 숨구멍 <span class="highlight">'활로'</span> 💨</h1>
+            <p>바둑돌도 숨을 쉬어야 해! 십자가 모양의 선이 바로 숨구멍이야.<br>이게 다 막히면 꼬르륵 죽어버려요!</p>
+            <div class="stone-box">
+                <div class="stone black breathe" style="position:relative;">
+                    <div style="position:absolute; top:-30px; left:40px; font-size:2rem;">⬆️</div>
+                    <div style="position:absolute; bottom:-30px; left:40px; font-size:2rem;">⬇️</div>
+                    <div style="position:absolute; left:-30px; top:40px; font-size:2rem;">⬅️</div>
+                    <div style="position:absolute; right:-30px; top:40px; font-size:2rem;">➡️</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>2. 축축수? ❌ <span class="highlight">촉촉수!</span> ⭕</h1>
+            <p>돌이 물에 젖은 게 아니야! 😆<br>촉! 촉! 촉! 연속으로 공격해서 함정에 빠뜨리는 무시무시한 마술!</p>
+            <div class="stone-box">
+                <div class="stone black shake"></div>
+                <div style="font-size: 3rem;">⚡💥⚡</div>
+                <div class="stone black shake" style="animation-delay: 0.2s;"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>3. 일타쌍피! <span class="highlight">'양단수'</span> ✌️</h1>
+            <p>"왼쪽 살릴래? 오른쪽 살릴래?"<br>동시에 두 마리 토끼를 공격하는 완벽한 작전!</p>
+            <div class="stone-box">
+                <div class="stone black"></div>
+                <div style="font-size: 3rem;">👉</div>
+                <div class="fork">
+                    <div class="stone white shake" style="width:70px; height:70px;"></div>
+                    <div class="stone white shake" style="width:70px; height:70px;"></div>
+                </div>
+                <div style="font-size: 3rem;">😱</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>4. 방구석이 최고! <span class="highlight">'귀(모서리)'</span> 🏠</h1>
+            <p>바둑판 가운데에 집을 지으려면 벽이 4개나 필요해!<br>하지만 모서리(귀)에 지으면 벽이 2개만 있어도 돼. 가성비 갑👍</p>
+            <div class="mini-board">
+                <div class="corner-highlight"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button onclick="changeSlide(-1)">⬅️ 이전</button>
+        <button onclick="changeSlide(1)">다음 ➡️</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function changeSlide(direction) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide += direction;
+            if(currentSlide < 0) currentSlide = 0;
+            if(currentSlide >= slides.length) currentSlide = slides.length - 1;
+            slides[currentSlide].classList.add('active');
+        }
+    </script>
+</body>
+</html>
