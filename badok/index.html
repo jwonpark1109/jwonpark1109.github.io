@@ -2,331 +2,271 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>초특급 바둑 교실 V2</title>
+    <title>바둑 교실</title>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Jua', sans-serif;
+        }
         body {
-            margin: 0; padding: 0; font-family: 'Jua', sans-serif;
-            background-color: #ffeaa7; overflow: hidden;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; height: 100vh;
+            margin: 0;
+            background-color: #f6e58d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
         }
-
-        #slide-container {
-            width: 90vw; height: 80vh; background: white;
-            border-radius: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            position: relative; overflow: hidden;
+        #slide-box {
+            width: 85vw;
+            height: 80vh;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            position: relative;
         }
-
         .slide {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; transform: scale(0.8) translateY(50px);
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 0; pointer-events: none; text-align: center;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
         }
-
         .slide.active {
-            opacity: 1; transform: scale(1) translateY(0);
-            z-index: 10; pointer-events: auto;
+            display: flex;
+        }
+        h1 {
+            font-size: 3.5rem;
+            color: #2c3e50;
+            margin: 0 0 15px 0;
+        }
+        .desc-box {
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.8rem;
+            color: #7f8c8d;
+            margin: 8px 0;
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+        .point {
+            color: #e74c3c;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .stone {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+        .black {
+            background: #2c3e50;
+            box-shadow: 3px 6px 0px #1a252f;
+        }
+        .white {
+            background: #f5f6fa;
+            border: 2px solid #dcdde1;
+            box-shadow: 3px 6px 0px #b2bec3;
         }
 
-        h1 { font-size: 3.5rem; color: #2d3436; margin-bottom: 10px; text-shadow: 3px 3px 0px #fdcb6e; }
-        p { font-size: 2rem; color: #636e72; margin: 10px 20px; line-height: 1.4; }
-        .highlight { color: #d63031; font-size: 2.5rem; }
-
-        /* 바둑돌 공통 */
-        .stone-box { display: flex; gap: 40px; margin-top: 20px; align-items: center; justify-content: center; }
-        .stone { width: 100px; height: 100px; border-radius: 50%; box-shadow: 5px 10px 15px rgba(0,0,0,0.3); }
-        .black { background: radial-gradient(circle at 30% 30%, #555, #000); }
-        .white { background: radial-gradient(circle at 30% 30%, #fff, #ddd); }
-
-        /* 애니메이션 모음 */
-        .breathe { animation: breathe 1.5s infinite alternate; }
-        @keyframes breathe {
-            0% { transform: scale(1); box-shadow: 0 0 10px #74b9ff; }
-            100% { transform: scale(1.1); box-shadow: 0 0 40px #0984e3; }
+        .intro-stones {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
         }
 
-        .shake { animation: shake 0.5s infinite; }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
+        .hwallo-space {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .line-v, .line-h {
+            position: absolute;
+            background-color: #bdc3c7;
+            z-index: 1;
+        }
+        .line-v { width: 4px; height: 100%; }
+        .line-h { width: 100%; height: 4px; }
+
+        .arrow {
+            position: absolute;
+            font-size: 2.5rem;
+            color: #e74c3c;
+            font-weight: bold;
+            z-index: 3;
+        }
+        .arrow.up { top: -5px; }
+        .arrow.down { bottom: -5px; }
+        .arrow.left { left: -5px; }
+        .arrow.right { right: -5px; }
+
+        .vs-box {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-top: 10px;
+        }
+        .vs-text {
+            font-size: 2.8rem;
+            color: #e67e22;
         }
 
-        .fork { display: flex; flex-direction: column; gap: 10px; }
+        .game-board {
+            width: 200px;
+            height: 200px;
+            background-color: #f39c12;
+            border: 6px solid #d35400;
+            border-radius: 10px;
+            position: relative;
+            margin-top: 10px;
+        }
+        .board-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(46, 204, 113, 0.4);
+            border: 3px dashed #2ecc71;
+            top: 0;
+            left: 0;
+        }
 
-        /* 미니 바둑판 이미지 대체용 CSS 아트 */
-        .mini-board {
-            width: 200px; height: 200px; background-color: #e1b15d;
-            border: 5px solid #a67c33; display: grid;
-            grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);
-            position: relative; margin-top: 20px;
+        #btn-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 30px;
         }
-        .mini-board::before {
-            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
-            background-image: linear-gradient(to right, black 2px, transparent 2px), linear-gradient(to bottom, black 2px, transparent 2px);
-            background-size: 90px 90px;
-        }
-        .corner-highlight {
-            position: absolute; width: 60px; height: 60px;
-            background: rgba(46, 204, 113, 0.5); border-radius: 50%;
-            top: -10px; left: -10px; animation: breathe 1s infinite alternate;
-        }
-
-        /* 컨트롤 버튼 */
-        #controls { margin-top: 20px; display: flex; gap: 20px; z-index: 100; }
         button {
-            padding: 15px 40px; font-size: 2rem; font-family: 'Jua', sans-serif;
-            background: #0984e3; color: white; border: none; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;
+            padding: 12px 35px;
+            font-size: 1.8rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 5px 0px #2980b9;
         }
-        button:hover { background: #74b9ff; transform: translateY(-5px); box-shadow: 0 15px 20px rgba(0,0,0,0.2); }
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0px #2980b9;
+        }
     </style>
 </head>
 <body>
 
-    <div id="slide-container">
+    <div id="slide-box">
         <div class="slide active">
-            <h1>😎 GOAT 선생님의 바둑 교실 😎</h1>
-            <p>1학년 친구들 안녕? 지금부터 바둑의 비밀을 알려줄게!</p>
-            <div class="stone-box">
-                <div class="stone black breathe"></div>
-                <div class="stone white breathe" style="animation-delay: 0.5s;"></div>
+            <h1>재미있는 바둑 교실</h1>
+            <div class="desc-box">
+                <p>까만 돌과 하얀 돌이 펼치는 흥미진진한 땅따먹기 대모험!</p>
+                <p>바둑은 규칙만 알면 누구나 천재가 될 수 있는 아주 재밌는 게임이야.</p>
+                <p>오늘 딱 4가지만 배워서 친구들을 깜짝 놀라게 만들어볼까?</p>
             </div>
-        </div>
-
-        <div class="slide">
-            <h1>1. 돌의 숨구멍 <span class="highlight">'활로'</span> 💨</h1>
-            <p>바둑돌도 숨을 쉬어야 해! 십자가 모양의 선이 바로 숨구멍이야.<br>이게 다 막히면 꼬르륵 죽어버려요!</p>
-            <div class="stone-box">
-                <div class="stone black breathe" style="position:relative;">
-                    <div style="position:absolute; top:-30px; left:40px; font-size:2rem;">⬆️</div>
-                    <div style="position:absolute; bottom:-30px; left:40px; font-size:2rem;">⬇️</div>
-                    <div style="position:absolute; left:-30px; top:40px; font-size:2rem;">⬅️</div>
-                    <div style="position:absolute; right:-30px; top:40px; font-size:2rem;">➡️</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h1>2. 축축수? ❌ <span class="highlight">촉촉수!</span> ⭕</h1>
-            <p>돌이 물에 젖은 게 아니야! 😆<br>촉! 촉! 촉! 연속으로 공격해서 함정에 빠뜨리는 무시무시한 마술!</p>
-            <div class="stone-box">
-                <div class="stone black shake"></div>
-                <div style="font-size: 3rem;">⚡💥⚡</div>
-                <div class="stone black shake" style="animation-delay: 0.2s;"></div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h1>3. 일타쌍피! <span class="highlight">'양단수'</span> ✌️</h1>
-            <p>"왼쪽 살릴래? 오른쪽 살릴래?"<br>동시에 두 마리 토끼를 공격하는 완벽한 작전!</p>
-            <div class="stone-box">
+            <div class="intro-stones">
                 <div class="stone black"></div>
-                <div style="font-size: 3rem;">👉</div>
-                <div class="fork">
-                    <div class="stone white shake" style="width:70px; height:70px;"></div>
-                    <div class="stone white shake" style="width:70px; height:70px;"></div>
-                </div>
-                <div style="font-size: 3rem;">😱</div>
+                <div class="white stone"></div>
             </div>
         </div>
 
         <div class="slide">
-            <h1>4. 방구석이 최고! <span class="highlight">'귀(모서리)'</span> 🏠</h1>
-            <p>바둑판 가운데에 집을 지으려면 벽이 4개나 필요해!<br>하지만 모서리(귀)에 지으면 벽이 2개만 있어도 돼. 가성비 갑👍</p>
-            <div class="mini-board">
-                <div class="corner-highlight"></div>
+            <h1>1. 돌의 숨구멍 <span class="point">'활로'</span></h1>
+            <div class="desc-box">
+                <p>바둑판 위에 놓인 돌들은 선이 만나는 길을 통해 숨을 쉬어!</p>
+                <p>이 길을 바로 <span class="point">활로</span>라고 부르는데, 돌 하나에는 위, 아래, 왼쪽, 오른쪽 총 4개의 숨구멍이 있어.</p>
+                <p>만약 상대방 돌이 내 숨구멍을 모두 막아버리면, 내 돌은 숨을 못 쉬어서 죽게 되니까 조심해야 해!</p>
+            </div>
+            <div class="hwallo-space">
+                <div class="line-v"></div>
+                <div class="line-h"></div>
+                <div class="stone black" style="z-index: 2;"></div>
+                <div class="arrow up">↑</div>
+                <div class="arrow down">↓</div>
+                <div class="arrow left">←</div>
+                <div class="arrow right">→</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>2. 연속 공격의 마술 <span class="point">'촉촉수'</span></h1>
+            <div class="desc-box">
+                <p>상대방 돌의 숨구멍이 딱 하나만 남은 상태를 '단수'라고 해.</p>
+                <p>여기서 아주 멋진 기술이 있는데, 바로 축축수가 아니라 <span class="point">촉촉수</span>야!</p>
+                <p>상대방이 도망치려고 돌을 놓아도, 내가 미리 함정을 파놓고 연달아 단수를 쳐서 결국에는 상대방 돌을 몽땅 잡아버리는 무시무시한 연속 공격 기술이지!</p>
+            </div>
+            <div class="vs-box">
+                <div class="stone black"></div>
+                <div class="vs-text">▶ 단수! ▶</div>
+                <div class="stone white"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>3. 일타쌍피 공격 <span class="point">'양단수'</span></h1>
+            <div class="desc-box">
+                <p>바둑돌을 딱 하나만 놓았는데, 상대방 돌 두 무리가 동시에 위험해지는 순간이 있어.</p>
+                <p>이걸 바로 두 군데를 동시에 공격한다고 해서 <span class="point">양단수</span>라고 불러!</p>
+                <p>상대방은 "왼쪽을 살릴까? 오른쪽을 살릴까?" 고민하겠지만, 어차피 하나를 살리면 다른 하나는 내가 잡을 수 있는 아주 강력한 필살기야.</p>
+            </div>
+            <div class="vs-box">
+                <div class="stone black"></div>
+                <div class="vs-text">⚔️ 양방향 공격</div>
+                <div style="display:flex; flex-direction:column; gap:15px;">
+                    <div class="stone white"></div>
+                    <div class="stone white"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>4. 가성비 최고 명당 <span class="point">'귀'</span></h1>
+            <div class="desc-box">
+                <p>바둑은 결국 자기 돌로 넓은 땅(집)을 만드는 사람이 이기는 게임이야.</p>
+                <p>바둑판은 크게 가운데, 변(모서리 벽 쪽), 그리고 구석탱이인 <span class="point">귀</span>로 나뉘어.</p>
+                <p>가운데에 땅을 만드려면 돌이 아주 많이 필요하지만, 귀(구석)는 이미 바둑판 벽이 두 개나 막아주고 있어서 돌을 조금만 써도 엄청 큰 집을 쉽게 지을 수 있는 최고의 명당자리야!</p>
+            </div>
+            <div class="game-board">
+                <div class="board-corner"></div>
             </div>
         </div>
     </div>
 
-    <div id="controls">
-        <button onclick="changeSlide(-1)">⬅️ 이전</button>
-        <button onclick="changeSlide(1)">다음 ➡️</button>
+    <div id="btn-group">
+        <button onclick="goPrev()">이전</button>
+        <button onclick="goNext()">다음</button>
     </div>
 
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
+        let index = 0;
+        const pages = document.querySelectorAll('.slide');
 
-        function changeSlide(direction) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide += direction;
-            if(currentSlide < 0) currentSlide = 0;
-            if(currentSlide >= slides.length) currentSlide = slides.length - 1;
-            slides[currentSlide].classList.add('active');
-        }
-    </script>
-</body>
-  </html><!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>초특급 바둑 교실 V2</title>
-    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0; padding: 0; font-family: 'Jua', sans-serif;
-            background-color: #ffeaa7; overflow: hidden;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; height: 100vh;
+        function updateSlide() {
+            pages.forEach(p => p.classList.remove('active'));
+            pages[index].classList.add('active');
         }
 
-        #slide-container {
-            width: 90vw; height: 80vh; background: white;
-            border-radius: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            position: relative; overflow: hidden;
+        function goPrev() {
+            if (index > 0) {
+                index--;
+                updateSlide();
+            }
         }
 
-        .slide {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; transform: scale(0.8) translateY(50px);
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 0; pointer-events: none; text-align: center;
-        }
-
-        .slide.active {
-            opacity: 1; transform: scale(1) translateY(0);
-            z-index: 10; pointer-events: auto;
-        }
-
-        h1 { font-size: 3.5rem; color: #2d3436; margin-bottom: 10px; text-shadow: 3px 3px 0px #fdcb6e; }
-        p { font-size: 2rem; color: #636e72; margin: 10px 20px; line-height: 1.4; }
-        .highlight { color: #d63031; font-size: 2.5rem; }
-
-        /* 바둑돌 공통 */
-        .stone-box { display: flex; gap: 40px; margin-top: 20px; align-items: center; justify-content: center; }
-        .stone { width: 100px; height: 100px; border-radius: 50%; box-shadow: 5px 10px 15px rgba(0,0,0,0.3); }
-        .black { background: radial-gradient(circle at 30% 30%, #555, #000); }
-        .white { background: radial-gradient(circle at 30% 30%, #fff, #ddd); }
-
-        /* 애니메이션 모음 */
-        .breathe { animation: breathe 1.5s infinite alternate; }
-        @keyframes breathe {
-            0% { transform: scale(1); box-shadow: 0 0 10px #74b9ff; }
-            100% { transform: scale(1.1); box-shadow: 0 0 40px #0984e3; }
-        }
-
-        .shake { animation: shake 0.5s infinite; }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
-        }
-
-        .fork { display: flex; flex-direction: column; gap: 10px; }
-
-        /* 미니 바둑판 이미지 대체용 CSS 아트 */
-        .mini-board {
-            width: 200px; height: 200px; background-color: #e1b15d;
-            border: 5px solid #a67c33; display: grid;
-            grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);
-            position: relative; margin-top: 20px;
-        }
-        .mini-board::before {
-            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
-            background-image: linear-gradient(to right, black 2px, transparent 2px), linear-gradient(to bottom, black 2px, transparent 2px);
-            background-size: 90px 90px;
-        }
-        .corner-highlight {
-            position: absolute; width: 60px; height: 60px;
-            background: rgba(46, 204, 113, 0.5); border-radius: 50%;
-            top: -10px; left: -10px; animation: breathe 1s infinite alternate;
-        }
-
-        /* 컨트롤 버튼 */
-        #controls { margin-top: 20px; display: flex; gap: 20px; z-index: 100; }
-        button {
-            padding: 15px 40px; font-size: 2rem; font-family: 'Jua', sans-serif;
-            background: #0984e3; color: white; border: none; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;
-        }
-        button:hover { background: #74b9ff; transform: translateY(-5px); box-shadow: 0 15px 20px rgba(0,0,0,0.2); }
-    </style>
-</head>
-<body>
-
-    <div id="slide-container">
-        <div class="slide active">
-            <h1>😎 GOAT 선생님의 바둑 교실 😎</h1>
-            <p>1학년 친구들 안녕? 지금부터 바둑의 비밀을 알려줄게!</p>
-            <div class="stone-box">
-                <div class="stone black breathe"></div>
-                <div class="stone white breathe" style="animation-delay: 0.5s;"></div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h1>1. 돌의 숨구멍 <span class="highlight">'활로'</span> 💨</h1>
-            <p>바둑돌도 숨을 쉬어야 해! 십자가 모양의 선이 바로 숨구멍이야.<br>이게 다 막히면 꼬르륵 죽어버려요!</p>
-            <div class="stone-box">
-                <div class="stone black breathe" style="position:relative;">
-                    <div style="position:absolute; top:-30px; left:40px; font-size:2rem;">⬆️</div>
-                    <div style="position:absolute; bottom:-30px; left:40px; font-size:2rem;">⬇️</div>
-                    <div style="position:absolute; left:-30px; top:40px; font-size:2rem;">⬅️</div>
-                    <div style="position:absolute; right:-30px; top:40px; font-size:2rem;">➡️</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h1>2. 축축수? ❌ <span class="highlight">촉촉수!</span> ⭕</h1>
-            <p>돌이 물에 젖은 게 아니야! 😆<br>촉! 촉! 촉! 연속으로 공격해서 함정에 빠뜨리는 무시무시한 마술!</p>
-            <div class="stone-box">
-                <div class="stone black shake"></div>
-                <div style="font-size: 3rem;">⚡💥⚡</div>
-                <div class="stone black shake" style="animation-delay: 0.2s;"></div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h1>3. 일타쌍피! <span class="highlight">'양단수'</span> ✌️</h1>
-            <p>"왼쪽 살릴래? 오른쪽 살릴래?"<br>동시에 두 마리 토끼를 공격하는 완벽한 작전!</p>
-            <div class="stone-box">
-                <div class="stone black"></div>
-                <div style="font-size: 3rem;">👉</div>
-                <div class="fork">
-                    <div class="stone white shake" style="width:70px; height:70px;"></div>
-                    <div class="stone white shake" style="width:70px; height:70px;"></div>
-                </div>
-                <div style="font-size: 3rem;">😱</div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h1>4. 방구석이 최고! <span class="highlight">'귀(모서리)'</span> 🏠</h1>
-            <p>바둑판 가운데에 집을 지으려면 벽이 4개나 필요해!<br>하지만 모서리(귀)에 지으면 벽이 2개만 있어도 돼. 가성비 갑👍</p>
-            <div class="mini-board">
-                <div class="corner-highlight"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="controls">
-        <button onclick="changeSlide(-1)">⬅️ 이전</button>
-        <button onclick="changeSlide(1)">다음 ➡️</button>
-    </div>
-
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-
-        function changeSlide(direction) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide += direction;
-            if(currentSlide < 0) currentSlide = 0;
-            if(currentSlide >= slides.length) currentSlide = slides.length - 1;
-            slides[currentSlide].classList.add('active');
+        function goNext() {
+            if (index < pages.length - 1) {
+                index++;
+                updateSlide();
+            }
         }
     </script>
 </body>
