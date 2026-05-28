@@ -21,25 +21,36 @@
         }
         #slide-box {
             width: 85vw;
-            height: 80vh;
+            height: 85vh;
             background: white;
             border-radius: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
             position: relative;
+            overflow: hidden;
         }
+        
+        /* 슬라이드 모핑 애니메이션 */
         .slide {
-            width: 100%;
-            height: 100%;
-            display: none;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             padding: 40px;
+            opacity: 0;
+            transform: scale(0.9) translateY(30px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
         }
         .slide.active {
-            display: flex;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
         }
+
         h1 {
             font-size: 3.5rem;
             color: #2c3e50;
@@ -62,19 +73,38 @@
             font-weight: bold;
         }
         
+        /* 돌멩이 둥둥 떠다니는 애니메이션 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        /* 공격받을 때 바들바들 떠는 애니메이션 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-5deg); }
+            75% { transform: translateX(5px) rotate(5deg); }
+        }
+
         .stone {
             width: 100px;
             height: 100px;
             border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
         }
         .black {
             background: #2c3e50;
             box-shadow: 3px 6px 0px #1a252f;
+            animation-delay: 0s;
         }
         .white {
             background: #f5f6fa;
             border: 2px solid #dcdde1;
             box-shadow: 3px 6px 0px #b2bec3;
+            animation-delay: 1.5s;
+        }
+        .shaking-stone {
+            animation: shake 0.4s infinite;
         }
 
         .intro-stones {
@@ -83,6 +113,7 @@
             margin-top: 20px;
         }
 
+        /* 활로 설명 부분 */
         .hwallo-space {
             position: relative;
             width: 200px;
@@ -106,12 +137,14 @@
             color: #e74c3c;
             font-weight: bold;
             z-index: 3;
+            animation: float 2s infinite;
         }
         .arrow.up { top: -5px; }
         .arrow.down { bottom: -5px; }
         .arrow.left { left: -5px; }
         .arrow.right { right: -5px; }
 
+        /* 단수 & 양단수 부분 */
         .vs-box {
             display: flex;
             align-items: center;
@@ -121,6 +154,13 @@
         .vs-text {
             font-size: 2.8rem;
             color: #e67e22;
+        }
+
+        /* 바둑판과 귀 깜빡임 효과 */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.5; }
         }
 
         .game-board {
@@ -140,12 +180,15 @@
             border: 3px dashed #2ecc71;
             top: 0;
             left: 0;
+            animation: pulse 1.5s infinite;
         }
 
+        /* 버튼 디자인 */
         #btn-group {
-            margin-top: 25px;
+            margin-top: 20px;
             display: flex;
             gap: 30px;
+            z-index: 100;
         }
         button {
             padding: 12px 35px;
@@ -156,10 +199,16 @@
             border-radius: 12px;
             cursor: pointer;
             box-shadow: 0 5px 0px #2980b9;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #2980b9;
+            transform: translateY(2px);
+            box-shadow: 0 3px 0px #1c5980;
         }
         button:active {
-            transform: translateY(4px);
-            box-shadow: 0 1px 0px #2980b9;
+            transform: translateY(5px);
+            box-shadow: 0 0px 0px #1c5980;
         }
     </style>
 </head>
@@ -175,7 +224,7 @@
             </div>
             <div class="intro-stones">
                 <div class="stone black"></div>
-                <div class="white stone"></div>
+                <div class="stone white"></div>
             </div>
         </div>
 
@@ -189,7 +238,7 @@
             <div class="hwallo-space">
                 <div class="line-v"></div>
                 <div class="line-h"></div>
-                <div class="stone black" style="z-index: 2;"></div>
+                <div class="stone black" style="z-index: 2; animation: none;"></div>
                 <div class="arrow up">↑</div>
                 <div class="arrow down">↓</div>
                 <div class="arrow left">←</div>
@@ -207,7 +256,7 @@
             <div class="vs-box">
                 <div class="stone black"></div>
                 <div class="vs-text">▶ 단수! ▶</div>
-                <div class="stone white"></div>
+                <div class="stone white shaking-stone" style="animation-delay: 0s;"></div>
             </div>
         </div>
 
@@ -222,8 +271,8 @@
                 <div class="stone black"></div>
                 <div class="vs-text">⚔️ 양방향 공격</div>
                 <div style="display:flex; flex-direction:column; gap:15px;">
-                    <div class="stone white"></div>
-                    <div class="stone white"></div>
+                    <div class="stone white shaking-stone"></div>
+                    <div class="stone white shaking-stone"></div>
                 </div>
             </div>
         </div>
