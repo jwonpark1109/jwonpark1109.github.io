@@ -87,12 +87,16 @@
     <div class="vignette"></div>
 
     <div class="story-container">
+        <!-- 상단 콘솔 이스터에그 힌트 로그 -->
         <script>
             console.log(
               "%c물. 물이야. 사방이 물이야. 억울해. 너도 당해봐. 물이야. 숨막혀. 너도 함께하자. 너도. 너. 물이 너무 많아.",
               "color: #00fff2; font-size: 16px; font-weight: bold; text-shadow: 0 0 8px #00fff2; font-family: monospace;"
             );
+            console.log("%c[SYSTEM]: 차원 장벽 붕괴 중. 콘솔에 'water'를 주입하여 유체 동기화를 수락하십시오.", "color: #888; font-size: 11px;");
         </script>
+
+        <!-- [기본 스토리 라인 - 파트 1] -->
         <div class="story-line broadcast-mode">[ SDP 재단이 알려드립니다. ]</div>
         <div class="story-line broadcast-mode">6시 1분 41초 AM (미국 중부 표준시) 기준,<br>4단계 비상 경보가 아메리카 대륙에 발령되었습니다.</div>
         <div class="story-line broadcast-mode">나머지 대륙은 3단계 비상 경보가 발령되었습니다.</div>
@@ -131,13 +135,30 @@
         <div class="story-line" id="final-whisper" style="font-size: 2rem; color: var(--water-blue); text-shadow: 0 0 25px rgba(0,210,255,0.8); font-weight: bold; letter-spacing: 4px;">
             물소리가.
         </div>
-        <div class="story-line" style="font-size: 10px; color: #222; margin-top: 40px;">[ SDP FOUNDATION ARG: SYSTEM CLOSED ]</div>
+        <div class="story-line" id="system-closed-line" style="font-size: 10px; color: #333; margin-top: 40px;">[ SDP FOUNDATION ARG: SYSTEM CLOSED ]</div>
+
+        <!-- [히든 스토리 라인 - 파트 2 (water 입력 시 해금)] -->
+        <div class="story-line water-story" style="color: #51b5ff; font-weight: bold;">물이 당신에게 가까이 온다.</div>
+        <div class="story-line water-story" style="font-style: italic; color: #fff;">"오. 오지마..."</div>
+        <div class="story-line water-story">당신은 힘을 쥐어짜내 말을 간신히 해냈다.</div>
+        <div class="story-line water-story" style="color: #51b5ff; font-weight: bold;">물이 점점더 가까이 온다.</div>
+        <div class="story-line water-story">그러곤 이렇게 물이 "말"한다.</div>
+        <div class="story-line water-story" style="color: #8898a5;">물이 말을 한다니, 기가 막혔다.</div>
+        <div class="story-line water-story" style="font-weight: bold; color: #cbd5e1;">물은 이렇게 말했다.</div>
+        
+        <!-- 물의 대사 (심해 연출) -->
+        <div class="story-line water-story" style="color: var(--water-blue); font-weight: bold; text-shadow: 0 0 10px var(--water-blue); font-size: 1.5rem;">"물. 물이야."</div>
+        <div class="story-line water-story" style="color: var(--water-blue); font-weight: bold; text-shadow: 0 0 10px var(--water-blue); font-size: 1.5rem;">"사방이 물이야."</div>
+        <div class="story-line water-story" style="color: var(--water-blue); font-weight: bold; text-shadow: 0 0 10px var(--water-blue); font-size: 1.5rem;">"억울해. 너도 당해봐."</div>
+        <div class="story-line water-story" style="color: #00ffff; font-weight: bold; text-shadow: 0 0 20px #00ffff; font-size: 1.6rem; line-height: 2.2;">"물이야. 숨막혀. 너도 함께하자. 너도. 너. 물이 너무 많아."</div>
+        <div class="story-line water-story" style="font-size: 11px; color: #ff3333; font-weight: bold; margin-top: 40px; letter-spacing: 3px;">[ TRUE ENDING: INFECTED & ASSIMILATED ]</div>
     </div>
 
     <div class="click-prompt" id="prompt-text">[ 화면을 클릭하여 기록 진행 ]</div>
 
     <script>
         let currentIdx = 0;
+        let waterUnlocked = false;
         const lines = document.querySelectorAll('.story-line');
         
         window.onload = () => {
@@ -145,45 +166,104 @@
         };
 
         function showLine(idx) {
-            if(idx >= lines.length) {
-                document.getElementById('prompt-text').innerText = "[ 데이터의 끝에 도달했습니다. 시스템을 종료하십시오. ]";
-                document.getElementById('prompt-text').style.color = "#555";
+            // 콘솔 이벤트를 트리거하지 않고 클릭으로만 히든 파트에 진입하려는 경우 차단
+            if (!waterUnlocked && lines[idx].classList.contains('water-story')) {
+                document.getElementById('prompt-text').innerText = "[ 대피소 내부 통신 침수 차단됨. 콘솔창에 'water' 분석 필요... ]";
+                document.getElementById('prompt-text').style.color = "var(--water-blue)";
                 return;
             }
 
-            // 이전 대사 페이드아웃 및 숨기기
-            if (idx > 0) {
-                lines[idx-1].style.opacity = 0;
-                setTimeout(() => { lines[idx-1].style.display = 'none'; }, 500);
+            if (idx >= lines.length) {
+                document.getElementById('prompt-text').innerText = "[ TRUE END: 영원히 물과 하나가 되었습니다. ]";
+                document.getElementById('prompt-text').style.color = "#00d2ff";
+                return;
             }
 
-            // 새로운 대사 페이드인
+            // 안전한 전체 화면 청소 (점프 연출 대비)
+            lines.forEach((line, i) => {
+                if (i !== idx) {
+                    line.style.opacity = 0;
+                    setTimeout(() => { line.style.display = 'none'; }, 400);
+                }
+            });
+
+            // 현재 대사 출력
             setTimeout(() => {
                 lines[idx].style.display = 'block';
-                lines[idx].offsetHeight; // 리플로우 강제성
+                lines[idx].offsetHeight; 
                 lines[idx].style.opacity = 1;
 
-                // 방송 끊기는 타이밍 (다시 안내드립니-) 효과음/화면 번쩍임 연출
+                // 글리치 효과 연출 (다시 안내드립니-)
                 if (idx === 7) {
                     document.body.classList.add('glitch-flash');
                     setTimeout(() => { document.body.classList.remove('glitch-flash'); }, 150);
                 }
 
-                // 마지막 "물소리가." 타이밍에 배경을 서서히 어두운 푸른빛으로 물들임 (침식 연출)
+                // 일반 엔딩 구간 침식 연출
                 if (lines[idx].id === "final-whisper") {
                     document.body.style.transition = "background-color 4s ease";
                     document.body.style.backgroundColor = "#000810";
-                    document.getElementById('prompt-text').style.display = "none"; // 클릭 유도 숨김
                 }
-            }, 500);
+
+                // 일반 엔딩 끝자락 유도 문구 전환
+                if (lines[idx].id === "system-closed-line" && !waterUnlocked) {
+                    document.getElementById('prompt-text').innerText = "[ SYSTEM CLOSED. F12 콘솔창에 'water'를 입력해 진실을 보십시오. ]";
+                    document.getElementById('prompt-text').style.color = "var(--water-blue)";
+                }
+
+                // 히든 스토리 돌입 시 심해 색상 심화 연출
+                if (waterUnlocked && idx === 33) {
+                    document.body.style.transition = "background-color 2s ease";
+                    document.body.style.backgroundColor = "#00040a";
+                    document.getElementById('prompt-text').innerText = "[ 화면을 클릭하여 심연 속으로 진행 ]";
+                    document.getElementById('prompt-text').style.color = "#666";
+                }
+                
+                // 물의 본색이 드러나는 마지막 문장 연출
+                if (idx === 43) {
+                    document.body.style.transition = "background-color 1s ease";
+                    document.body.style.backgroundColor = "#011625"; 
+                    document.getElementById('prompt-text').style.display = "none";
+                }
+            }, 450);
         }
 
         function nextStory() {
+            // 시스템 클로즈 라인(idx 32)에서 워터 미해금 상태면 클릭 작동 안 함
+            if (!waterUnlocked && currentIdx === 32) return;
+
             if (currentIdx < lines.length) {
                 currentIdx++;
                 showLine(currentIdx);
             }
         }
+
+        /* 
+           🔥 ARG 핵심 매직 기믹: 
+           콘솔에 water()가 아니라 오직 'water' 글자만 치고 엔터를 눌러도 작동하는 Getter 주입.
+        */
+        Object.defineProperty(window, 'water', {
+            get: function() {
+                if (!waterUnlocked) {
+                    waterUnlocked = true;
+                    
+                    // 현재 활성화된 일반 텍스트 즉시 제거
+                    lines.forEach(line => {
+                        line.style.opacity = 0;
+                        line.style.display = 'none';
+                    });
+
+                    // 히든 스토리 시작 인덱스(33)로 점프 강제 연출
+                    currentIdx = 33;
+                    showLine(currentIdx);
+                    
+                    return "💧 [SYS_ALERT]: 변칙 생명 액체가 콘솔을 통해 시각 인지 필터망을 오염시켰습니다.";
+                } else {
+                    return "💧 이미 삼켜졌습니다. 저항은 의미가 없습니다.";
+                }
+            },
+            configurable: true
+        });
     </script>
 </body>
 </html>
