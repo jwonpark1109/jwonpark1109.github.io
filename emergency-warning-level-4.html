@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP FOUNDATION - EMERGENCY WARNING LEVEL 4</title>
+    <style>
+        :root {
+            --bg-color: #050000;
+            --alert-red: #ff0033;
+            --glitch-color-1: #00ffff;
+            --glitch-color-2: #ff00ff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--alert-red);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden; text-align: center;
+        }
+
+        .alert-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(255,0,51,0.15) 0%, rgba(5,0,0,1) 100%);
+            animation: pulse-bg 1.5s infinite; z-index: -1;
+        }
+        @keyframes pulse-bg { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .glitch {
+            font-size: 3rem; font-weight: bold; text-transform: uppercase;
+            position: relative;
+            text-shadow: 0.05em 0 0 var(--glitch-color-1), -0.05em -0.025em 0 var(--glitch-color-2);
+            animation: glitch-anim 2.5s infinite;
+        }
+        @keyframes glitch-anim {
+            0% { text-shadow: 0.05em 0 0 var(--glitch-color-1), -0.05em -0.025em 0 var(--glitch-color-2); transform: translate(0); }
+            20% { text-shadow: -0.05em -0.025em 0 var(--glitch-color-1), 0.025em 0.025em 0 var(--glitch-color-2); transform: translate(-2px, 2px); }
+            40% { text-shadow: 0.05em 0.05em 0 var(--glitch-color-1), -0.05em -0.05em 0 var(--glitch-color-2); transform: translate(2px, -2px); }
+            60% { text-shadow: -0.025em 0.05em 0 var(--glitch-color-1), 0.05em -0.025em 0 var(--glitch-color-2); transform: translate(-2px, 0); }
+            80% { text-shadow: 0.025em 0 0 var(--glitch-color-1), -0.05em -0.05em 0 var(--glitch-color-2); transform: translate(2px, 2px); }
+            100% { text-shadow: 0.05em 0 0 var(--glitch-color-1), -0.05em -0.025em 0 var(--glitch-color-2); transform: translate(0); }
+        }
+
+        .message-box {
+            border: 2px solid var(--alert-red); padding: 30px;
+            background: rgba(20, 0, 0, 0.8); max-width: 700px;
+            box-shadow: 0 0 30px rgba(255, 0, 51, 0.4); margin-top: 30px;
+        }
+
+        .typewriter { font-size: 1.2rem; color: #ffcccc; line-height: 1.6; margin-bottom: 30px; min-height: 100px; }
+        .input-area { margin-top: 20px; }
+        input[type="text"] {
+            background: transparent; border: 1px solid var(--alert-red);
+            color: #fff; padding: 10px; font-family: monospace; font-size: 1.2rem;
+            width: 300px; text-align: center; outline: none;
+        }
+        input[type="text"]:focus { box-shadow: 0 0 15px var(--alert-red); }
+        
+        button {
+            background: var(--alert-red); color: #fff; border: none;
+            padding: 11px 20px; font-weight: bold; cursor: pointer;
+            font-family: monospace; font-size: 1.1rem;
+        }
+        button:hover { background: #ff3366; }
+        .hidden-hint { font-size: 8px; color: #1a0000; user-select: none; }
+    </style>
+</head>
+<body>
+
+    <div class="alert-bg"></div>
+
+    <div class="glitch" data-text="EMERGENCY WARNING LEVEL 4">
+        EMERGENCY WARNING LEVEL 4
+    </div>
+
+    <div class="message-box">
+        <div class="typewriter" id="text-output"></div>
+        
+        <div class="input-area">
+            <input type="text" id="override-code" placeholder="ENTER O5 OVERRIDE CODE" onkeypress="handleEnter(event)">
+            <button onclick="checkCode()">[ 전송 ]</button>
+        </div>
+        <div id="error-msg" style="color: var(--alert-red); margin-top: 15px; display: none;">[오류] 접근 권한이 없거나 코드가 일치하지 않습니다.</div>
+    </div>
+
+    <div class="hidden-hint">F12를 눌러 진실을 마주하라.</div>
+
+    <script>
+        const text = "경고: 다중 격리 실패 감지.\n식별 코드 불명 개체 중앙 통제실 접근 중.\n\n시스템 자동 폐쇄 절차가 3분 후 시작됩니다.\n오버라이드 코드를 입력하여 통제권을 수동 복구하십시오.";
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                let char = text.charAt(i);
+                document.getElementById("text-output").innerHTML += (char === '\n') ? "<br>" : char;
+                i++; setTimeout(typeWriter, 50);
+            }
+        }
+        window.onload = () => { setTimeout(typeWriter, 1000); };
+        function handleEnter(e) { if (e.key === 'Enter') checkCode(); }
+
+        function checkCode() {
+            const input = document.getElementById("override-code").value.trim();
+            const errorMsg = document.getElementById("error-msg");
+
+            if (input === "Epsilon-11-Protocol") {
+                document.body.innerHTML = "<h1 style='color:#00ff66; margin-top:20vh; font-family:monospace;'>[ O5-OVERRIDE SUCCESS ]<br>메인 데이터베이스망 강제 접속 중...</h1>";
+                setTimeout(() => {
+                    window.location.href = "main-database.html"; // 경로 수정 완료
+                }, 2500);
+            } else {
+                errorMsg.style.display = "block";
+                setTimeout(() => { errorMsg.style.display = "none"; }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
