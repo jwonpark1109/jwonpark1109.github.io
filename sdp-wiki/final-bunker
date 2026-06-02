@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP FOUNDATION - FINAL BUNKER</title>
+    <style>
+        :root {
+            --bg-iron: #0a0a0c;
+            --text-muted: #4a5568;
+            --neon-red: #ff2a2a;
+            --neon-white: #e2e8f0;
+        }
+
+        body {
+            background-color: var(--bg-iron);
+            color: var(--neon-white);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
+        }
+
+        /* 벙커 철문 느낌의 배경 질감 */
+        body::before {
+            content: "";
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px) 0 0 / 50px 50px,
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px) 0 0 / 50px 50px;
+            z-index: -1; pointer-events: none;
+        }
+
+        .bunker-panel {
+            background: rgba(5, 5, 6, 0.9);
+            border: 2px solid #1a1a24;
+            border-top: 4px solid var(--neon-red);
+            padding: 40px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        h1 { color: var(--neon-red); font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 5px; text-transform: uppercase; }
+        .subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 30px; letter-spacing: 2px; }
+
+        .formula-box {
+            background: #000;
+            border: 1px dashed var(--text-muted);
+            padding: 20px;
+            margin: 30px 0;
+            font-size: 1.2rem;
+            color: #a0aec0;
+            letter-spacing: 2px;
+        }
+
+        .highlight { color: #fff; font-weight: bold; font-size: 1.4rem; }
+
+        /* 드래그해야 보이는 텍스트 (β) */
+        .hidden-drag {
+            color: #000; /* 배경과 같은 검은색 */
+            background: #000;
+            user-select: text;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+        .hidden-drag::selection { background: var(--neon-red); color: #fff; }
+
+        /* 거울 반사 텍스트 (δ) */
+        .mirror-text {
+            display: inline-block;
+            transform: scaleX(-1);
+            color: #2d3748;
+            font-size: 18px;
+            margin-top: 10px;
+            user-select: none;
+        }
+
+        /* 눈에 안 띄는 극소형 텍스트 (γ) */
+        .micro-text {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 3px;
+            color: #111; /* 거의 안보이는 짙은 회색 */
+            user-select: none;
+        }
+
+        .input-group { margin-top: 20px; }
+        .master-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-muted);
+            color: var(--neon-white);
+            font-family: monospace;
+            font-size: 2rem;
+            width: 150px;
+            text-align: center;
+            outline: none;
+            letter-spacing: 5px;
+            transition: all 0.3s;
+        }
+        .master-input:focus { border-bottom-color: var(--neon-red); }
+
+        .auth-btn {
+            background: transparent;
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+            padding: 10px 30px;
+            font-family: monospace;
+            font-size: 1rem;
+            margin-top: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+        }
+        .auth-btn:hover { background: var(--neon-red); color: #000; }
+
+        #error-msg {
+            color: var(--neon-red); font-size: 12px; margin-top: 15px; opacity: 0; transition: opacity 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- HTML 주석으로 힌트를 찾는 사람들을 위한 페이크. 진짜 α 힌트는 Console 창에 있습니다. -->
+    <!-- [SYSTEM LOG] F12를 눌러 소스코드를 보는 자여, 여기서 α값을 찾고 있나? 진짜 진실은 'Console' 탭에 출력되어 있다. -->
+
+    <div class="bunker-panel">
+        <h1>O5 COMMAND BUNKER</h1>
+        <div class="subtitle">격리실 최종 밀봉 절차 가동 중</div>
+
+        <p style="font-size: 13px; line-height: 1.6; color: #718096;">
+            모든 위협 요소가 차단되었습니다. 벙커의 수동 개방을 위해 최고 관리자의 연산 코드가 필요합니다. 흩어진 데이터를 조합하십시오.
+        </p>
+
+        <!-- 암호 해독 공식 -->
+        <div class="formula-box">
+            MASTER_KEY = <span class="highlight">α + ( β × γ ) - δ</span>
+        </div>
+
+        <!-- β (베타): 드래그 기믹 -->
+        <div class="hidden-drag">보안 로그 복구 성공: [ β = 13 ]</div>
+
+        <!-- δ (델타): 거울 기믹 -->
+        <div class="mirror-text">404 = δ</div>
+
+        <div class="input-group">
+            <input type="text" id="code-input" class="master-input" maxlength="4" placeholder="----" onkeypress="handleEnter(event)">
+            <br>
+            <button class="auth-btn" onclick="verifyCode()">AUTHENTICATE</button>
+        </div>
+        
+        <div id="error-msg">ACCESS DENIED. 데이터 결합 오류.</div>
+    </div>
+
+    <!-- γ (감마): 줌인 / 숨은 그림 찾기 기믹 -->
+    <div class="micro-text">γ=5</div>
+
+    <script>
+        // α (알파): F12 콘솔 기믹
+        console.log("%c[SYSTEM ADMIN] α(Alpha) 파라미터 복구 완료: 2026", "color: #ff3333; font-weight: bold; font-size: 14px; border: 1px solid red; padding: 5px;");
+        console.log("%c공식을 완성하여 벙커를 개방하십시오.", "color: #aaa; font-size: 12px;");
+
+        function handleEnter(e) { if (e.key === 'Enter') verifyCode(); }
+
+        function verifyCode() {
+            const input = document.getElementById("code-input").value.trim();
+            const errorMsg = document.getElementById("error-msg");
+
+            // 정답: 2026 + (13 * 5) - 404 = 1687
+            if (input === "1687") {
+                document.body.innerHTML = "<div style='color:#fff; text-align:center; font-family:monospace; margin-top:35vh;'><h1>[ LOCKDOWN LIFTED ]</h1><p style='color:#00ff66;'>마지막 문이 열립니다. 기록 보관소로 진입합니다...</p></div>";
+                setTimeout(() => {
+                    window.location.href = "final-story.html";
+                }, 3000);
+            } else {
+                errorMsg.style.opacity = "1";
+                setTimeout(() => { errorMsg.style.opacity = "0"; }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
