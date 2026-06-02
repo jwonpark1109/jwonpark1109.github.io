@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP FOUNDATION - GATEWAY CHAMBER (FLOOD WARNING)</title>
+    <style>
+        :root {
+            --bg-fluid: #020b14;
+            --neon-blue: #00d2ff;
+            --alert-orange: #ff6600;
+            --heavy-blue: #0A2540;
+        }
+
+        body {
+            background-color: var(--bg-fluid);
+            color: #c2e1f5;
+            font-family: 'Courier New', monospace;
+            margin: 0; padding: 40px 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 물 밑에 잠긴 듯한 화면 일렁임 애니메이션 */
+        body::before {
+            content: ""; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0, 210, 255, 0.03) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 6px;
+            z-index: 10; pointer-events: none;
+        }
+
+        /* 실시간으로 차오르는 물을 시각화한 스크린 배경 효과 */
+        .water-level-bg {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: linear-gradient(to top, rgba(0, 132, 255, 0.15), rgba(0, 210, 255, 0.05));
+            border-top: 2px solid var(--neon-blue);
+            transition: height 1s linear;
+            z-index: -1;
+        }
+
+        .container { max-width: 850px; margin: 0 auto; position: relative; z-index: 2; }
+
+        .status-header {
+            border: 1px solid var(--neon-blue);
+            background: rgba(0, 30, 60, 0.6);
+            padding: 15px 25px; display: flex;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+            margin-bottom: 30px;
+        }
+        .status-title { color: #fff; font-weight: bold; font-size: 1.2rem; letter-spacing: 1px; }
+        
+        /* 실시간 침수율 카운터 */
+        .flood-counter {
+            font-size: 1.8rem; font-weight: bold; color: var(--alert-orange);
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+            animation: pulse 1s infinite;
+        }
+
+        .log-box {
+            background: rgba(3, 10, 18, 0.85);
+            border: 1px solid #102a45;
+            padding: 25px; line-height: 1.8;
+            margin-bottom: 30px; border-radius: 4px;
+        }
+
+        .accent-text { color: var(--neon-blue); font-weight: bold; }
+        .danger-text { color: var(--alert-orange); font-weight: bold; }
+
+        /* 퍼즐 제어 장치 UI */
+        .valve-control {
+            background: #050e17; border: 1px solid #16385c;
+            padding: 30px; text-align: center; border-radius: 4px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        
+        .riddle-hint {
+            font-size: 13px; color: #7ca4c4; margin-bottom: 20px;
+            border-bottom: 1px dashed #16385c; padding-bottom: 15px;
+        }
+
+        .valve-input {
+            background: #01050a; border: 1px solid var(--neon-blue);
+            color: #fff; padding: 12px; font-family: monospace;
+            font-size: 1.2rem; width: 300px; text-align: center; outline: none;
+            letter-spacing: 3px;
+        }
+
+        .valve-btn {
+            background: #002d47; border: 1px solid var(--neon-blue);
+            color: var(--neon-blue); padding: 12px 25px; font-weight: bold;
+            font-size: 16px; cursor: pointer; vertical-align: top; margin-left: 10px;
+            transition: all 0.2s;
+        }
+        .valve-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+    </style>
+</head>
+<body>
+
+    <div class="water-level-bg" id="water-fluid"></div>
+
+    <div class="container">
+        
+        <div class="status-header">
+            <div class="status-title">🚨 격실 제7호 (GATEWAY CHAMBER) 내부 터미널</div>
+            <div class="flood-counter" id="flood-percent">침수율: 0%</div>
+        </div>
+
+        <div class="log-box">
+            <p>
+                [오류] 차원 문이 열림과 동시에 인접 구역 격리동에 수용되어 있던 <span class="danger-text">SDP-3280 "지성형 포식성 수자원"</span>의 액체 배관이 파열되었습니다.
+            </p>
+            <p>
+                본 변칙 유체는 일반적인 물(H2O)의 구조를 지니고 있으나, 스스로 흐름을 통제하며 생명체의 호흡기를 찾아 강제로 침투하는 <span class="accent-text">의식형 살인 액체</span>입니다. 현재 격실 하단 배수구가 유체에 의해 고의로 막혔으며, 천장 밸브로부터 역류가 진행 중입니다.
+            </p>
+            <p class="danger-text" style="animation: pulse 1.5s infinite;">
+                ※ 경고: 침수율이 100%에 도달할 경우 격실이 영구 폐쇄되며 유체에 의해 질식 처리됩니다.
+            </p>
+        </div>
+
+        <div class="valve-control">
+            <div style="color: #fff; font-weight: bold; margin-bottom: 10px;">액체 질소 급속 냉각 프로토콜 가동</div>
+            
+            <div class="riddle-hint">
+                <b>[보안 힌트 디코딩]</b><br>
+                "산소(Oxygen)와 결합하여 무색무취의 생명을 만들었으나, 놈들의 본질은 파괴다.<br>
+                그 원소의 접두사, 물을 지배하는 화학적 첫걸음의 단어를 외쳐라."
+            </div>
+
+            <div>
+                <input type="text" id="valve-code" class="valve-input" placeholder="OVERRIDE KEYWORD" onkeypress="handleEnter(event)">
+                <button class="valve-btn" onclick="checkValve()">밸브 동결</button>
+            </div>
+            <div id="status-msg" style="margin-top: 15px; font-size: 12px; display: none;"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // 실시간 침수율 상승 스크립트 (ARG의 긴박함 연출)
+        let floodPercent = 0;
+        const floodElement = document.getElementById("flood-percent");
+        const waterBg = document.getElementById("water-fluid");
+
+        const floodInterval = setInterval(() => {
+            if (floodPercent < 100) {
+                floodPercent += 2; // 2%씩 상승 (약 1분 40초의 제한시간)
+                floodElement.innerText = `침수율: ${floodPercent}%`;
+                waterBg.style.height = `${floodPercent}%`; // 물이 시각적으로 차오름
+
+                if (floodPercent >= 80) {
+                    floodElement.style.color = "#ff0000";
+                }
+            } else {
+                clearInterval(floodInterval);
+                gameOver();
+            }
+        }, 2000);
+
+        function handleEnter(e) { if (e.key === 'Enter') checkValve(); }
+
+        // 퍼즐 검증 (정답: HYDRO)
+        function checkValve() {
+            const input = document.getElementById("valve-code").value.trim().toUpperCase();
+            const msg = document.getElementById("status-msg");
+
+            if (input === "HYDRO") {
+                clearInterval(floodInterval); // 타이머 멈춤
+                msg.style.color = "#00ff66";
+                msg.style.display = "block";
+                msg.innerText = "[SUCCESS] 액체 질소 전면 분사. 변칙 유체 동결 완료. 배수 밸브가 열립니다.";
+                
+                setTimeout(() => {
+                    document.body.innerHTML = "<div style='color:var(--neon-blue); text-align:center; font-family:monospace; margin-top:35vh;'><h1>[ STAGE CLEAR ]</h1><p>살아있는 물이 얼어붙어 부서집니다. 최종 생존 구역 통로가 개방되었습니다...</p></div>";
+                    setTimeout(() => {
+                        // 다음 최종 클리어 페이지 또는 또 다른 단서 페이지로 이동
+                        window.location.href = "final-bunker.html"; 
+                    }, 3000);
+                }, 2000);
+            } else {
+                msg.style.color = "var(--alert-orange)";
+                msg.style.display = "block";
+                msg.innerText = "[ERROR] 올바르지 않은 키워드입니다. 냉각 장치가 거부되었습니다.";
+                setTimeout(() => { msg.style.display = "none"; }, 2000);
+            }
+        }
+
+        // 게임 오버 (100% 도달 시)
+        function gameOver() {
+            document.body.innerHTML = "<div style='color:#ff0033; text-align:center; font-family:monospace; margin-top:35vh; background:black; height:100vh; position:fixed; top:0; left:0; width:100%; padding-top:30vh;'><h1>[ FATAL: SENSOR DISCONNECTED ]</h1><p>격실 제7호 전역 침수. 생체 신호가 감지되지 않습니다. 사용자가 시스템에서 탈탈 털렸습니다.</p><br><button onclick='window.location.reload()' style='background:#ff0033; color:white; border:none; padding:10px 20px; cursor:pointer;'>다시 시도 (RETRY)</button></div>";
+        }
+    </script>
+</body>
+</html>
