@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Video ASCII Player</title>
+    <title>Video ASCII Player (Color)</title>
     <style>
         html, body {
             width: 100%;
@@ -68,8 +68,9 @@
 
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-        let WIDTH = 150;
-        let HEIGHT = 50;
+        // 컬러 연산 시 과부하를 줄이기 위해 해상도를 살짝 낮춰서 시작합니다.
+        let WIDTH = 120;
+        let HEIGHT = 40;
         
         const asciiChars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
         const revChars = asciiChars.split("").reverse().join("");
@@ -79,10 +80,9 @@
             const windowHeight = window.innerHeight;
 
             let fontSize = Math.max(5, Math.floor(windowWidth / 180)); 
-            if (fontSize > 12) fontSize = 12;
+            if (fontSize > 10) fontSize = 10; // 컬러 렌더링 성능을 위해 폰트 최대 크기를 살짝 조절
 
             container.style.fontSize = `${fontSize}px`;
-            
             container.style.lineHeight = "1.0"; 
             container.style.letterSpacing = "0px"; 
 
@@ -96,8 +96,9 @@
                 WIDTH = Math.floor(HEIGHT / 0.38);
             }
 
-            if (WIDTH > 280) {
-                WIDTH = 280;
+            // 가로 최대 글자 수를 제한하여 성능 저하(렉)를 방지합니다.
+            if (WIDTH > 180) {
+                WIDTH = 180;
                 HEIGHT = Math.floor(WIDTH * 0.38);
             }
 
@@ -131,24 +132,44 @@
             try {
                 const imgData = ctx.getImageData(0, 0, WIDTH, HEIGHT);
                 const pixels = imgData.data;
-                let asciiArt = "";
+                let htmlOutput = "";
 
                 for (let y = 0; y < HEIGHT; y++) {
+                    let currentR = -1, currentG = -1, currentB = -1;
+                    let rowSegment = "";
+
                     for (let x = 0; x < WIDTH; x++) {
                         const idx = (y * WIDTH + x) * 4;
                         const r = pixels[idx];
                         const g = pixels[idx + 1];
                         const b = pixels[idx + 2];
 
+                        // 문자 결정을 위한 밝기 계산
                         const brightness = (r * 0.299 + g * 0.587 + b * 0.114);
-
                         const charIdx = Math.floor((brightness / 255) * (revChars.length - 1));
-                        asciiArt += revChars[charIdx];
+                        const char = revChars[charIdx] === " " ? "&nbsp;" : revChars[charIdx];
+
+                        // [성능 최적화] 이전 픽셀과 색상이 같다면 <span>을 매번 열지 않고 글자만 이어붙입니다.
+                        if (r === currentR && g === currentG && b === currentB) {
+                            rowSegment += char;
+                        } else {
+                            if (rowSegment !== "") {
+                                htmlOutput += `<span style="color:rgb(${currentR},${currentG},${currentB})">${rowSegment}</span>`;
+                            }
+                            currentR = r;
+                            currentG = g;
+                            currentB = b;
+                            rowSegment = char;
+                        }
                     }
-                    asciiArt += "\n";
+                    // 한 줄의 마지막 남은 세그먼트 처리
+                    if (rowSegment !== "") {
+                        htmlOutput += `<span style="color:rgb(${currentR},${currentG},${currentB})">${rowSegment}</span>`;
+                    }
+                    htmlOutput += "\n";
                 }
 
-                container.textContent = asciiArt;
+                container.innerHTML = htmlOutput;
                 
             } catch (e) {
                 container.textContent = "CORS Error or Canvas Tainted.";
