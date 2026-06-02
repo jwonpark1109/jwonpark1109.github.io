@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP FOUNDATION - WARNING_INFO_LEVEL_4</title>
+    <style>
+        :root {
+            --bg-dark: #080202;
+            --text-gray: #b5c7cc;
+            --crimson: #ff1144;
+            --terminal-green: #33ff66;
+            --border-color: #3b141c;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-gray);
+            font-family: 'Courier New', monospace;
+            padding: 40px 20px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* 경고 화면 지직거림(Scanline/Flicker) 연출 */
+        body::after {
+            content: " ";
+            display: block; position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
+            z-index: 9999; background-size: 100% 4px; pointer-events: none;
+            animation: flicker 0.15s infinite;
+            opacity: 0.4;
+        }
+        @keyframes flicker { 0% { opacity: 0.35; } 50% { opacity: 0.45; } 100% { opacity: 0.35; } }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* 기밀 문서 헤더 */
+        .doc-header {
+            border: 2px solid var(--crimson);
+            background: rgba(255, 17, 68, 0.05);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 0 20px rgba(255,17,68,0.2);
+        }
+        .doc-header h1 { color: #fff; margin: 0 0 10px 0; font-size: 1.8rem; letter-spacing: 3px; }
+        .classification {
+            background: var(--crimson); color: #fff;
+            display: inline-block; padding: 3px 15px;
+            font-size: 12px; font-weight: bold; letter-spacing: 2px;
+        }
+
+        /* 문서 내용 복고풍 스타일 */
+        .document-body {
+            background: #0f0506;
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            line-height: 1.8;
+            font-size: 14px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
+        }
+        .meta-line { color: #5c7e8a; border-bottom: 1px solid #1f0b0f; padding-bottom: 8px; margin-bottom: 20px; }
+        .meta-line span { color: var(--crimson); font-weight: bold; }
+        
+        .section-title {
+            color: #fff; font-size: 15px; font-weight: bold;
+            margin-top: 25px; margin-bottom: 10px;
+            border-left: 3px solid var(--crimson); padding-left: 10px;
+        }
+
+        .black-box { background: #000; color: #000; padding: 0 3px; user-select: none; } /* 마우스 드래그 방지 기믹 */
+        
+        /* 무전 로그 스타일 */
+        .audio-log {
+            background: #050102; border-left: 2px dashed var(--crimson);
+            padding: 15px; margin: 20px 0; font-style: italic; color: #d996a2;
+        }
+
+        /* 암호 해독 모듈 UI */
+        .crypto-box {
+            background: #020503; border: 1px solid #11331a;
+            padding: 25px; border-radius: 4px; text-align: center;
+        }
+        .crypto-title { color: var(--terminal-green); font-size: 13px; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px; }
+        .encrypted-str { font-size: 22px; color: #fff; letter-spacing: 4px; margin: 15px 0; font-weight: bold; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
+        
+        .decrypt-input {
+            background: #000; border: 1px solid #1a4d26;
+            color: var(--terminal-green); padding: 12px; font-family: monospace;
+            font-size: 1.1rem; width: 280px; text-align: center; outline: none;
+            text-transform: uppercase;
+        }
+        .decrypt-input:focus { border-color: var(--terminal-green); box-shadow: 0 0 10px rgba(51,255,102,0.3); }
+        
+        .decrypt-btn {
+            background: #0f3318; border: 1px solid var(--terminal-green);
+            color: var(--terminal-green); padding: 12px 24px; font-weight: bold;
+            cursor: pointer; font-size: 15px; vertical-align: top; margin-left: 10px;
+            transition: all 0.2s;
+        }
+        .decrypt-btn:hover { background: var(--terminal-green); color: #000; box-shadow: 0 0 15px var(--terminal-green); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="doc-header">
+            <h1>SDP 재단 최고보안 기밀 보고서</h1>
+            <div class="classification">등급 4 (EYES ONLY) - 복제 및 외부 반출 금지</div>
+        </div>
+
+        <div class="document-body">
+            <div class="meta-line">
+                [문서 번호] <b>SDP-404-B4</b> | [작성 그룹] <b>제거부 산하 제거검토위원회</b><br>
+                [사태 분류] <span class="crimson">4등급 다중 격리 실패 (MASS BREACH)</span>
+            </div>
+
+            <p>
+                본 문서는 제거 검토부에서 최종 사살 및 소각 판정이 보류되었던 <b>SDP-404 "차원 균열성 포식자"</b>의 탈주 및 제19기동구역 붕괴 사건에 대한 상세 경위를 담고 있다. 현 시간부로 해당 개체의 위험도는 감당 불가능한 수준으로 격상되었음을 알린다.
+            </p>
+
+            <div class="section-title">1. 초기 감지 및 현실성 닻(Scranton Anchor) 무력화</div>
+            <p>
+                2026년 06월 02일 23시 11분, 격리실 내부의 위상 변화 수치가 임계점을 돌파했다. 제거 검토 위원회가 대안 분석을 위해 집행 승인을 미루는 사이, 대상은 고유 변칙 능력을 이용해 3중 차원 구조를 왜곡, <span class="black-box">물리적 차단벽</span>을 통째로 통과했다. 
+            </p>
+
+            <div class="section-title">2. 현장 생존 요원의 마지막 무전 교신 기록</div>
+            <p>공격 직전 수신된 현장 보안 대장(Agent. ████)의 파편화된 오디오 세그먼트 변환 결과이다.</p>
+            
+            <div class="audio-log">
+                "...치직... 놈이 문을 연 게 아니다! 공간 자체를 접어버리고 있어! 무기가 통하지 않는다... 생물 제거부의 전술 탄환도 소용없어! 놈은 공간의 틈새로 교전 구역을 피하고 있다... 치직... 만약 통제실 브릿지가 완전히 차단된다면... 명심해라... <b>심연의 거울을 돌려라... 뒤집힌 그림자 속에 통로(Link)가 있다...</b> 놈이 온다, 으아아아악! [신호 유실]"
+            </div>
+
+            <div class="section-title">3. 긴급 프로토콜 작동 지침</div>
+            <p>
+                현 시스템은 4등급 폐쇄 조치로 인해 인트라넷이 전면 차단되었으며, 하단의 <b>차원 억제 게이트(Gateway) 터미널</b>을 수동 디코딩하여 다음 구역으로 피난해야 한다.
+            </p>
+        </div>
+
+        <div class="crypto-box">
+            <div class="crypto-title">[ GATEWAY OVERRIDE DECODER ]</div>
+            <div style="font-size: 11px; color: #558866; margin-bottom: 5px;">차원 반사 파형 분석 완료 - 해독 키워드를 입력하십시오</div>
+            
+            <div class="encrypted-str">█ Y _ A _ W _ E _ T _ A _ G █</div>
+            
+            <div>
+                <input type="text" id="crypto-input" class="decrypt-input" placeholder="ACCESS KEYWORD 입력" onkeypress="handleEnter(event)">
+                <button class="decrypt-btn" onclick="verifyKey()">DECRYPT</button>
+            </div>
+            <div id="fail-msg" style="color: var(--crimson); font-size: 12px; margin-top: 15px; display: none;">[DECRYPTION FAILED] 파형 분석 불일치. 심연의 거울을 상기하십시오.</div>
+        </div>
+
+    </div>
+
+    <script>
+        function handleEnter(e) { if (e.key === 'Enter') verifyKey(); }
+
+        function verifyKey() {
+            const input = document.getElementById("crypto-input").value.trim().toUpperCase();
+            const failMsg = document.getElementById("fail-msg");
+
+            // 정답은 YAWETAG를 거꾸로 뒤집은 GATEWAY
+            if (input === "GATEWAY") {
+                document.body.innerHTML = "<div style='color:var(--terminal-green); text-align:center; font-family:monospace; margin-top:35vh;'><h1>[ DECRYPTION SUCCESSFUL ]</h1><p>차원 격벽 게이트가 일시적으로 열립니다. 즉시 대피하십시오...</p></div>";
+                setTimeout(() => {
+                    // 다음 퍼즐이 있는 게이트웨이 챔버 페이지로 이동
+                    window.location.href = "gateway-chamber.html";
+                }, 2500);
+            } else {
+                failMsg.style.display = "block";
+                setTimeout(() => { failMsg.style.display = "none"; }, 2500);
+            }
+        }
+    </script>
+</body>
+</html>
