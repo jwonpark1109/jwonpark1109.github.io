@@ -3,117 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDP FOUNDATION - EMERGENCY WARNING LEVEL 4</title>
+    <title>SDP FOUNDATION - MAIN DATABASE (CRITICAL_CORRUPTED)</title>
     <style>
         :root {
-            --bg-color: #050000;
-            --alert-red: #ff0033;
-            --glitch-color-1: #00ffff;
-            --glitch-color-2: #ff00ff;
+            --bg-color: #06090c;
+            --text-corrupt: #3a535c;
+            --amber-alert: #ffaa00;
+            --border-dark: #121b24;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--alert-red);
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0; padding: 0;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            height: 100vh; overflow: hidden; text-align: center;
+            color: var(--text-corrupt);
+            font-family: 'Courier New', monospace;
+            padding: 30px;
+            margin: 0;
+            overflow-x: hidden;
         }
 
-        .alert-bg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(255,0,51,0.15) 0%, rgba(5,0,0,1) 100%);
-            animation: pulse-bg 1.5s infinite; z-index: -1;
-        }
-        @keyframes pulse-bg { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        .glitch {
-            font-size: 3rem; font-weight: bold; text-transform: uppercase;
-            position: relative;
-            text-shadow: 0.05em 0 0 var(--glitch-color-1), -0.05em -0.025em 0 var(--glitch-color-2);
-            animation: glitch-anim 2.5s infinite;
-        }
-        @keyframes glitch-anim {
-            0% { text-shadow: 0.05em 0 0 var(--glitch-color-1), -0.05em -0.025em 0 var(--glitch-color-2); transform: translate(0); }
-            20% { text-shadow: -0.05em -0.025em 0 var(--glitch-color-1), 0.025em 0.025em 0 var(--glitch-color-2); transform: translate(-2px, 2px); }
-            40% { text-shadow: 0.05em 0.05em 0 var(--glitch-color-1), -0.05em -0.05em 0 var(--glitch-color-2); transform: translate(2px, -2px); }
-            60% { text-shadow: -0.025em 0.05em 0 var(--glitch-color-1), 0.05em -0.025em 0 var(--glitch-color-2); transform: translate(-2px, 0); }
-            80% { text-shadow: 0.025em 0 0 var(--glitch-color-1), -0.05em -0.05em 0 var(--glitch-color-2); transform: translate(2px, 2px); }
-            100% { text-shadow: 0.05em 0 0 var(--glitch-color-1), -0.05em -0.025em 0 var(--glitch-color-2); transform: translate(0); }
+        /* 손상된 터미널 느낌의 그리드 배경 */
+        body::before {
+            content: " ";
+            display: block; position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 9999; background-size: 100% 4px, 6px 100%; pointer-events: none;
         }
 
-        .message-box {
-            border: 2px solid var(--alert-red); padding: 30px;
-            background: rgba(20, 0, 0, 0.8); max-width: 700px;
-            box-shadow: 0 0 30px rgba(255, 0, 51, 0.4); margin-top: 30px;
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* 타이틀 바 깨짐 연출 */
+        .db-header {
+            border-bottom: 1px solid #1c2d3d;
+            padding-bottom: 15px; margin-bottom: 30px;
+            color: #557a8a;
+        }
+        .db-header h1 { margin: 0; font-size: 1.5rem; letter-spacing: 1px; }
+
+        /* 메인 데이터 레이아웃 */
+        .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; }
+        .panel {
+            background: #030507; border: 1px solid var(--border-dark);
+            padding: 20px; border-radius: 3px; position: relative;
         }
 
-        .typewriter { font-size: 1.2rem; color: #ffcccc; line-height: 1.6; margin-bottom: 30px; min-height: 100px; }
-        .input-area { margin-top: 20px; }
-        input[type="text"] {
-            background: transparent; border: 1px solid var(--alert-red);
-            color: #fff; padding: 10px; font-family: monospace; font-size: 1.2rem;
-            width: 300px; text-align: center; outline: none;
+        /* 심각하게 깨진 텍스트 스타일 */
+        .corrupted-block {
+            font-size: 12px; line-height: 1.8; color: var(--text-corrupt);
+            word-break: break-all; margin-bottom: 15px;
+            user-select: none;
         }
-        input[type="text"]:focus { box-shadow: 0 0 15px var(--alert-red); }
+        .corrupted-block span { color: #1c2b30; }
+
+        /* 핵심 공지 구역 (이머전시 워닝 레벨4) */
+        .notice-panel {
+            grid-column: span 2;
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            background: rgba(255, 170, 0, 0.02);
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.05);
+        }
+        .notice-title {
+            color: var(--amber-alert); font-weight: bold; font-size: 14px;
+            border-bottom: 1px dashed rgba(255, 170, 0, 0.4);
+            padding-bottom: 8px; margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+        }
+
+        /* 버튼 및 링크 시스템 */
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
         
-        button {
-            background: var(--alert-red); color: #fff; border: none;
-            padding: 11px 20px; font-weight: bold; cursor: pointer;
-            font-family: monospace; font-size: 1.1rem;
+        /* 작동 안 되는 깨진 버튼 */
+        .broken-btn {
+            background: transparent; border: 1px solid #2a1c0a;
+            color: #543f21; padding: 8px 16px; font-family: monospace;
+            cursor: pointer; font-size: 12px; transition: all 0.2s;
         }
-        button:hover { background: #ff3366; }
-        .hidden-hint { font-size: 8px; color: #1a0000; user-select: none; }
+        .broken-btn:hover {
+            background: rgba(255, 0, 0, 0.1); border-color: #ff3333; color: #ff3333;
+        }
+
+        /* 유일하게 작동하는 More info 버튼 */
+        .active-link {
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid var(--amber-alert);
+            color: #fff; padding: 8px 20px; font-family: monospace;
+            font-size: 12px; text-decoration: none; font-weight: bold;
+            box-shadow: 0 0 10px rgba(255,170,0,0.2);
+            transition: all 0.3s;
+            display: inline-block;
+            animation: blink 2s infinite;
+        }
+        .active-link:hover {
+            background: var(--amber-alert); color: #000;
+            box-shadow: 0 0 20px var(--amber-alert);
+            animation: none;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
     </style>
 </head>
 <body>
 
-    <div class="alert-bg"></div>
-
-    <div class="glitch" data-text="EMERGENCY WARNING LEVEL 4">
-        EMERGENCY WARNING LEVEL 4
-    </div>
-
-    <div class="message-box">
-        <div class="typewriter" id="text-output"></div>
+    <div class="container">
         
-        <div class="input-area">
-            <input type="text" id="override-code" placeholder="ENTER O5 OVERRIDE CODE" onkeypress="handleEnter(event)">
-            <button onclick="checkCode()">[ 전송 ]</button>
+        <div class="db-header">
+            <h1>SDP_FOUNDATION // MAIN_DB_SEC_4 [▒▒█ Corrupted]</h1>
+            <div style="font-size: 11px; margin-top: 5px;">SYS_STATUS: 0x8F_FATAL_SECTOR_LOST // AUTH_LEVEL: PROXY_O5</div>
         </div>
-        <div id="error-msg" style="color: var(--alert-red); margin-top: 15px; display: none;">[오류] 접근 권한이 없거나 코드가 일치하지 않습니다.</div>
-    </div>
 
-    <div class="hidden-hint">F12를 눌러 진실을 마주하라.</div>
+        <div class="grid">
+            
+            <div class="panel notice-panel">
+                <div class="notice-title">⚠️ SYSTEM_ANNOUNCEMENT: EMERGENCY WARNING LEVEL 4</div>
+                <div class="corrupted-block" style="color: #c2a16b;">
+                    본 구역은 4등급 비상 사태 발령으로 인해 데이터 스트림이 강제 암호화/파괴되었습니다.<br>
+                    하단의 제어 프로토콜을 복구하십시오. ▒▒▒ 타겟 식별 코드 검증 실패 ▒▒▒
+                </div>
+                
+                <div class="btn-group">
+                    <button class="broken-btn" onclick="triggerError()">??!@2222</button>
+                    <button class="broken-btn" onclick="triggerError()">CORE_DESTRUCTION_LOG</button>
+                    <button class="broken-btn" onclick="triggerError()">0x88F_OVERRIDE_SYS</button>
+                    
+                    <a href="warning-info.html" class="active-link">[ More info ]</a>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div style="color: #486570; font-size: 12px; margin-bottom: 10px; font-weight:bold;">DATA_TREE [ERR]</div>
+                <div class="corrupted-block">
+                    ├─ ▒▒▒_LOGS<br>
+                    ├─ SCP_SDP_▒▒▒<br>
+                    ├─ PERSONNEL_▒<br>
+                    └─ SITE_19_▒█▒
+                </div>
+            </div>
+
+            <div class="panel">
+                <div style="color: #486570; font-size: 12px; margin-bottom: 10px; font-weight:bold;">SECURE_DUMP_042</div>
+                <div class="corrupted-block">
+                    0x002A1F ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒<br>
+                    <span>[CRITICAL_CORE_ERR]</span> █▒█▒█ 01001001 01010011 00100000 01000100<br>
+                    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒<br>
+                    WARNING: 데이터 무결성 검사 실패. 원본 자산 파일이 변칙적 엔트로피에 의해 소멸 증발되었습니다. 
+                    <span>k9#@!$!111239aa▒▒▒</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <script>
-        const text = "경고: 다중 격리 실패 감지.\n식별 코드 불명 개체 중앙 통제실 접근 중.\n\n시스템 자동 폐쇄 절차가 3분 후 시작됩니다.\n오버라이드 코드를 입력하여 통제권을 수동 복구하십시오.";
-        let i = 0;
-        function typeWriter() {
-            if (i < text.length) {
-                let char = text.charAt(i);
-                document.getElementById("text-output").innerHTML += (char === '\n') ? "<br>" : char;
-                i++; setTimeout(typeWriter, 50);
-            }
-        }
-        window.onload = () => { setTimeout(typeWriter, 1000); };
-        function handleEnter(e) { if (e.key === 'Enter') checkCode(); }
-
-        function checkCode() {
-            const input = document.getElementById("override-code").value.trim();
-            const errorMsg = document.getElementById("error-msg");
-
-            if (input === "Epsilon-11-Protocol") {
-                document.body.innerHTML = "<h1 style='color:#00ff66; margin-top:20vh; font-family:monospace;'>[ O5-OVERRIDE SUCCESS ]<br>메인 데이터베이스망 강제 접속 중...</h1>";
-                setTimeout(() => {
-                    window.location.href = "main-database.html"; // 경로 수정 완료
-                }, 2500);
-            } else {
-                errorMsg.style.display = "block";
-                setTimeout(() => { errorMsg.style.display = "none"; }, 2000);
-            }
+        // 무효화된 버튼 클릭 시 경고창 기믹
+        function triggerError() {
+            alert("❌ [SYSTEM_ERROR] 데이터 블록이 복구 불가능한 수준으로 깨져 있습니다. (Error Code: 0x444_UNREADABLE)");
         }
     </script>
 </body>
