@@ -64,19 +64,35 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 0.8s ease-in-out;
+            cursor: pointer; /* 클릭 가능함을 표시 */
         }
 
         .boot-line {
             margin-bottom: 8px;
             font-size: 14px;
+            color: #00ff00;
             text-shadow: 0 0 5px #00ff00;
             opacity: 0;
+            transition: opacity 0.2s ease-in;
         }
 
         .boot-error {
             color: #ff3333;
             text-shadow: 0 0 5px #ff3333;
+        }
+
+        .skip-hint {
+            margin-top: 30px;
+            color: #555555;
+            font-size: 12px;
+            opacity: 0.7;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
         }
 
         .warning-bar {
@@ -115,7 +131,7 @@
             padding: 0;
         }
 
-        /* 글리치 텍스트 효과 수정 */
+        /* 글리치 텍스트 효과 */
         .glitch-text {
             position: relative;
             display: inline-block;
@@ -202,7 +218,6 @@
             font-weight: bold;
         }
 
-        /* 검은색 마스킹 텍스트 */
         .classified {
             background-color: #000000;
             color: #000000;
@@ -231,7 +246,7 @@
             font-size: 12px;
             box-shadow: 0 4px 15px rgba(255,0,0,0.2);
             animation: slide-in-out 12s infinite;
-            animation-delay: 5s; /* 로딩 이후에 나타나도록 딜레이 */
+            animation-delay: 2s;
             z-index: 100;
         }
 
@@ -260,6 +275,7 @@
 
     <div id="boot-screen">
         <div id="boot-content"></div>
+        <div class="skip-hint">[ 화면을 클릭하면 로딩을 건너뜁니다 ]</div>
     </div>
 
     <div id="main-content" style="display: none;">
@@ -283,4 +299,104 @@
 
             <h2>전산망 동기화 오류 보고서</h2>
             
-            <table class="meta
+            <table class="meta-table">
+                <tr>
+                    <th>발생 일시</th>
+                    <td>2026-06-09 21:57 KST</td>
+                </tr>
+                <tr>
+                    <th>오류 내용</th>
+                    <td>식별되지 않은 외부 노드로부터의 무단 데이터 동기화 시도</td>
+                </tr>
+                <tr>
+                    <th>발신처</th>
+                    <td><span class="classified">제03기지 (Site-03)</span></td>
+                </tr>
+            </table>
+
+            <h2>상세 기록</h2>
+            <p>현재 제03기지 메인 서버에 알 수 없는 용량 증설 현상이 관측되고 있습니다. 재단 전산망에 등록되지 않은 <strong>'제03기지'</strong>라는 명칭의 가상 노드가 우리 시스템의 백업 슬롯을 강제로 할당받고 있습니다.</p>
+            <p>정보부의 추적 결과, 해당 기지는 물리적으로 존재하지 않으며, 오직 <span class="classified">재단 인트라넷 상의 논리적 오류</span>로서만 존재를 증명하고 있습니다. 추가적인 데이터 오염을 막기 위해 현재 격리 프로토콜 절차를 밟고 있습니다.</p>
+        </div>
+
+        <div class="error-popup">
+            <strong>[시스템 에러 감지]</strong>
+            ERR_UNAUTHORIZED_SYNC<br>
+            > 제03기지의 격리 데이터가 동기화 중입니다...<br>
+            > 오류: ERROR 404<br>
+            > [ 보고하기 ]
+        </div>
+
+        <footer>
+            &copy; SDP Foundation. Site-03 Log. All rights reserved.
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bootLines = [
+                "SDP OS v4.12 부팅 중...",
+                "보안 프로토콜 로드 중... [OK]",
+                "네트워크 노드 스캔 중...",
+                "경고: 알 수 없는 노드 [제05기지?] 감지됨. (ERR: 0x892F)",
+                "데이터베이스 동기화 시도 중...",
+                "재단 인트라넷 접근 승인. 자격 증명 확인됨.",
+                "문서 복호화 진행 중..."
+            ];
+
+            const bootContent = document.getElementById('boot-content');
+            const bootScreen = document.getElementById('boot-screen');
+            const mainContent = document.getElementById('main-content');
+
+            let delay = 0;
+            let bootTimeoutIds = [];
+            let isBootingFinished = false;
+
+            // 로딩 종료 및 메인 화면 표시 함수
+            function finishBoot() {
+                if (isBootingFinished) return;
+                isBootingFinished = true;
+                
+                // 예약된 모든 setTimeout 취소 (클릭으로 건너뛸 때 텍스트가 계속 나오는 것 방지)
+                bootTimeoutIds.forEach(id => clearTimeout(id));
+                
+                bootScreen.style.opacity = '0';
+                setTimeout(() => {
+                    bootScreen.style.display = 'none';
+                    mainContent.style.display = 'block';
+                }, 800);
+            }
+
+            // 검은 화면 아무 곳이나 클릭하면 즉시 메인 화면으로 이동
+            bootScreen.addEventListener('click', finishBoot);
+
+            // 부팅 텍스트 순차적 출력
+            bootLines.forEach((line) => {
+                let timeoutId = setTimeout(() => {
+                    const p = document.createElement('div');
+                    p.className = 'boot-line';
+                    if (line.includes('경고') || line.includes('ERR')) {
+                        p.classList.add('boot-error');
+                    }
+                    p.textContent = line;
+                    bootContent.appendChild(p);
+                    
+                    // 텍스트 페이드인 효과
+                    setTimeout(() => {
+                        p.style.opacity = '1';
+                    }, 50);
+
+                }, delay);
+                bootTimeoutIds.push(timeoutId);
+                
+                // 다음 줄이 나오는 시간 간격 (400ms ~ 900ms 무작위)
+                delay += Math.floor(Math.random() * 500) + 400; 
+            });
+
+            // 모든 텍스트 출력이 끝나면 메인 화면으로 전환 (약 5~6초 뒤)
+            let finalTimeoutId = setTimeout(finishBoot, delay + 800);
+            bootTimeoutIds.push(finalTimeoutId);
+        });
+    </script>
+</body>
+</html>
