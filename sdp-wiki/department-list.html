@@ -14,6 +14,11 @@
             --cyan-glow: #00f0ff;
         }
 
+        /* 전역 박스 사이징 선언으로 패딩 충돌 방지 */
+        * {
+            box-sizing: border-box;
+        }
+
         @keyframes terminalBoot {
             0% { opacity: 0; transform: translateY(10px); filter: brightness(0.5); }
             100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
@@ -24,14 +29,16 @@
             color: var(--text-color);
             font-family: 'Courier New', 'Malgun Gothic', monospace;
             margin: 0;
-            padding: 40px 20px;
+            padding: 40px 0; /* 컨테이너 패딩 제어를 위해 상하만 부여 */
             animation: terminalBoot 0.6s ease-out forwards;
         }
 
-        /* 물류부 추가로 인한 조직도 확장에 맞춰 컨테이너 가로폭을 1650px로 확대 */
+        /* 유연한 반응형 컨테이너로 변경 */
         .container {
+            width: 100%;
             max-width: 1650px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
         /* 헤더 디자인 통일 및 강화 */
@@ -93,24 +100,45 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         /* ==========================================================================
-           [상단 영역] 조직도(Canvas) CSS 스타일 
-           (7대 부서 수용을 위해 너비를 1610px로 확장)
+           [상단 영역] 조직도 스크롤 및 크기 자동 조절 래퍼 추가
            ========================================================================== */
-        .canvas {
-            width: 1610px; 
-            height: 560px;
-            position: relative;
-            background: #070d14;
+        .canvas-wrapper {
+            width: 100%;
+            overflow-x: auto; /* 화면이 좁아지면 조직도 내부에서만 가로 스크롤 발생 */
             border: 1px solid var(--border-color);
             border-radius: 4px;
+            background: #070d14;
             margin-bottom: 40px;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        
+        /* 사이버네틱 터미널 스타일 스크롤바 커스텀 */
+        .canvas-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        .canvas-wrapper::-webkit-scrollbar-track {
+            background: #05080a;
+        }
+        .canvas-wrapper::-webkit-scrollbar-thumb {
+            background: #1a2f3b;
+            border-radius: 4px;
+        }
+        .canvas-wrapper::-webkit-scrollbar-thumb:hover {
+            background: var(--cyan-glow);
+            box-shadow: 0 0 8px var(--cyan-glow);
+        }
+
+        .canvas {
+            width: 1610px; /* 기존 절대 좌표 맵 유지를 위해 내부 폭 고정 */
+            height: 560px;
+            position: relative;
             overflow: hidden;
         }
+        
         .node {
             position: absolute;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            box-sizing: border-box; padding: 12px; border-radius: 4px;
+            padding: 12px; border-radius: 4px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.6); z-index: 10; text-align: center;
             background: #0d1726; border: 1px solid #3b6694;
             transition: all 0.3s;
@@ -296,96 +324,99 @@
 
 
         <div class="section-title">SYSTEM_MATRIX: SDP 재단 조직도</div>
-        <div class="canvas">
-            
-            <div class="node node-o5" style="left: 695px; top: 0px; width: 220px; height: 60px;">
-                <div class="node-title">O5 평의회</div>
-            </div>
+        
+        <div class="canvas-wrapper">
+            <div class="canvas">
+                
+                <div class="node node-o5" style="left: 695px; top: 0px; width: 220px; height: 60px;">
+                    <div class="node-title">O5 평의회</div>
+                </div>
 
-            <div class="node node-direct" style="left: 515px; top: 120px; width: 180px; height: 60px;">
-                <div class="node-title">행정부</div><div class="node-desc">재단의 행정은 우리가 맡는다!</div>
-            </div>
-            <div class="node node-direct" style="left: 915px; top: 120px; width: 180px; height: 60px;">
-                <div class="node-title">내부보안부</div><div class="node-desc">FBI Open Up!</div>
-            </div>
+                <div class="node node-direct" style="left: 515px; top: 120px; width: 180px; height: 60px;">
+                    <div class="node-title">행정부</div><div class="node-desc">재단의 행정은 우리가 맡는다!</div>
+                </div>
+                <div class="node node-direct" style="left: 915px; top: 120px; width: 180px; height: 60px;">
+                    <div class="node-title">내부보안부</div><div class="node-desc">FBI Open Up!</div>
+                </div>
 
-            <div class="node" style="left: 40px; top: 250px; width: 150px; height: 60px;">
-                <div class="node-title">격리부</div><div class="node-desc">모든것을 완벽하게 격리한다.</div>
-            </div>
-            <div class="node" style="left: 270px; top: 250px; width: 150px; height: 60px; box-shadow: 0 0 15px rgba(59, 102, 148, 0.4);">
-                <div class="node-title">연구부</div><div class="node-desc">모든것을 연구합니다.</div>
-            </div>
-            <div class="node" style="left: 500px; top: 250px; width: 150px; height: 60px;">
-                <div class="node-title">전투부</div><div class="node-desc">재단 경비, 기동특무부대는 우리 부서 일원이지.</div>
-            </div>
-            <div class="node" style="left: 730px; top: 250px; width: 150px; height: 60px; box-shadow: 0 0 15px rgba(59, 102, 148, 0.4);">
-                <div class="node-title">정보부</div><div class="node-desc">모든 정보를 얻는다.</div>
-            </div>
-            <div class="node" style="left: 960px; top: 250px; width: 150px; height: 60px; border-color: #00ff66;">
-                <div class="node-title" style="color: #00ff66;">의료부</div><div class="node-desc" style="color: #82dfa2;">누구든지 무료로 치료해드립니다.</div>
-            </div>
-            
-            <div class="node" style="left: 1190px; top: 250px; width: 150px; height: 60px; border-color: #808080;">
-                <div class="node-title" style="color: #cccccc;">물류부</div><div class="node-desc" style="color: #999999;">물건이 있어야 연구도 하죠!</div>
-            </div>
+                <div class="node" style="left: 40px; top: 250px; width: 150px; height: 60px;">
+                    <div class="node-title">격리부</div><div class="node-desc">모든것을 완벽하게 격리한다.</div>
+                </div>
+                <div class="node" style="left: 270px; top: 250px; width: 150px; height: 60px; box-shadow: 0 0 15px rgba(59, 102, 148, 0.4);">
+                    <div class="node-title">연구부</div><div class="node-desc">모든것을 연구합니다.</div>
+                </div>
+                <div class="node" style="left: 500px; top: 250px; width: 150px; height: 60px;">
+                    <div class="node-title">전투부</div><div class="node-desc">재단 경비, 기동특무부대는 우리 부서 일원이지.</div>
+                </div>
+                <div class="node" style="left: 730px; top: 250px; width: 150px; height: 60px; box-shadow: 0 0 15px rgba(59, 102, 148, 0.4);">
+                    <div class="node-title">정보부</div><div class="node-desc">모든 정보를 얻는다.</div>
+                </div>
+                <div class="node" style="left: 960px; top: 250px; width: 150px; height: 60px; border-color: #00ff66;">
+                    <div class="node-title" style="color: #00ff66;">의료부</div><div class="node-desc" style="color: #82dfa2;">누구든지 무료로 치료해드립니다.</div>
+                </div>
+                
+                <div class="node" style="left: 1190px; top: 250px; width: 150px; height: 60px; border-color: #808080;">
+                    <div class="node-title" style="color: #cccccc;">물류부</div><div class="node-desc" style="color: #999999;">물건이 있어야 연구도 하죠!</div>
+                </div>
 
-            <div class="node" style="left: 1420px; top: 250px; width: 150px; height: 60px; border-color: #ff3366;">
-                <div class="node-title" style="color: #ff3366;">제거부</div><div class="node-desc" style="color: #df8298;">너무 위험한건 '제거'한다.</div>
-            </div>
+                <div class="node" style="left: 1420px; top: 250px; width: 150px; height: 60px; border-color: #ff3366;">
+                    <div class="node-title" style="color: #ff3366;">제거부</div><div class="node-desc" style="color: #df8298;">너무 위험한건 '제거'한다.</div>
+                </div>
 
-            <div class="node node-sub" style="left: 205px; top: 360px; width: 130px; height: 50px;">
-                <div class="node-title">무한연구부</div><div class="node-desc">너는 너가 맞는가? 무한은 실존하는가?</div>
-            </div>
-            <div class="node node-sub" style="left: 355px; top: 360px; width: 130px; height: 50px;">
-                <div class="node-title">연금술부</div><div class="node-desc">와 금이다!</div>
-            </div>
-            <div class="node node-sub" style="left: 500px; top: 360px; width: 150px; height: 50px; border-color: #943b3b; background: #260d0d;">
-                <div class="node-title" style="color: #ffbcbc;">신속대응팀</div><div class="node-desc" style="color: #a87272;">모든것을 신속하게 대응합니다.</div>
-            </div>
-            <div class="node node-special" style="left: 715px; top: 360px; width: 180px; height: 60px;">
-                <div class="node-title">인터넷부</div><div class="node-desc">세상의 모든 정보는 인터넷에.</div>
-            </div>
+                <div class="node node-sub" style="left: 205px; top: 360px; width: 130px; height: 50px;">
+                    <div class="node-title">무한연구부</div><div class="node-desc">너는 너가 맞는가? 무한은 실존하는가?</div>
+                </div>
+                <div class="node node-sub" style="left: 355px; top: 360px; width: 130px; height: 50px;">
+                    <div class="node-title">연금술부</div><div class="node-desc">와 금이다!</div>
+                </div>
+                <div class="node node-sub" style="left: 500px; top: 360px; width: 150px; height: 50px; border-color: #943b3b; background: #260d0d;">
+                    <div class="node-title" style="color: #ffbcbc;">신속대응팀</div><div class="node-desc" style="color: #a87272;">모든것을 신속하게 대응합니다.</div>
+                </div>
+                <div class="node node-special" style="left: 715px; top: 360px; width: 180px; height: 60px;">
+                    <div class="node-title">인터넷부</div><div class="node-desc">세상의 모든 정보는 인터넷에.</div>
+                </div>
 
-            <div class="node node-sub" style="left: 275px; top: 460px; width: 140px; height: 50px; border-color: #bfa343;">
-                <div class="node-title" style="color: #ffe699;">현실부</div><div class="node-desc" style="color: #bfa343;">현실 조작을 연구합니다.</div>
+                <div class="node node-sub" style="left: 275px; top: 460px; width: 140px; height: 50px; border-color: #bfa343;">
+                    <div class="node-title" style="color: #ffe699;">현실부</div><div class="node-desc" style="color: #bfa343;">현실 조작을 연구합니다.</div>
+                </div>
+                <div class="node node-special" style="left: 645px; top: 460px; width: 150px; height: 50px; border-color: #00bfff;">
+                    <div class="node-title" style="color: #bfeeff;">AI부</div><div class="node-desc" style="color: #638a99;">AI는 미래다.</div>
+                </div>
+                <div class="node node-special" style="left: 815px; top: 460px; width: 150px; height: 50px; border-color: #ffff00;">
+                    <div class="node-title" style="color: #ffffcc;">게임부</div><div class="node-desc" style="color: #999963;">와 샌즈! 와 파피루스!</div>
+                </div>
+
+
+                <div class="line-v" style="left: 804px; top: 60px; height: 30px;"></div>
+                <div class="line-h" style="left: 605px; top: 90px; width: 400px;"></div>
+                <div class="line-v" style="left: 604px; top: 90px; height: 30px;"></div>
+                <div class="line-v" style="left: 1004px; top: 90px; height: 30px;"></div>
+
+                <div class="line-v" style="left: 604px; top: 180px; height: 40px;"></div>
+                <div class="line-h" style="left: 115px; top: 220px; width: 1380px;"></div>
+                
+                <div class="line-v" style="left: 114px; top: 220px; height: 30px;"></div>
+                <div class="line-v" style="left: 344px; top: 220px; height: 30px;"></div>
+                <div class="line-v" style="left: 574px; top: 220px; height: 30px;"></div>
+                <div class="line-v" style="left: 804px; top: 220px; height: 30px;"></div>
+                <div class="line-v" style="left: 1034px; top: 220px; height: 30px;"></div>
+                <div class="line-v" style="left: 1264px; top: 220px; height: 30px;"></div>
+                <div class="line-v" style="left: 1494px; top: 220px; height: 30px;"></div>
+
+                <div class="line-v" style="left: 344px; top: 310px; height: 150px;"></div> 
+                <div class="line-h" style="left: 270px; top: 335px; width: 150px;"></div> 
+                <div class="line-v" style="left: 269px; top: 335px; height: 25px;"></div>
+                <div class="line-v" style="left: 419px; top: 335px; height: 25px;"></div>
+
+                <div class="line-v" style="left: 574px; top: 310px; height: 50px;"></div>
+                
+                <div class="line-v" style="left: 804px; top: 310px; height: 50px;"></div>
+
+                <div class="line-v-purple-dash" style="left: 804px; top: 420px; height: 20px;"></div>
+                <div class="line-h-purple-dash" style="left: 720px; top: 440px; width: 170px;"></div>
+                <div class="line-v-purple-dash" style="left: 719px; top: 440px; height: 20px;"></div>
+                <div class="line-v-purple-dash" style="left: 889px; top: 440px; height: 20px;"></div>
             </div>
-            <div class="node node-special" style="left: 645px; top: 460px; width: 150px; height: 50px; border-color: #00bfff;">
-                <div class="node-title" style="color: #bfeeff;">AI부</div><div class="node-desc" style="color: #638a99;">AI는 미래다.</div>
-            </div>
-            <div class="node node-special" style="left: 815px; top: 460px; width: 150px; height: 50px; border-color: #ffff00;">
-                <div class="node-title" style="color: #ffffcc;">게임부</div><div class="node-desc" style="color: #999963;">와 샌즈! 와 파피루스!</div>
-            </div>
-
-
-            <div class="line-v" style="left: 804px; top: 60px; height: 30px;"></div>
-            <div class="line-h" style="left: 605px; top: 90px; width: 400px;"></div>
-            <div class="line-v" style="left: 604px; top: 90px; height: 30px;"></div>
-            <div class="line-v" style="left: 1004px; top: 90px; height: 30px;"></div>
-
-            <div class="line-v" style="left: 604px; top: 180px; height: 40px;"></div>
-            <div class="line-h" style="left: 115px; top: 220px; width: 1380px;"></div>
-            
-            <div class="line-v" style="left: 114px; top: 220px; height: 30px;"></div>
-            <div class="line-v" style="left: 344px; top: 220px; height: 30px;"></div>
-            <div class="line-v" style="left: 574px; top: 220px; height: 30px;"></div>
-            <div class="line-v" style="left: 804px; top: 220px; height: 30px;"></div>
-            <div class="line-v" style="left: 1034px; top: 220px; height: 30px;"></div>
-            <div class="line-v" style="left: 1264px; top: 220px; height: 30px;"></div>
-            <div class="line-v" style="left: 1494px; top: 220px; height: 30px;"></div>
-
-            <div class="line-v" style="left: 344px; top: 310px; height: 150px;"></div> 
-            <div class="line-h" style="left: 270px; top: 335px; width: 150px;"></div> 
-            <div class="line-v" style="left: 269px; top: 335px; height: 25px;"></div>
-            <div class="line-v" style="left: 419px; top: 335px; height: 25px;"></div>
-
-            <div class="line-v" style="left: 574px; top: 310px; height: 50px;"></div>
-            
-            <div class="line-v" style="left: 804px; top: 310px; height: 50px;"></div>
-
-            <div class="line-v-purple-dash" style="left: 804px; top: 420px; height: 20px;"></div>
-            <div class="line-h-purple-dash" style="left: 720px; top: 440px; width: 170px;"></div>
-            <div class="line-v-purple-dash" style="left: 719px; top: 440px; height: 20px;"></div>
-            <div class="line-v-purple-dash" style="left: 889px; top: 440px; height: 20px;"></div>
         </div>
 
 
@@ -524,6 +555,3 @@
 
 </body>
 </html>
-
-
-
