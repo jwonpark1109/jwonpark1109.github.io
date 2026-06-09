@@ -65,7 +65,7 @@
             flex-direction: column;
             justify-content: flex-start;
             transition: opacity 0.8s ease-in-out;
-            cursor: pointer; /* 클릭 가능함을 표시 */
+            cursor: pointer;
         }
 
         .boot-line {
@@ -165,6 +165,35 @@
 
         .glitch-text::before {
             animation: glitch-anim 6s infinite;
+        }
+
+        /* 네비게이션 버튼 (이전 페이지) */
+        .nav-controls {
+            max-width: 900px;
+            margin: 25px auto -15px auto;
+            padding: 0 40px;
+            box-sizing: border-box;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #333333;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 20;
+        }
+
+        .back-btn:hover {
+            background-color: #990000;
+            border-color: #ff3333;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+            color: #ffffff;
         }
 
         .container {
@@ -293,6 +322,10 @@
                 데이터베이스 관리 시스템 v4.12
             </div>
         </header>
+
+        <div class="nav-controls">
+            <a href="site-list.html" class="back-btn">&lt; 이전 페이지로 이동</a>
+        </div>
 
         <div class="container">
             <div class="logo-seal">SDP<br>SECURE</div>
