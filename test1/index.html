@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video ASCII Player (Color)</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden;
+        }
+        body {
+            color: #fff;
+            font-family: 'Courier New', Consolas, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #btn-start {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #fff;
+            color: #000;
+            border: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        #btn-start:hover {
+            background: #ccc;
+        }
+        #ascii-container {
+            display: inline-block;
+            white-space: pre;       
+            font-weight: bold;
+            text-align: left;
+            transform: translateZ(0); 
+        }
+    </style>
+</head>
+<body>
+
+    <button id="btn-start">Play Video</button>
+    <div id="ascii-container">by. jwonpark1109</div>
+
+    <video id="video" loop muted playsinline style="display:none;">
+        <source src="video.mp4" type="video/mp4">
+    </video>
+
+    <audio id="audio" loop style="display:none;">
+        <source src="sound.m4a" type="audio/mpeg">
+    </audio>
+    
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <script>
+        const video = document.getElementById('video');
+        const audio = document.getElementById('audio');
+        const canvas = document.getElementById('canvas');
+        const container = document.getElementById('ascii-container');
+        const btnStart = document.getElementById('btn-start');
+
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+        // 컬러 연산 시 과부하를 줄이기 위해 해상도를 살짝 낮춰서 시작합니다.
+        let WIDTH = 120;
+        let HEIGHT = 40;
+        
+        const asciiChars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+        const revChars = asciiChars.split("").reverse().join("");
+
+        function resizeResponsive() {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            let fontSize = Math.max(5, Math.floor(windowWidth / 180)); 
+            if (fontSize > 10) fontSize = 10; // 컬러 렌더링 성능을 위해 폰트 최대 크기를 살짝 조절
+
+            container.style.fontSize = `${fontSize}px`;
+            container.style.lineHeight = "1.0"; 
+            container.style.letterSpacing = "0px"; 
+
+            WIDTH = Math.floor(windowWidth / (fontSize * 0.55));
+            HEIGHT = Math.floor(windowHeight / fontSize) - 2;
+
+            const targetHeight = Math.floor(WIDTH * 0.38); 
+            if (HEIGHT > targetHeight) {
+                HEIGHT = targetHeight;
+            } else {
+                WIDTH = Math.floor(HEIGHT / 0.38);
+            }
+
+            // 가로 최대 글자 수를 제한하여 성능 저하(렉)를 방지합니다.
+            if (WIDTH > 180) {
+                WIDTH = 180;
+                HEIGHT = Math.floor(WIDTH * 0.38);
+            }
+
+            canvas.width = WIDTH;
+            canvas.height = HEIGHT;
+        }
+
+        resizeResponsive();
+        window.addEventListener('resize', resizeResponsive);
+
+        btnStart.addEventListener('click', () => {
+            btnStart.style.display = 'none';
+            
+            Promise.all([video.play(), audio.play()]).then(() => {
+                renderFrame();
+            }).catch(err => {
+                container.textContent = "Playback failed. Please check file paths and server environment.";
+                console.error(err);
+            });
+        });
+
+        function renderFrame() {
+            if (video.paused || video.ended) return;
+
+            if (Math.abs(video.currentTime - audio.currentTime) > 0.15) {
+                video.currentTime = audio.currentTime;
+            }
+
+            ctx.drawImage(video, 0, 0, WIDTH, HEIGHT);
+            
+            try {
+                const imgData = ctx.getImageData(0, 0, WIDTH, HEIGHT);
+                const pixels = imgData.data;
+                let htmlOutput = "";
+
+                for (let y = 0; y < HEIGHT; y++) {
+                    let currentR = -1, currentG = -1, currentB = -1;
+                    let rowSegment = "";
+
+                    for (let x = 0; x < WIDTH; x++) {
+                        const idx = (y * WIDTH + x) * 4;
+                        const r = pixels[idx];
+                        const g = pixels[idx + 1];
+                        const b = pixels[idx + 2];
+
+                        // 문자 결정을 위한 밝기 계산
+                        const brightness = (r * 0.299 + g * 0.587 + b * 0.114);
+                        const charIdx = Math.floor((brightness / 255) * (revChars.length - 1));
+                        const char = revChars[charIdx] === " " ? "&nbsp;" : revChars[charIdx];
+
+                        // [성능 최적화] 이전 픽셀과 색상이 같다면 <span>을 매번 열지 않고 글자만 이어붙입니다.
+                        if (r === currentR && g === currentG && b === currentB) {
+                            rowSegment += char;
+                        } else {
+                            if (rowSegment !== "") {
+                                htmlOutput += `<span style="color:rgb(${currentR},${currentG},${currentB})">${rowSegment}</span>`;
+                            }
+                            currentR = r;
+                            currentG = g;
+                            currentB = b;
+                            rowSegment = char;
+                        }
+                    }
+                    // 한 줄의 마지막 남은 세그먼트 처리
+                    if (rowSegment !== "") {
+                        htmlOutput += `<span style="color:rgb(${currentR},${currentG},${currentB})">${rowSegment}</span>`;
+                    }
+                    htmlOutput += "\n";
+                }
+
+                container.innerHTML = htmlOutput;
+                
+            } catch (e) {
+                container.textContent = "CORS Error or Canvas Tainted.";
+                console.error(e);
+                return;
+            }
+
+            requestAnimationFrame(renderFrame);
+        }
+    </script>
+</body>
+</html>
+</html>
