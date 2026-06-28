@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="error-handler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 제42기지</title>
+    <style>
+        :root {
+            --bg: #0a001f;
+            --text: #b0e0ff;
+            --neon-cyan: #00f0ff;
+            --neon-purple: #a020f0;
+            --accent: #00ffcc;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.7;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 우주 + 데이터 스트림 느낌 */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(160, 32, 240, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+            animation: dataflow 25s linear infinite;
+            z-index: -1;
+        }
+        @keyframes dataflow {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 800px; }
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            animation: fadeIn 2s ease forwards;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-cyan);
+            padding-bottom: 25px;
+            margin-bottom: 45px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px var(--neon-cyan);
+        }
+        .glitch {
+            animation: textGlitch 2s infinite alternate;
+        }
+        @keyframes textGlitch {
+            0% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
+            100% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; }
+        }
+
+        .back-btn {
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 12px 24px;
+            text-decoration: none;
+            transition: all 0.4s ease;
+        }
+        .back-btn:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 25px var(--accent);
+        }
+
+        .info-panel {
+            background: rgba(15, 5, 40, 0.75);
+            border: 1px solid var(--neon-purple);
+            padding: 28px;
+            margin-bottom: 40px;
+            box-shadow: 0 0 30px rgba(160, 32, 240, 0.25);
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 170px 1fr;
+            gap: 16px 30px;
+        }
+        .label {
+            color: var(--neon-cyan);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--accent);
+            border-left: 5px solid var(--neon-cyan);
+            padding-left: 18px;
+            margin: 55px 0 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0,0,0,0.5);
+        }
+        th, td {
+            padding: 16px;
+            border: 1px solid #334466;
+        }
+        th {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-cyan);
+        }
+
+        .redacted {
+            background: #000;
+            color: #000;
+            padding: 3px 8px;
+            transition: all 0.5s;
+        }
+        .redacted:hover {
+            color: #ff00aa;
+            background: #220022;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="glitch">SITE 42</h1>
+            <a href="site-list.html" class="back-btn">← 시설 목록으로</a>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-grid">
+                <div><span class="label">공식 명칭</span></div>
+                <div>제42연구기지 (Site-42)</div>
+                
+                <div><span class="label">위치</span></div>
+                <div><span class="redacted">[데이터 말소됨]</span> 미국</div>
+                
+                <div><span class="label">설립 연도</span></div>
+                <div>1998년</div>
+                
+                <div><span class="label">주요 기능</span></div>
+                <div>변칙 현상의 근본 원인 탐구, 미지 질문 기록 및 분석</div>
+                
+                <div><span class="label">기지 이사관</span></div>
+                <div>O5-<span class="redacted">[데이터 말소됨]</span></div>
+            </div>
+        </div>
+
+        <h2>시설 개요</h2>
+        <p>제42기지는 단순한 격리 시설이 아니다. <strong>"왜?"</strong>라는 질문을 하는 모든 것을 연구하는 곳이다. 다른 기지가 답을 찾는다면, 이 기지는 더 나은 질문을 찾는다.</p>
+
+        <h2>주요 구역</h2>
+        <ul>
+            <li><strong>Core Question Chamber</strong> — 가장 위험한 질문들을 직접 던지는 공간</li>
+            <li><strong>Paradox Archive</strong> — 연구를 위한 임시 격리실동</li>
+            <li><strong>Observation Spire</strong> — 평행세계 및 우주 신호 감시</li>
+        </ul>
+
+        <h2>인력 현황</h2>
+        <table>
+            <tr><th>직군</th><th>인원</th><th>비고</th></tr>
+            <tr><td>질문 연구원</td><td>89명</td><td>호기심 과다로 인한 정신 오염 주의.</td></tr>
+            <tr><td>보안 인원</td><td>56명</td><td>대답을 강요하는 자에 대한 대응 훈련 완료.</td></tr>
+            <tr><td>분석 AI</td><td>20기</td><td>모두 "아직 모른다"는 답변을 허용하도록 프로그래밍되어 할루시네이션 현상을 방지함. 또한 질문시 1기 내에 5개의 AI가 추가로 있어 서로 진실 여부를 확인하게 함. 하지만 속도가 크게 저하됨.</td></tr>
+        </table>
+
+        <div style="margin-top: 70px; text-align: center; font-size: 1.15rem; opacity: 0.85;">
+            “우리는 모든 것에 답하지 않는다.<br>
+            다만, 더 깊은 질문을 할 수 있게 도울 뿐이다.”
+        </div>
+    </div>
+</body>
+</html>
