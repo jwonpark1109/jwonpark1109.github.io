@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDP 재단 - 메인 데이터베이스</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #d4d4d4;
+            --accent-color: #b30000;
+            --border-color: #333;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 20px;
+            width: 80%;
+            max-width: 600px;
+        }
+        .sdg-logo {
+            width: 140px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(179, 0, 0, 0.4));
+        }
+        .header h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            letter-spacing: 6px;
+            color: #fff;
+        }
+        .header p {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 80%;
+            max-width: 400px;
+        }
+        .menu-item {
+            background-color: rgba(15, 15, 15, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .menu-item:hover {
+            border-color: var(--accent-color);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(179, 0, 0, 0.3);
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="images/sdgicon.png" alt="SDG Foundation Logo" class="sdg-logo">
+        <h1>SDG FOUNDATION</h1>
+        <p>Super Dead Guy</p>
+    </div>
+        <p>LOL</p>
+    <div class="menu-container">
+        <a href="list.html" class="menu-item">[데이터베이스 진입]</a>
+        <a href="cmd.html" class="menu-item">[보안 인가 터미널]</a>
+    </div>
+        <p> ------- </p>
+    <div class="menu-container">
+        <a href="testplace.html" class="menu-item">[★테스트 플레이스]</a>
+    </div>
+
+</body>
+</html>
